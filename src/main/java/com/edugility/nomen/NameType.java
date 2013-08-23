@@ -52,6 +52,10 @@ public class NameType implements Serializable {
     if (value == null) {
       throw new IllegalArgumentException("value", new NullPointerException("value"));
     }
+    final Object old = this.getValue();
+    if (old != null && !old.equals(value)) {
+      throw new IllegalStateException();
+    }
     this.value = value;
   }
 

@@ -292,7 +292,7 @@
     <links>http://download.oracle.com/javaee/6/api/,http://maven.apache.org/maven-plugin-api/apidocs/,http://maven.apache.org/maven-model/apidocs/,http://plexus.codehaus.org/plexus-containers/plexus-container-default/apidocs/,http://plexus.codehaus.org/plexus-utils/apidocs/,http://scannotation.sourceforge.net/apidocs/</links>
     <show>private</show>
     <sourcetab>2</sourcetab>
-    <stylesheetfile>styles.css</stylesheetfile>
+    <stylesheetfile>css/styles.css</stylesheetfile>
 
     <!-- maven-resource-plugin properties -->
     <maven.resource.escapeString>\</maven.resource.escapeString>
