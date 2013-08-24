@@ -36,7 +36,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class NameType implements Serializable {
+public class NameType extends Valued {
 
   private static final long serialVersionUID = 1L;
 
@@ -52,67 +52,12 @@ public class NameType implements Serializable {
   
   private static final ReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
-  private String value;
-
   public NameType() {
     super();
   }
 
   public NameType(final String value) {
-    this();
-    this.setValue(value);
-  }
-
-  public String getValue() {
-    return this.value;
-  }
-
-  public void setValue(final String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("value", new NullPointerException("value"));
-    }
-    final Object old = this.getValue();
-    if (old != null && !old.equals(value)) {
-      throw new IllegalStateException();
-    }
-    this.value = value;
-  }
-
-  @Override
-  public int hashCode() {
-    final int hashCode;
-    final String value = this.getValue();
-    if (value == null) {
-      hashCode = 0;
-    } else {
-      hashCode = value.hashCode();
-    }
-    return hashCode;
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (other == this) {
-      return true;
-    } else if (other != null && this.getClass().equals(other.getClass())) {
-      final NameType him = (NameType)other;
-      final Object value = this.getValue();
-      if (value == null) {
-        if (him.getValue() != null) {
-          return false;
-        }
-      } else if (!value.equals(him.getValue())) {
-        return false;
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  @Override
-  public String toString() {
-    return String.valueOf(this.getValue());
+    super(value);
   }
 
 
@@ -121,10 +66,55 @@ public class NameType implements Serializable {
    */
 
 
+  /**
+   * Returns the result of calling the {@link #valueOf(String)}
+   * method.  This method exists primarily for using via the {@code
+   * import static} directive.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * <p>This method is safe for use by multiple concurrent
+   * threads.</p>
+   *
+   * @param value a {@link String} naming the {@link NameType} to be
+   * returned; must not be {@code null}
+   * 
+   * @return the result of calling the {@link #valueOf(String)}
+   * method; never {@code null}
+   *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   *
+   * @see #valueOf(String)
+   *
+   * @see #NameType(String)
+   */
   public static final NameType nt(final String value) {
     return valueOf(value);
   }
 
+  /**
+   * Returns a {@link NameType} whose {@linkplain #getValue() value}
+   * will be equal to the supplied {@code value}.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * <p>This method is safe for use by multiple concurrent
+   * threads.</p>
+   *
+   * <p>This method does not necessarily create a new {@link NameType}
+   * on each invocation, but may return a cached copy.</p>
+   *
+   * @param value a {@link String} naming the {@link NameType} to be
+   * returned; must not be {@code null}
+   *
+   * @return a non-{@code null} {@link NameType}
+   *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   *
+   * @see #NameType(String)
+   */
   public static final NameType valueOf(final String value) {
     if (value == null) {
       throw new IllegalArgumentException("value", new NullPointerException("value"));
@@ -152,5 +142,34 @@ public class NameType implements Serializable {
     return nt;
   }
 
+  /**
+   * Returns {@code true} if and only if the supplied {@code value}
+   * identifies a {@link NameType} that is cached by the internals of
+   * this class.
+   *
+   * <p>The internal cache's contents can change over time, so there
+   * is no guarantee&mdash;explicit or implicit&mdash;about how long a
+   * given cached {@link NameType} will continue to be cached.</p>
+   *
+   * <p>This method is intended for use by single-threaded unit tests,
+   * although it is safe for use by multiple concurrent threads.</p>
+   *
+   * @param value a {@link String} identifying a {@link NameType};
+   * must not be {@code null}
+   *
+   * @return {@code true} if the supplied {@code value} identifies a
+   * cached {@link NameType}; {@code false} otherwise
+   */
+  static final boolean isCached(final String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("value", new NullPointerException("value"));
+    }
+    try {
+      cacheLock.readLock().lock();
+      return cache.containsKey(value);
+    } finally {
+      cacheLock.readLock().unlock();
+    }
+  }
 
 }

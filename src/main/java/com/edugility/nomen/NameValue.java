@@ -36,7 +36,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class NameValue implements Serializable {
+public class NameValue extends Valued {
 
   private static final long serialVersionUID = 1L;
 
@@ -52,8 +52,6 @@ public class NameValue implements Serializable {
 
   private static final ReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
-  private String value;
-
   private boolean atomic;
 
   public NameValue() {
@@ -65,9 +63,8 @@ public class NameValue implements Serializable {
   }
 
   public NameValue(final String value, final boolean atomic) {
-    super();
+    super(value);
     this.setAtomic(atomic);
-    this.setValue(value);
   }
 
   public boolean isAtomic() {
@@ -76,67 +73,6 @@ public class NameValue implements Serializable {
 
   public void setAtomic(final boolean atomic) {
     this.atomic = atomic;
-  }
-
-  public String getValue() {
-    return this.value;
-  }
-
-  public void setValue(final String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("value", new NullPointerException("value"));
-    }
-    final String old = this.getValue();
-    if (old != null && !old.equals(value)) {
-      throw new IllegalStateException("value already set");
-    }
-    this.value = value;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = 17;
-
-    int c = 0;
-    c = Boolean.valueOf(this.isAtomic()).hashCode();
-    result = 37 * result + c;
-
-    c = 0;
-    final String value = this.getValue();
-    if (value != null) {
-      c = value.hashCode();
-    }
-    result = 37 * result + c;
-
-    return result;
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (other == this) {
-      return true;
-    } else if (other != null && this.getClass().equals(other.getClass())) {
-      final NameValue him = (NameValue)other;
-      if (this.isAtomic() && !him.isAtomic()) {
-        return false;
-      }
-      final Object value = this.getValue();
-      if (value == null) {
-        if (him.getValue() != null) {
-          return false;
-        }
-      } else if (!value.equals(him.getValue())) {
-        return false;
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  @Override
-  public String toString() {
-    return String.valueOf(this.getValue());
   }
 
 
@@ -174,6 +110,18 @@ public class NameValue implements Serializable {
     }
     assert nv != null;
     return nv;
+  }
+
+  static final boolean isCached(final String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("value", new NullPointerException("value"));
+    }
+    try {
+      cacheLock.readLock().lock();
+      return cache.containsKey(value);
+    } finally {
+      cacheLock.readLock().unlock();
+    }
   }
 
 }
