@@ -52,7 +52,7 @@ public class NameValue extends Valued {
 
   private static final ReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
-  private boolean atomic;
+  private Boolean atomic;
 
   public NameValue() {
     super();
@@ -68,11 +68,47 @@ public class NameValue extends Valued {
   }
 
   public boolean isAtomic() {
-    return this.atomic;
+    if (this.atomic == null) {
+      return false;
+    }
+    return this.atomic.booleanValue();
   }
 
   public void setAtomic(final boolean atomic) {
-    this.atomic = atomic;
+    if (this.atomic != null && !this.atomic.booleanValue() == atomic) {
+      throw new IllegalStateException();
+    }
+    this.atomic = Boolean.valueOf(atomic);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    
+    int c = Boolean.valueOf(this.isAtomic()).hashCode();
+    result = result * 37 + c;
+    
+    c = super.hashCode();
+    result = result * 37 + c;
+    
+    return result;
+  }
+
+  @Override
+  public boolean equals(final Object other) {
+    if (other == this) {
+      return true;
+    } else if (other instanceof NameValue) {
+      final NameValue him = (NameValue)other;
+      if (this.isAtomic()) {
+        if (!him.isAtomic()) {
+          return false;
+        }
+      }
+      return super.equals(other);
+    } else {
+      return false;
+    }
   }
 
 
