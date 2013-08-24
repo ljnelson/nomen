@@ -32,13 +32,22 @@ import org.mvel2.integration.VariableResolver;
 import org.mvel2.integration.impl.BaseVariableResolverFactory;
 import org.mvel2.integration.impl.SimpleValueResolver;
 
-public class NameResolver implements VariableResolver {
+/**
+ * A {@link VariableResolver} for resolving MVEL variables from a
+ * {@link Named}.
+ *
+ * @author <a href="http://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ *
+ * @see VariableResolver
+ */
+public final class NameResolver implements VariableResolver {
 
   private static final long serialVersionUID = 1L;
 
-  private Named named;
+  private final Named named;
 
-  private String name;
+  private final String name;
 
   public NameResolver(final Named named, final String name) {
     super();
@@ -53,37 +62,56 @@ public class NameResolver implements VariableResolver {
   }
 
   @Override
-  public int getFlags() {
+  public final int getFlags() {
     return 0; // per documentation
   }
 
   @Override
-  public String getName() {
+  public final String getName() {
     return this.name;
   }
 
   @Override
-  public Class<Name> getType() {
+  public final Class<Name> getType() {
     return Name.class;
   }
 
   @Override
-  public Object getValue() {
-    final Name n = this.named.getName(new NameType(this.getName()));
-    if (n == null) {
-      return null;
+  public final Object getValue() {
+    Object returnValue = null;
+    final String name = this.getName();
+    if (name != null) {
+      final NameType nt = NameType.valueOf(name);
+      assert nt != null;
+      final Name n = this.named.getName(nt);
+      if (n != null) {
+        returnValue = n.getValue();
+      }
     }
-    return n.getValue();
+    if (returnValue == null) {
+      returnValue = "";
+    }
+    return returnValue;
   }
 
+  /**
+   * Does nothing on purpose.
+   *
+   * @param type ignored
+   */
   @Override
-  public void setStaticType(final Class type) {
-    throw new UnsupportedOperationException("setValue");
+  public final void setStaticType(final Class type) {
+
   }
 
+  /**
+   * Does nothing on purpose.
+   *
+   * @param value ignored
+   */
   @Override
-  public void setValue(final Object value) {
-    throw new UnsupportedOperationException("setValue");
+  public final void setValue(final Object value) {
+
   }
 
 }

@@ -251,7 +251,7 @@ public class Name implements Serializable {
   private final void installTemplate() {
     if (this.compiledTemplate == null) {
       final NameValue nv = this.getNameValue();
-      if (nv != null) {
+      if (nv != null && !nv.isAtomic()) {
         final String template = nv.getValue();
         if (template != null) {
           this.compiledTemplate = TemplateCompiler.compileTemplate(template);
@@ -274,7 +274,12 @@ public class Name implements Serializable {
   public String getValue() {
     String returnValue = null;
     this.installTemplate();
-    if (this.compiledTemplate != null) {
+    if (this.compiledTemplate == null) {
+      final NameValue nv = this.getNameValue();
+      if (nv != null && nv.isAtomic()) {
+        returnValue = nv.getValue();
+      }
+    } else {
       final Named named = this.getNamed();
       if (this.nameResolverFactory == null) {
         this.nameResolverFactory = new NameResolverFactory(named);

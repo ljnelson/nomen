@@ -43,8 +43,9 @@ public class NameValue implements Serializable {
   private static final int cacheSize = 20;
 
   private static final Map<String, NameValue> cache = new LinkedHashMap<String, NameValue>(cacheSize, 0.75F, true) {
+    private static final long serialVersionUID = 1L;
     @Override
-    protected boolean removeEldestEntry(final Entry<String, NameValue> entry) {
+    protected final boolean removeEldestEntry(final Entry<String, NameValue> entry) {
       return this.size() > cacheSize;
     }
   };
@@ -53,13 +54,28 @@ public class NameValue implements Serializable {
 
   private String value;
 
+  private boolean atomic;
+
   public NameValue() {
     super();
   }
 
   public NameValue(final String value) {
+    this(value, false);
+  }
+
+  public NameValue(final String value, final boolean atomic) {
     super();
+    this.setAtomic(atomic);
     this.setValue(value);
+  }
+
+  public boolean isAtomic() {
+    return this.atomic;
+  }
+
+  public void setAtomic(final boolean atomic) {
+    this.atomic = atomic;
   }
 
   public String getValue() {
@@ -79,14 +95,20 @@ public class NameValue implements Serializable {
 
   @Override
   public int hashCode() {
-    final int hashCode;
+    int result = 17;
+
+    int c = 0;
+    c = Boolean.valueOf(this.isAtomic()).hashCode();
+    result = 37 * result + c;
+
+    c = 0;
     final String value = this.getValue();
-    if (value == null) {
-      hashCode = 0;
-    } else {
-      hashCode = value.hashCode();
+    if (value != null) {
+      c = value.hashCode();
     }
-    return hashCode;
+    result = 37 * result + c;
+
+    return result;
   }
 
   @Override
@@ -94,12 +116,16 @@ public class NameValue implements Serializable {
     if (other == this) {
       return true;
     } else if (other != null && this.getClass().equals(other.getClass())) {
+      final NameValue him = (NameValue)other;
+      if (this.isAtomic() && !him.isAtomic()) {
+        return false;
+      }
       final Object value = this.getValue();
       if (value == null) {
-        if (((NameValue)other).getValue() != null) {
+        if (him.getValue() != null) {
           return false;
         }
-      } else if (!value.equals(((NameValue)other).getValue())) {
+      } else if (!value.equals(him.getValue())) {
         return false;
       }
       return true;
@@ -137,13 +163,15 @@ public class NameValue implements Serializable {
         cacheLock.writeLock().unlock();
         nv = cache.get(value);
         assert nv != null;
+        cacheLock.readLock().unlock();
       } else {
         nv = new NameValue(value);
         cache.put(value, nv);
         cacheLock.writeLock().unlock();
       }
+    } else {
+      cacheLock.readLock().unlock();
     }
-    cacheLock.readLock().unlock();
     assert nv != null;
     return nv;
   }

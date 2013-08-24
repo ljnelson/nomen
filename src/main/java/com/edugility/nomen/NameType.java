@@ -29,9 +29,28 @@ package com.edugility.nomen;
 
 import java.io.Serializable;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class NameType implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  private static final int cacheSize = 20;
+  
+  private static final Map<String, NameType> cache = new LinkedHashMap<String, NameType>(cacheSize, 0.75F, true) {
+    private static final long serialVersionUID = 1L;
+    @Override
+    protected boolean removeEldestEntry(final Entry<String, NameType> entry) {
+      return this.size() > cacheSize;
+    }
+  };
+  
+  private static final ReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
   private String value;
 
@@ -95,5 +114,43 @@ public class NameType implements Serializable {
   public String toString() {
     return String.valueOf(this.getValue());
   }
+
+
+  /*
+   * Static methods.
+   */
+
+
+  public static final NameType nt(final String value) {
+    return valueOf(value);
+  }
+
+  public static final NameType valueOf(final String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("value", new NullPointerException("value"));
+    }
+    cacheLock.readLock().lock();
+    NameType nt = cache.get(value);
+    if (nt == null) {
+      cacheLock.readLock().unlock();
+      cacheLock.writeLock().lock();
+      if (cache.containsKey(value)) {
+        cacheLock.readLock().lock();
+        cacheLock.writeLock().unlock();
+        nt = cache.get(value);
+        assert nt != null;
+        cacheLock.readLock().unlock();
+      } else {
+        nt = new NameType(value);
+        cache.put(value, nt);
+        cacheLock.writeLock().unlock();
+      }
+    } else {
+      cacheLock.readLock().unlock();
+    }
+    assert nt != null;
+    return nt;
+  }
+
 
 }
