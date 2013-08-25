@@ -39,32 +39,23 @@ public class TestCaseTemplateEvaluation {
 
   @Test
   public void testEvaluation() {
-    final NameType firstNameType = new NameType("firstName");
-    final NameType middleNameType = new NameType("middleName");
-    final NameType lastNameType = new NameType("lastName");
-    final NameType fullNameType = new NameType("fullName");
-
     final NameValue laird = new NameValue("Laird");
     final NameValue jarrett = new NameValue("Jarrett");
     final NameValue nelson = new NameValue("Nelson");
     final NameValue lairdJarrettNelson = new NameValue("${firstName}        ${middleName} ${lastName}");
 
     final Name firstName = new Name();
-    firstName.setNameType(firstNameType);
     firstName.setNameValue(laird);
 
     final Name middleName = new Name();
-    middleName.setNameType(middleNameType);
     middleName.setNameValue(jarrett);
 
     final Name lastName = new Name();
-    lastName.setNameType(lastNameType);
     lastName.setNameValue(nelson);
 
 
     final Name fullName = new Name();
     fullName.setCollapseWhitespace(true);
-    fullName.setNameType(fullNameType);
     fullName.setNameValue(lairdJarrettNelson);
 
     final Named dude = new Named() {

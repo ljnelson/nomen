@@ -29,13 +29,13 @@ package com.edugility.nomen;
 
 import java.io.Serializable;
 
-import java.util.Collection;
+import java.util.Map;
 
 public abstract class AbstractNamed implements Named {
 
   private static final long serialVersionUID = 1L;
 
-  private Collection<Name> names;
+  private Map<NameType, Name> names;
 
   protected AbstractNamed() {
     super();
@@ -43,24 +43,8 @@ public abstract class AbstractNamed implements Named {
 
   public Name getName(final NameType nameType) {
     Name name = null;
-    if (this.names != null && !this.names.isEmpty()) {
-      for (final Name n : this.names) {
-        if (n != null) {
-          if (!this.equals(n.getNamed())) {
-            throw new WrongOwnerException();
-          }
-          final Object nt = n.getNameType();
-          if (nameType == null) {
-            if (nt == null) {
-              name = n;
-              break;
-            }
-          } else if (nameType.equals(nt)) {
-            name = n;
-            break;
-          }
-        }
-      }
+    if (nameType != null && this.names != null && !this.names.isEmpty()) {
+      name = this.names.get(nameType);
     }
     return name;
   }

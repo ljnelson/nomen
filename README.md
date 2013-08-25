@@ -36,10 +36,10 @@ stands for Junior.
 `nomen` treats all these concepts as first-class notions.  A
 `NameValue` is a glorified `String` with either an _atomic_ value
 ("Laird"), or a template value ("${firstName} ${lastName}").  A
-`Named` is something that can have a name associated with it.  A
 `NameType` is another glorified `String` that identifies the usage of
-a given name, and that can be used as a key in templates.  And
-finally, a `Name` is a union of a `Named`, a `NameType` and a `Named`,
-together with a template evaluation engine.
+a given name, and that can be used as a key in templates.  A `Named`
+is something that can have a name associated with it by (minimally)
+`NameType`.  And finally, a `Name` is a union of a `Named` and a
+`NameValue`, together with a template evaluation engine.
 
 [1]: http://about.me/lairdnelson

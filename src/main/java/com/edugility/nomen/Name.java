@@ -39,9 +39,8 @@ import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
 
 /**
- * A {@link Serializable} combination of a {@link NameValue}, the
- * {@link Named} that it is currently assigned to, and the {@link
- * NameType} under which it is indexed.
+ * A {@link Serializable} combination of a {@link NameValue} and the
+ * {@link Named} that it is currently assigned to.
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
@@ -74,17 +73,6 @@ public class Name implements Serializable {
    * @see #setNamed(Named)
    */
   private Named named;
-
-  /**
-   * The {@link NameType} classifying this {@link Name} within the
-   * "space" of the {@linkplain #getNamed() affiliated
-   * <code>Named</code>}.  This field may be {@code null}.
-   *
-   * @see #getNameType()
-   *
-   * @see #setNameType(NameType)
-   */
-  private NameType nameType;
 
   /**
    * The {@link NameValue} housing the actual name value, which may be
@@ -140,11 +128,9 @@ public class Name implements Serializable {
    * no-argument constructor is provided for JPA compatibility and
    * serialization purposes.
    *
-   * @see #Name(Named, NameType, NameValue, boolean)
+   * @see #Name(Named, NameValue, boolean)
    *
    * @see #setNamed(Named)
-   *
-   * @see #setNameType(NameType)
    *
    * @see #setNameValue(NameValue)
    *
@@ -160,10 +146,6 @@ public class Name implements Serializable {
    * @param named the {@link Named} named by this {@link Name}; must
    * not be {@code null}
    *
-   * @param nameType the {@link NameType} classifying this {@link
-   * Name} with respect to the supplied {@code Named}; must not be
-   * {@code null}
-   *
    * @param nameValue the {@link NameValue} that represents the actual
    * name value; must not be {@code null}
    *
@@ -173,17 +155,14 @@ public class Name implements Serializable {
    *
    * @see #setNamed(Named)
    *
-   * @see #setNameType(NameType)
-   *
    * @see #setNameValue(NameValue)
    *
    * @see #setCollapseWhitespace(boolean)
    */
-  public Name(final Named named, final NameType nameType, final NameValue nameValue, final boolean collapseWhitespace) {
+  public Name(final Named named, final NameValue nameValue, final boolean collapseWhitespace) {
     this();
     this.setCollapseWhitespace(collapseWhitespace);
     this.setNamed(named);
-    this.setNameType(nameType);
     this.setNameValue(nameValue);
   }
 
@@ -206,17 +185,6 @@ public class Name implements Serializable {
     this.named = named;
     this.compiledTemplate = null;
     this.installTemplate();
-  }
-
-  public NameType getNameType() {
-    return this.nameType;
-  }
-
-  public void setNameType(final NameType nameType) {
-    if (nameType == null) {
-      throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
-    }
-    this.nameType = nameType;
   }
 
   public NameValue getNameValue() {
@@ -284,7 +252,14 @@ public class Name implements Serializable {
       if (this.nameResolverFactory == null) {
         this.nameResolverFactory = new NameResolverFactory(named);
       }
-      final Object rawValue = TemplateRuntime.execute(this.compiledTemplate, named, this.nameResolverFactory);
+      Object rawValue = null;
+      try {
+        rawValue = TemplateRuntime.execute(this.compiledTemplate, named, this.nameResolverFactory);
+      } catch (final IllegalStateException throwMe) {
+        throw throwMe;
+      } catch (final RuntimeException wrapMe) {
+        throw new IllegalStateException(wrapMe);
+      }
       if (rawValue == null) {
         returnValue = "";
       } else if (this.getCollapseWhitespace()) {
@@ -303,13 +278,6 @@ public class Name implements Serializable {
     int result = 17;
 
     int c = 0;
-    final Object nameType = this.getNameType();
-    if (nameType != null) {
-      c = nameType.hashCode();
-    }
-    result = 37 * result + c;
-
-    c = 0;
     final Object value = this.getValue();
     if (value != null) {
       c = value.hashCode();
@@ -325,15 +293,6 @@ public class Name implements Serializable {
       return true;
     } else if (other != null && this.getClass().equals(other.getClass())) {
       final Name him = (Name)other;
-
-      final NameType nameType = this.getNameType();
-      if (nameType == null) {
-        if (him.getNameType() != null) {
-          return false;
-        }
-      } else if (!nameType.equals(him.getNameType())) {
-        return false;
-      }
 
       final Object value = this.getValue();
       if (value == null) {
@@ -352,17 +311,9 @@ public class Name implements Serializable {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder();
-    final NameType nameType = this.getNameType();
     final Object value = this.getValue();
-    if (nameType == null) {
-      if (value != null) {
-        sb.append(value);
-      }
-    } else {
-      sb.append(nameType).append(":");
-      if (value != null) {
-        sb.append(" ").append(value);
-      }
+    if (value != null) {
+      sb.append(value);
     }
     return sb.toString();
   }
