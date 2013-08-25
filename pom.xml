@@ -289,7 +289,7 @@
     <!-- maven-javadoc-plugin properties -->
     <bottom><![CDATA[Copyright &copy; ${project.inceptionYear}&ndash;{currentYear}, <a href="http://about.me/lairdnelson" target="_parent">Laird Nelson</a>. All rights reserved.]]></bottom>
     <detectLinks>false</detectLinks>
-    <links>http://download.oracle.com/javaee/6/api/,http://maven.apache.org/maven-plugin-api/apidocs/,http://maven.apache.org/maven-model/apidocs/,http://plexus.codehaus.org/plexus-containers/plexus-container-default/apidocs/,http://plexus.codehaus.org/plexus-utils/apidocs/,http://scannotation.sourceforge.net/apidocs/</links>
+    <links>http://download.oracle.com/javaee/6/api/,http://mvel.codehaus.org/javadoc/2.0/,http://junit.org/javadoc/4.10/</links>
     <show>private</show>
     <sourcetab>2</sourcetab>
     <stylesheetfile>css/styles.css</stylesheetfile>
