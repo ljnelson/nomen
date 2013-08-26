@@ -27,84 +27,26 @@
  */
 package com.edugility.nomen;
 
-import java.io.Serializable;
-
-public abstract class Valued implements Serializable {
-
-  private static final long serialVersionUID = 1L;
-
-  private String value;
-
-  protected Valued() {
-    super();
-  }
-
-  protected Valued(final String value) {
-    this();
-    this.setValue(value);
-  }
-
-  public String getValue() {
-    return this.value;
-  }
-
-  public void setValue(final String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("value", new NullPointerException("value"));
-    }
-    final Object old = this.getValue();
-    if (old != null && !old.equals(value)) {
-      throw new IllegalStateException();
-    }
-    this.value = value;
-  }
-
-  @Override
-  public int hashCode() {
-    final int hashCode;
-    final String value = this.getValue();
-    if (value == null) {
-      hashCode = 0;
-    } else {
-      hashCode = value.hashCode();
-    }
-    return hashCode;
-  }
-
-  @Override
-  public boolean equals(final Object other) {
-    if (other == this) {
-      return true;
-    } else if (other instanceof Valued) {
-      final Valued him = (Valued)other;
-      final Object value = this.getValue();
-      if (value == null) {
-        if (him.getValue() != null) {
-          return false;
-        }
-      } else if (!value.equals(him.getValue())) {
-        return false;
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
+/**
+ * Indicates that an implementation is capable of reporting its value
+ * as a {@link String}.
+ *
+ * @author <a href="http://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ *
+ * @see #getValue()
+ */
+public interface Valued {
 
   /**
-   * Returns the return value of invoking {@link
-   * String#valueOf(Object)} on the return value of the {@link
-   * #getValue()} method.
+   * Returns the value of this {@link Valued} implementation as a
+   * {@link String}.
    *
-   * <p>This method never returns {@code null}.</p>
+   * <p>Implementations of this method must not return {@code
+   * null}.</p>
    *
-   * @return the return value of invoking {@link
-   * String#valueOf(Object)} on the return value of the {@link
-   * #getValue()} method; never {@code null}
+   * @return a non-{@code null} {@link String}
    */
-  @Override
-  public String toString() {
-    return String.valueOf(this.getValue());
-  }
+  public String getValue();
 
 }

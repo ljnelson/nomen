@@ -140,6 +140,14 @@ public class Name implements Serializable {
     super();
   }
 
+  public Name(final Named named, final String nameValue) {
+    this(named, NameValue.valueOf(nameValue), true);
+  }
+
+  public Name(final Named named, final NameValue nameValue) {
+    this(named, nameValue, true);
+  }
+
   /**
    * Creates a new {@link Name}.
    *
@@ -179,9 +187,6 @@ public class Name implements Serializable {
   }
 
   public void setNamed(final Named named) {
-    if (named == null) {
-      throw new IllegalArgumentException("named", new NullPointerException("named"));
-    }
     this.named = named;
     this.compiledTemplate = null;
     this.installTemplate();
@@ -236,19 +241,28 @@ public class Name implements Serializable {
    * <code>Named</code>} as an <a
    * href="http://mvel.codehaus.org/">MVEL template</a>.
    *
-   * @return a {@link String} with the just-in-time-computed value of
-   * this {@link Name}, or {@code null}
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @return a non-{@code null} {@link String} with the
+   * just-in-time-computed value of this {@link Name}
+   *
+   * @exception IllegalStateException if there was a problem
+   * interpolating the template
    */
   public String getValue() {
-    String returnValue = null;
+    final String returnValue;
+    final Named named = this.getNamed();
     this.installTemplate();
-    if (this.compiledTemplate == null) {
+    if (this.compiledTemplate == null || named == null) {
       final NameValue nv = this.getNameValue();
-      if (nv != null && nv.isAtomic()) {
+      if (nv != null && (named == null || nv.isAtomic())) {
         returnValue = nv.getValue();
+      } else {
+        returnValue = "";
       }
     } else {
-      final Named named = this.getNamed();
+      assert this.compiledTemplate != null;
+      assert named != null;
       if (this.nameResolverFactory == null) {
         this.nameResolverFactory = new NameResolverFactory(named);
       }
@@ -270,6 +284,7 @@ public class Name implements Serializable {
         returnValue = rawValue.toString();
       }
     }
+    assert returnValue != null;
     return returnValue;
   }
 

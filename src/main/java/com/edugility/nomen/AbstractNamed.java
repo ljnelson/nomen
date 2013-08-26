@@ -29,7 +29,11 @@ package com.edugility.nomen;
 
 import java.io.Serializable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class AbstractNamed implements Named {
 
@@ -41,12 +45,50 @@ public abstract class AbstractNamed implements Named {
     super();
   }
 
+  @Override
   public Name getName(final NameType nameType) {
     Name name = null;
     if (nameType != null && this.names != null && !this.names.isEmpty()) {
       name = this.names.get(nameType);
     }
     return name;
+  }
+
+  public Name putName(final NameType nameType, final NameValue nameValue) {
+    if (nameType == null) {
+      throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
+    }
+    if (nameValue == null) {
+      throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
+    }
+    if (this.names == null) {
+      this.names = new HashMap<NameType, Name>(11);
+    }
+    final Name returnValue = this.names.put(nameType, new Name(this, nameValue));
+    if (returnValue != null) {
+      returnValue.setNamed(null);
+    }
+    return returnValue;
+  }
+
+  public Set<NameType> getNameTypes() {
+    final Set<NameType> returnValue;
+    if (this.names == null || this.names.isEmpty()) {
+      returnValue = Collections.emptySet();
+    } else {
+      returnValue = Collections.unmodifiableSet(this.names.keySet());
+    }
+    return returnValue;
+  }
+
+  public Collection<Name> getNames() {
+    final Collection<Name> returnValue;
+    if (this.names == null || this.names.isEmpty()) {
+      returnValue = Collections.emptySet();
+    } else {
+      returnValue = Collections.unmodifiableCollection(this.names.values());
+    }
+    return returnValue;
   }
 
 }

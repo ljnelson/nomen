@@ -36,7 +36,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class NameType extends Valued {
+public class NameType extends AbstractValued {
 
   private static final long serialVersionUID = 1L;
 
