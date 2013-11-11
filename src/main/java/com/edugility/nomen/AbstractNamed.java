@@ -35,6 +35,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A skeletal implementation of the {@link Named} interface, together
+ * with mutator methods
+ */
 public abstract class AbstractNamed implements Named {
 
   private static final long serialVersionUID = 1L;
@@ -65,6 +69,20 @@ public abstract class AbstractNamed implements Named {
       this.names = new HashMap<NameType, Name>(11);
     }
     final Name returnValue = this.names.put(nameType, new Name(this, nameValue));
+    if (returnValue != null) {
+      returnValue.setNamed(null);
+    }
+    return returnValue;
+  }
+
+  public Name removeName(final NameType nameType) {
+    if (nameType == null) {
+      throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
+    }
+    Name returnValue = null;
+    if (this.names != null && !this.names.isEmpty()) {
+      returnValue = this.names.remove(nameType);
+    }
     if (returnValue != null) {
       returnValue.setNamed(null);
     }

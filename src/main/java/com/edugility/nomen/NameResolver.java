@@ -33,8 +33,9 @@ import org.mvel2.integration.impl.BaseVariableResolverFactory;
 import org.mvel2.integration.impl.SimpleValueResolver;
 
 /**
- * A {@link VariableResolver} for resolving MVEL variables from a
- * {@link Named}.
+ * An <a href="http://mvel.codehaus.org/">MVEL</a> {@link
+ * VariableResolver} for resolving MVEL variables from a {@link
+ * Named}.
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
@@ -52,7 +53,7 @@ public final class NameResolver implements VariableResolver {
   public NameResolver(final Named named, final String name) {
     super();
     if (named == null) {
-      throw new IllegalStateException("named", new NullPointerException("named"));
+      throw new IllegalArgumentException("named", new NullPointerException("named"));
     }
     if (name == null) {
       throw new IllegalArgumentException("name", new NullPointerException("name"));
@@ -63,7 +64,7 @@ public final class NameResolver implements VariableResolver {
 
   @Override
   public final int getFlags() {
-    return 0; // per documentation
+    return 0; // per VariableResolver "documentation"
   }
 
   @Override
@@ -100,6 +101,7 @@ public final class NameResolver implements VariableResolver {
    * @param type ignored
    */
   @Override
+  @SuppressWarnings("rawtypes")
   public final void setStaticType(final Class type) {
 
   }

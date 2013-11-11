@@ -47,6 +47,12 @@ import org.mvel2.templates.TemplateRuntime;
  */
 public class Name implements Serializable {
 
+
+  /*
+   * Static fields.
+   */
+
+
   /**
    * The version of this class for {@linkplain Serializable
    * serialization purposes}.
@@ -63,6 +69,12 @@ public class Name implements Serializable {
    * @see #getCollapseWhitespace()
    */
   public static final Pattern whitespacePattern = Pattern.compile("\\s+");
+
+
+  /*
+   * Instance fields.
+   */
+
 
   /**
    * The {@link Named} to which this {@link Name} applies.  This field
@@ -123,6 +135,12 @@ public class Name implements Serializable {
    */
   private transient CompiledTemplate compiledTemplate;
 
+
+  /*
+   * Constructors.
+   */
+
+
   /**
    * Creates a new {@link Name} in an initially useless state.  This
    * no-argument constructor is provided for JPA compatibility and
@@ -173,6 +191,12 @@ public class Name implements Serializable {
     this.setNamed(named);
     this.setNameValue(nameValue);
   }
+
+
+  /*
+   * Instance methods.
+   */
+
 
   public boolean getCollapseWhitespace() {
     return this.collapseWhitespace;
@@ -251,8 +275,8 @@ public class Name implements Serializable {
    */
   public String getValue() {
     final String returnValue;
-    final Named named = this.getNamed();
     this.installTemplate();
+    final Named named = this.getNamed();
     if (this.compiledTemplate == null || named == null) {
       final NameValue nv = this.getNameValue();
       if (nv != null && (named == null || nv.isAtomic())) {

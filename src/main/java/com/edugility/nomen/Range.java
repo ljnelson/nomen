@@ -189,7 +189,12 @@ public class Range<T extends Comparable<T>> extends AbstractSet<T> {
      *
      * <p>When this method is called by the {@link Range} class, it is
      * guaranteed that the supplied {@link Comparable} will have been
-     * found to possibly lie between the lower and upper bounds.</p>
+     * found to lie between the lower and upper bounds&mdash;that is,
+     * that a {@link Range} with those as its bounds does not
+     * <em>definitively exclude</em> the supplied {@link Comparable}.
+     * It is now up to this {@link Interpolator}, in other words, to
+     * answer the containment question with respect to the supplied
+     * bounds.</p>
      *
      * @param lowerBound a {@link Comparable} representing the
      * inclusive lower bound; may be {@code null} in which case the
@@ -199,7 +204,9 @@ public class Range<T extends Comparable<T>> extends AbstractSet<T> {
      * exclusive upper bound; may be {@code null} in which case the
      * exclusive upper bound is infinite
      *
-     * @param o the {@link Comparable} to test; must not be {@code null}
+     * @param o the {@link Comparable} to test; must not be {@code
+     * null}; guaranteed to lie somewhere between the supplied lower
+     * and upper bounds
      *
      * @return {@code true} if this {@link Interpolator} concludes
      * that the supplied {@code Comparable} falls between the supplied

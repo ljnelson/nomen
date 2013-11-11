@@ -40,7 +40,7 @@ public class NameType extends AbstractValued {
 
   private static final long serialVersionUID = 1L;
 
-  private static final int cacheSize = 20;
+  private static final int cacheSize = Integer.getInteger("nomen.NameType.cacheSize", 20);
   
   private static final Map<String, NameType> cache = new LinkedHashMap<String, NameType>(cacheSize, 0.75F, true) {
     private static final long serialVersionUID = 1L;
@@ -119,26 +119,20 @@ public class NameType extends AbstractValued {
     if (value == null) {
       throw new IllegalArgumentException("value", new NullPointerException("value"));
     }
-    cacheLock.readLock().lock();
-    NameType nt = cache.get(value);
-    if (nt == null) {
-      cacheLock.readLock().unlock();
-      cacheLock.writeLock().lock();
-      if (cache.containsKey(value)) {
-        cacheLock.readLock().lock();
-        cacheLock.writeLock().unlock();
-        nt = cache.get(value);
-        assert nt != null;
-        cacheLock.readLock().unlock();
-      } else {
+    NameType nt = null;
+    // Because the cache is a LinkedHashMap in access order, get()
+    // calls are structural modifications.  Therefore we need a write
+    // lock.
+    cacheLock.writeLock().lock();
+    try {
+      nt = cache.get(value);
+      if (nt == null) {
         nt = new NameType(value);
         cache.put(value, nt);
-        cacheLock.writeLock().unlock();
       }
-    } else {
-      cacheLock.readLock().unlock();
+    } finally {
+      cacheLock.writeLock().unlock();
     }
-    assert nt != null;
     return nt;
   }
 
