@@ -29,26 +29,75 @@ package com.edugility.nomen;
 
 import java.io.Serializable;
 
+/**
+ * A {@link Serializable} {@link Valued} implementation that correctly
+ * implements the {@link #equals(Object)} and {@link #hashCode()}
+ * methods.
+ *
+ * @author <a href="http://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ */
 public abstract class AbstractValued implements Serializable, Valued {
 
+  /**
+   * The version of this class for {@linkplain Serializable
+   * serialization purposes}.
+   */
   private static final long serialVersionUID = 1L;
 
+  /**
+   * The value of this {@link AbstractValued}.  This field may be
+   * {@code null}.
+   */
   private String value;
 
+  /**
+   * Creates a new {@link AbstractValued}.
+   */
   protected AbstractValued() {
     super();
   }
 
+  /**
+   * Creates a new {@link AbstractValued} with the supplied {@code
+   * value}.
+   *
+   * @param value the new value; must not be {@code null}
+   *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   *
+   * @see #setValue(String)
+   */
   protected AbstractValued(final String value) {
     this();
     this.setValue(value);
   }
 
+  /**
+   * Returns the value of this {@link AbstractValued}.
+   *
+   * <p>This method may return {@code null}.</p>
+   *
+   * @return the value of this {@link AbstractValued}, or {@code
+   * null}
+   */
   @Override
   public String getValue() {
     return this.value;
   }
 
+  /**
+   * Sets the value of this {@link AbstractValued}.
+   *
+   * <p>This method may only be called once.  Subsequent calls will
+   * throw an {@link IllegalStateException}.</p>
+   * 
+   * @param value the new value; must not be {@code null}
+   *
+   * @exception IllegalStateException if this method is called more
+   * than once
+   */
   public void setValue(final String value) {
     if (value == null) {
       throw new IllegalArgumentException("value", new NullPointerException("value"));
@@ -60,6 +109,12 @@ public abstract class AbstractValued implements Serializable, Valued {
     this.value = value;
   }
 
+  /**
+   * Returns a hashcode for this {@link AbstractValued} based off the
+   * hashcode of the return value of its {@link #getValue()} method.
+   *
+   * @return a hashcode for this {@link AbstractValued} implementation
+   */
   @Override
   public int hashCode() {
     final int hashCode;
@@ -72,6 +127,18 @@ public abstract class AbstractValued implements Serializable, Valued {
     return hashCode;
   }
 
+  /**
+   * Returns {@code true} if the supplied {@link Object} is an
+   * instance of {@code Valued} and returns a value from its {@link
+   * #getValue()} method that is {@linkplain String#equals(Object)
+   * equal to} the return value of this {@link AbstractValued}'s
+   * {@link #getValue()} method.
+   *
+   * @return {@code true} if the supplied {@link Object} is equal to
+   * this {@link AbstractValued}; {@code false} in all other cases
+   *
+   * @see #getValue()
+   */
   @Override
   public boolean equals(final Object other) {
     if (other == this) {

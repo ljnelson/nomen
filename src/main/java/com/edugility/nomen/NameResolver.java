@@ -50,6 +50,19 @@ public final class NameResolver implements VariableResolver {
 
   private final String name;
 
+  /**
+   * Creates a new {@link NameResolver}.
+   *
+   * @param named the {@link Named} that will be used by the {@link
+   * #getValue()} method; must not be {@code null}
+   *
+   * @param name the name of the variable this {@link NameResolver}
+   * will return from its {@link #getName()} method; must not be
+   * {@code null}
+   *
+   * @exception IllegalArgumentException if either {@code named} or
+   * {@code name} is {@code null}
+   */
   public NameResolver(final Named named, final String name) {
     super();
     if (named == null) {
@@ -62,21 +75,65 @@ public final class NameResolver implements VariableResolver {
     this.name = name;
   }
 
+  /**
+   * Returns {@code 0}, following the recommendations of the <a
+   * href="http://mvel.codehaus.org/">MVEL</a> project.
+   *
+   * <p>The {@link VariableResolver} documentation does not describe
+   * what this method is used for.</p>
+   *
+   * @return {@code 0}
+   */
   @Override
   public final int getFlags() {
     return 0; // per VariableResolver "documentation"
   }
 
+  /**
+   * Returns the {@link String} supplied at {@linkplain
+   * #NameResolver(Named, String) construction time} as the value of
+   * {@linkplain #NameResolver(Named, String) that constructor}'s
+   * {@code name} parameter.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @return a non-{@code null} {@link String} naming the {@link Name}
+   * whose value will be returned by the {@link #getValue()} method
+   *
+   * @see #getValue()
+   */
   @Override
   public final String getName() {
     return this.name;
   }
 
+  /**
+   * Returns the value of {@code Name.class} when invoked.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @return {@code Name.class}
+   */
   @Override
   public final Class<Name> getType() {
     return Name.class;
   }
 
+  /**
+   * Returns the value of a {@link Name} reference in a <a
+   * href="http://mvel.codehaus.org/">MVEL</a> program whose name is
+   * given by the return value of this {@link NameResolver}'s {@link
+   * #getName()} method.
+   *
+   * <p>If a suitable value cannot be determined, then the {@linkplain
+   * String#isEmpty() empty string} ("") is returned.</p>
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @return a non-{@code null} {@link String}
+   *
+   * @see #getName()
+   */
   @Override
   public final Object getValue() {
     Object returnValue = null;

@@ -68,10 +68,7 @@ public class NameValue extends AbstractValued {
   }
 
   public boolean isAtomic() {
-    if (this.atomic == null) {
-      return false;
-    }
-    return this.atomic.booleanValue();
+    return this.atomic != null && this.atomic.booleanValue();
   }
 
   public void setAtomic(final boolean atomic) {

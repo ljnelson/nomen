@@ -25,39 +25,13 @@
  * The original copy of this license is available at
  * http://www.opensource.org/license/mit-license.html.
  */
-package com.edugility.nomen;
-
-import java.io.Serializable;
 
 /**
- * An owner of {@link Name}s that can retrieve them efficiently when
- * asked for them by {@link NameType}.
+ * Provides classes and interfaces for working with names of all
+ * varieties.
  *
- * @see #getName(NameType)
+ * @see com.edugility.nomen.Name
  *
- * @see Name
+ * @see com.edugility.nomen.NameType
  */
-public interface Named extends Serializable {
-
-  /**
-   * Retrieves a {@link Name} that belongs to this {@link Named} that
-   * is appropriate for the supplied {@link NameType}, or {@code null}
-   * if no such {@link Name} can be found.
-   *
-   * <p>Implementations of this method are permitted to return {@code
-   * null}.</p>
-   *
-   * @param nameType the {@link NameType} for which a {@link Name}
-   * will be sought; may be {@code null} in which case the
-   * implementation may decide what kind of {@link Name} to return
-   * (including {@code null})
-   *
-   * @return a {@link Name} indexed under the supplied {@link
-   * NameType}, or {@code null}
-   *
-   * @exception IllegalArgumentException if {@code nameType} is not
-   * accepted by the implementation of this method for any reason
-   */
-  public Name getName(final NameType nameType);
-
-}
+package com.edugility.nomen;
