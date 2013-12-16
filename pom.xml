@@ -27,18 +27,6 @@
     <url>https://github.com/ljnelson/${project.artifactId}/</url>
   </scm>
 
-  <dependencyManagement>
-    <dependencies>
-
-      <dependency>
-        <groupId>org.mvel</groupId>
-        <artifactId>mvel2</artifactId>
-        <version>2.1.8.Final</version>
-      </dependency>
-      
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
 
     <dependency>
@@ -50,6 +38,7 @@
     <dependency>
       <groupId>org.mvel</groupId>
       <artifactId>mvel2</artifactId>
+      <version>2.1.8.Final</version>
     </dependency>
 
   </dependencies>
@@ -57,7 +46,6 @@
   <build>
     <pluginManagement>
       <plugins>
-
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
@@ -73,21 +61,8 @@
             </groups>
           </configuration>
         </plugin>
-
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <systemPropertyVariables>
-              <loggingConfigFile>${loggingConfigFile}</loggingConfigFile>
-              <maven.project.build.directory>${project.build.directory}</maven.project.build.directory>
-              <maven.project.build.testOutputDirectory>${project.build.testOutputDirectory}</maven.project.build.testOutputDirectory>
-            </systemPropertyVariables>
-          </configuration>
-        </plugin>
-
       </plugins>
     </pluginManagement>
-
   </build>
 
   <properties>
@@ -97,13 +72,8 @@
     <maven.compiler.target>1.6</maven.compiler.target>
 
     <!-- maven-javadoc-plugin properties -->
-    <links>http://download.oracle.com/javaee/6/api/,http://mvel.codehaus.org/javadoc/2.0/,http://junit.org/javadoc/4.10/</links>
+    <links>http://mvel.codehaus.org/javadoc/2.0/,http://junit.org/javadoc/4.10/</links>
     <stylesheetfile>css/styles.css</stylesheetfile>
-
-    <!-- Other properties -->
-    <loggingConfigFile>${basedir}/logging.properties</loggingConfigFile>
-    <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF8</project.reporting.outputEncoding>
 
   </properties>
 
