@@ -36,20 +36,47 @@ import java.io.Serializable;
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
+ *
+ * @see #getValue()
  */
 public abstract class AbstractValued implements Serializable, Valued {
+
+
+  /*
+   * Static fields.
+   */
+
 
   /**
    * The version of this class for {@linkplain Serializable
    * serialization purposes}.
+   *
+   * @see Serializable
    */
   private static final long serialVersionUID = 1L;
 
+
+  /*
+   * Instance fields.
+   */
+
+
   /**
-   * The value of this {@link AbstractValued}.  This field may be
-   * {@code null}.
+   * The value of this {@link AbstractValued}.
+   *
+   * <p>This field may be {@code null}.</p>
+   *
+   * @see #getValue()
+   *
+   * @see #setValue(String)
    */
   private String value;
+
+
+  /*
+   * Constructors.
+   */
+
 
   /**
    * Creates a new {@link AbstractValued}.
@@ -74,6 +101,12 @@ public abstract class AbstractValued implements Serializable, Valued {
     this.setValue(value);
   }
 
+
+  /*
+   * Instance methods.
+   */
+
+
   /**
    * Returns the value of this {@link AbstractValued}.
    *
@@ -90,8 +123,10 @@ public abstract class AbstractValued implements Serializable, Valued {
   /**
    * Sets the value of this {@link AbstractValued}.
    *
-   * <p>This method may only be called once.  Subsequent calls will
-   * throw an {@link IllegalStateException}.</p>
+   * <p>The default implementation of this method may only be called
+   * once.  Subsequent calls will throw an {@link
+   * IllegalStateException}.  Subclasses are free to override this
+   * restriction.</p>
    * 
    * @param value the new value; must not be {@code null}
    *

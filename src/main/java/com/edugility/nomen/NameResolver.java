@@ -40,15 +40,57 @@ import org.mvel2.integration.impl.SimpleValueResolver;
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
  *
+ * @see NameResolverFactory
+ *
  * @see VariableResolver
+ *
+ * @see <a href="http://mvel.codehaus.org">MVEL</a>
  */
 public final class NameResolver implements VariableResolver {
 
+  
+  /*
+   * Static fields.
+   */
+
+
+  /**
+   * The version of this class for {@linkplain Serializable
+   * serialization purposes}.
+   *
+   * @see Serializable
+   */
   private static final long serialVersionUID = 1L;
 
+
+  /*
+   * Instance fields.
+   */
+
+
+  /**
+   * The {@link Named} that owns {@link Name}s that might be resolved
+   * by this {@link NameResolver}.
+   *
+   * <p>This field will never be {@code null}.</p>
+   *
+   * @see Named
+   */
   private final Named named;
 
+  /**
+   * The name of the {@link Name} to be resolved by this {@link
+   * NameResolver}&mdash;akin to a variable name.
+   *
+   * <p>This field will never be {@code null}.</p>
+   */
   private final String name;
+
+
+  /*
+   * Constructors.
+   */
+
 
   /**
    * Creates a new {@link NameResolver}.
@@ -74,6 +116,12 @@ public final class NameResolver implements VariableResolver {
     this.named = named;
     this.name = name;
   }
+
+
+  /*
+   * Instance methods.
+   */
+
 
   /**
    * Returns {@code 0}, following the recommendations of the <a

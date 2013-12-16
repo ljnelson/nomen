@@ -36,12 +36,52 @@ import java.util.Map.Entry;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * An {@link AbstractValued} implementation that serves as a key
+ * within a {@link Named} to identify particular {@link Name}
+ * instances.
+ *
+ * @author <a href="http://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ *
+ * @see Named
+ *
+ * @see Name
+ *
+ * @see Named#getName(NameType)
+ */
 public class NameType extends AbstractValued {
 
+  /**
+   * The version of this class for {@linkplain Serializable
+   * serialization purposes}.
+   *
+   * @see Serializable
+   */
   private static final long serialVersionUID = 1L;
 
+  /**
+   * The size of the cache used by the {@link #valueOf(String)}
+   * method; {@code 20} by default and linked to the {@code
+   * nomen.NameType.cacheSize} {@linkplain System#getProperty(String,
+   * String) system property}.
+   *
+   * @see #valueOf(String)
+   */
   private static final int cacheSize = Integer.getInteger("nomen.NameType.cacheSize", 20);
   
+  /**
+   * A cache of {@link NameType} instances used by the {@link
+   * #valueOf(String)} method.  A {@linkplain
+   * ReadWriteLock#writeLock() write lock} must be obtained from the
+   * {@link #cacheLock} field before modifying this field, and a
+   * {@linkplain ReadWriteLock#readLock() read lock} must be obtained
+   * from the {@link #cacheLock} field before reading from this field.
+   *
+   * <p>This field is never {@code null}.</p>
+   *
+   * @see #valueOf(String)
+   */
   private static final Map<String, NameType> cache = new LinkedHashMap<String, NameType>(cacheSize, 0.75F, true) {
     private static final long serialVersionUID = 1L;
     @Override
@@ -50,12 +90,38 @@ public class NameType extends AbstractValued {
     }
   };
   
+  /**
+   * A {@link ReadWriteLock} used to synchronized access to the {@link
+   * #cache} field; used only by the {@link #valueOf(String)} method.
+   *
+   * <p>This field is never {@code null}.</p>
+   */
   private static final ReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
+
+  /*
+   * Constructors.
+   */
+
+
+  /**
+   * Creates a new {@link NameType}.
+   */
   public NameType() {
     super();
   }
 
+  /**
+   * Creates a new {@link NameType} with the supplied {@code value}.
+   *
+   * @param value the value for this {@link NameType}; must not be
+   * {@code null}
+   * 
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   *
+   * @see AbstractValued#AbstractValued(String)
+   */
   public NameType(final String value) {
     super(value);
   }

@@ -55,13 +55,13 @@ public class TestCaseTemplateEvaluation {
 
 
     final Name fullName = new Name();
-    fullName.setCollapseWhitespace(true);
+    fullName.setWhitespaceReplacement(" ");
     fullName.setNameValue(lairdJarrettNelson);
 
     final Named dude = new Named() {
         private static final long serialVersionUID = 1L;
         @Override
-        public Name getName(final NameType nameType) {
+        public final Name getName(final NameType nameType) {
           if (nameType == null) {
             throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
           }
@@ -87,6 +87,17 @@ public class TestCaseTemplateEvaluation {
 
     final String value = fullName.getValue();
     assertEquals("Laird Jarrett Nelson", value);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testSyntacticallyInvalidTemplate() {
+    final Name firstName = new Name();
+    assertEquals(" ", firstName.getWhitespaceReplacement());
+    final NameValue template = new NameValue("${BAD SYNTAX ON PURPOSE");
+    assertFalse(template.isAtomic());
+
+    // Throws IllegalStateException
+    firstName.setNameValue(template);
   }
 
 }

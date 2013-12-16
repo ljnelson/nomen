@@ -117,7 +117,7 @@ public abstract class AbstractNamed implements Named {
   }
 
   /**
-   * {@linkplain Name#Name(Named, NameValue, boolean) Creates a
+   * {@linkplain Name#Name(Named, NameValue, String) Creates a
    * <code>Name</code>} from the supplied {@link NameType} and {@link
    * NameValue} and stores it in this {@link AbstractNamed} in such a
    * way that it can be retrieved later by the {@link
