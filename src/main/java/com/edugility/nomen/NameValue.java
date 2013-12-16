@@ -245,7 +245,7 @@ public class NameValue extends AbstractValued {
    * @see #setAtomic(boolean)
    */
   public boolean isInitialized() {
-    return this.atomic != null && super.isInitialized();
+    return this.atomic != null && this.getValue() != null;
   }
 
   /**
