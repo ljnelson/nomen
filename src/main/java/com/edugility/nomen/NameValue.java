@@ -46,6 +46,22 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * something that is <em>named</em>}.  Each concept has a
  * corresponding class.</p>
  *
+ * <p>A {@link NameValue} may be <em>atomic</em>&mdash;basically a
+ * glorified {@link String}, indivisible, not subject to any further
+ * interpretation&mdash;or not atomic&mdash;in which case it is
+ * interpreted as an <a href="http://mvel.codehaus.org/>MVEL</a>
+ * template that will be interpolated once the given {@link NameValue}
+ * is {@linkplain Name#getNameValue() owned} by a {@link Name}.
+ * {@link NameValue}s are <em>not</em> atomic by default.</p>
+ *
+ * <p>A {@link NameValue}, once initialized with a {@linkplain
+ * #setValue(String) value}, whether via {@linkplain
+ * #NameValue(String, boolean) the constructor} or the {@link
+ * #setValue(String)} and {@link #setAtomic(boolean)} methods, can be
+ * treated as though it is immutable.  Subsequent attempts to call
+ * either the {@link #setValue(String)} or {@link #setAtomic(boolean)}
+ * methods will fail with {@link IllegalStateException}s.</p>
+ *
  * <p>Two {@link NameValue}s are {@linkplain #equals(Object) equal} if
  * their {@linkplain AbstractValued#getValue() values} are {@linkplain
  * String#equals(Object) equal} and if they are both {@linkplain
@@ -55,7 +71,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * <p>Methods and fields that might otherwise be {@code final} are
  * explicitly left non-{@code final} so that this class may be used as
- * a JPA entity.</p>
+ * a JPA entity.  Certain methods, like {@link #setAtomic(boolean)}
+ * and {@link #setValue(String)}, may only be called once.</p>
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
@@ -153,9 +170,21 @@ public class NameValue extends AbstractValued {
 
 
   /**
-   * Creates a new {@link NameValue} in an initially invalid state.
+   * Creates a new {@link NameValue} in an incomplete state; to fully
+   * initialize the new {@link NameValue} callers must invoke the
+   * {@link #setValue(String)} method and the {@link
+   * #setAtomic(boolean)} method.
+   *
+   * <h4>Design Notes</h4>
+   *
+   * <p>This constructor exists for JPA compatibility.  Please
+   * consider using the {@link #NameValue(String, boolean)}
+   * constructor instead which fully initializes a {@link NameValue}
+   * instance as it creates it.</p>
+   *
+   * @see #NameValue(String, boolean)
    */
-  public NameValue() {
+  protected NameValue() {
     super();
   }
 
@@ -203,6 +232,21 @@ public class NameValue extends AbstractValued {
    * Instance methods.
    */
 
+  
+  /**
+   * Returns {@code true} if this {@link NameValue} is fully
+   * initialized and hence immutable.
+   *
+   * @return {@code true} if this {@link NameValue} is fully
+   * initialized
+   *
+   * @see #setValue(String)
+   *
+   * @see #setAtomic(boolean)
+   */
+  public boolean isInitialized() {
+    return this.atomic != null && super.isInitialized();
+  }
 
   /**
    * Returns {@code true} if this {@link NameValue} is <em>atomic</em>
@@ -235,7 +279,7 @@ public class NameValue extends AbstractValued {
   public void setAtomic(final boolean atomic) {
     if (this.atomic == null) {
       this.atomic = Boolean.valueOf(atomic);
-    } else if (!this.atomic.booleanValue() == atomic) {
+    } else if (this.atomic.booleanValue() != atomic) {
       throw new IllegalStateException();
     }
   }

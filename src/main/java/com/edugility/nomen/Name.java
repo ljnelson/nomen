@@ -181,7 +181,7 @@ public class Name extends AbstractValued {
    *
    * @see #setWhitespaceReplacement(String)
    */
-  public Name() {
+  protected Name() {
     super();
     this.setWhitespaceReplacement(" ");
   }
