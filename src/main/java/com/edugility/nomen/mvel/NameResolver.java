@@ -25,7 +25,11 @@
  * The original copy of this license is available at
  * http://www.opensource.org/license/mit-license.html.
  */
-package com.edugility.nomen;
+package com.edugility.nomen.mvel;
+
+import com.edugility.nomen.Name;
+import com.edugility.nomen.Named;
+import com.edugility.nomen.NameType;
 
 import org.mvel2.integration.VariableResolver;
 

@@ -31,7 +31,10 @@ import java.io.Serializable;
 
 /**
  * An owner of {@link Name}s that can retrieve them efficiently when
- * asked for them by {@link NameType}.
+ * {@linkplain #getName(NameType) asked for them} by {@link NameType}.
+ *
+ * @author <a href="http://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
  *
  * @see #getName(NameType)
  *

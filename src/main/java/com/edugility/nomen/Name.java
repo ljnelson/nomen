@@ -34,6 +34,8 @@ import java.util.Map; // for javadoc only
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.edugility.nomen.mvel.NameResolverFactory;
+
 import org.mvel2.CompileException;
 
 import org.mvel2.integration.VariableResolverFactory; // for javadoc only

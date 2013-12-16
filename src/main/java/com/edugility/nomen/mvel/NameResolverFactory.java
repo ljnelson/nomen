@@ -25,11 +25,16 @@
  * The original copy of this license is available at
  * http://www.opensource.org/license/mit-license.html.
  */
-package com.edugility.nomen;
+package com.edugility.nomen.mvel;
 
 import java.io.Serializable; // for javadoc only
 
 import java.util.HashMap;
+
+import com.edugility.nomen.Name;
+import com.edugility.nomen.Named;
+import com.edugility.nomen.NameType;
+import com.edugility.nomen.NameValue; // for javadoc only
 
 import org.mvel2.integration.VariableResolver;
 import org.mvel2.integration.VariableResolverFactory;
@@ -118,13 +123,13 @@ public class NameResolverFactory extends BaseVariableResolverFactory {
 
   /**
    * Returns {@code true} if {@code name} is equal to the {@linkplain
-   * AbstractValued#getValue() value} of a {@link NameType} that, when
+   * NameType#getValue() value} of a {@link NameType} that, when
    * passed to {@link Named#getName(NameType)}, results in a
    * non-{@code null} {@link Name}, or if subsequent {@link
    * VariableResolver}s are able to make sense of the supplied {@code
    * name} parameter.
    *
-   * @param name the {@linkplain AbstractValued#getValue() value} of a
+   * @param name the {@linkplain NameType#getValue() value} of a
    * {@link NameType}; may be {@code null}
    *
    * @return {@code true} if this {@link NameResolverFactory} or any
@@ -193,7 +198,7 @@ public class NameResolverFactory extends BaseVariableResolverFactory {
    * the {@link #isResolveable(String)} method to resolve a {@link
    * Name} indexed under the supplied {@code name}.
    *
-   * @param name the {@linkplain AbstractValued#getValue() value} of a
+   * @param name the {@linkplain NameType#getValue() value} of a
    * {@link NameType}; may be {@code null}
    *
    * @return {@code true} if the supplied {@code name} is non-{@code

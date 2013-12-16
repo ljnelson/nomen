@@ -27,18 +27,14 @@
  */
 
 /**
- * Provides classes and interfaces for working with names of all
- * varieties.
+ * Provides classes and interfaces for integrating <a
+ * href="http://mvel.codehaus.org/">MVEL</a> into the Nomen project.
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
  *
- * @see com.edugility.nomen.Name
+ * @see com.edugility.nomen.mvel.NameResolver
  *
- * @see com.edugility.nomen.Named
- *
- * @see com.edugility.nomen.NameType
- *
- * @see com.edugility.nomen.NameValue
+ * @see com.edugility.nomen.mvel.NameResolverFactory
  */
-package com.edugility.nomen;
+package com.edugility.nomen.mvel;
