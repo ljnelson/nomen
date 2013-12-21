@@ -39,12 +39,7 @@ public class TestCaseNameValue {
 
   @Test
   public void testCaching() {
-    assertFalse(NameValue.isCached("Laird"));
-    final NameValue nv = NameValue.valueOf("Laird");
-    assertNotNull(nv);
-    assertTrue(NameValue.isCached("Laird"));
-    final NameValue nv2 = NameValue.valueOf("Laird");
-    assertSame(nv, nv2);
+    
   }
 
 }

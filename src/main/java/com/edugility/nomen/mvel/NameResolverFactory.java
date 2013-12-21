@@ -63,7 +63,7 @@ import org.mvel2.integration.impl.BaseVariableResolverFactory;
  *
  * @see NameValue#setAtomic(boolean)
  */
-public class NameResolverFactory extends BaseVariableResolverFactory {
+public class NameResolverFactory extends BaseVariableResolverFactory implements Named {
 
   
   /*
@@ -121,6 +121,17 @@ public class NameResolverFactory extends BaseVariableResolverFactory {
     this.named = named;
   }
 
+  @Override
+  public final Name getName(final NameType nameType) {
+    final Name returnValue;
+    if (nameType != null && this.named != null) {
+      returnValue = this.named.getName(nameType);
+    } else {
+      returnValue = null;
+    }
+    return returnValue;
+  }
+  
   /**
    * Returns {@code true} if {@code name} is equal to the {@linkplain
    * NameType#getValue() value} of a {@link NameType} that, when
@@ -153,8 +164,7 @@ public class NameResolverFactory extends BaseVariableResolverFactory {
     } else if (this.isTarget(name)) {
       returnValue = true;
     } else {
-      assert this.named != null;
-      final Name n = this.named.getName(NameType.valueOf(name));
+      final Name n = this.getName(NameType.valueOf(name));
       if (n == null) {
         returnValue = this.isNextResolveable(null);
       } else {
@@ -188,7 +198,7 @@ public class NameResolverFactory extends BaseVariableResolverFactory {
    * {@code name} is {@code null}
    */
   protected NameResolver createNameResolver(final Named named, final String name) {
-    return new NameResolver(named, name);
+    return new NameResolver(named, NameType.valueOf(name));
   }
 
   /**

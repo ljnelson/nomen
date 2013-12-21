@@ -1,0 +1,22 @@
+* Nomen
+ljnelson@gmail.com
+2013-12-21
+
+** Use Cases
+
+*** Permit shared values
+If someone has a name part of "Sr.", then there shouldn't be "sr",
+"SR", "SR.", etc. in the Names repository/database.  The system
+should make it possible to look these values up as someone is
+entering them so they can pick one that already exists.
+
+*** Allow unlimited types
+A name value should be able to be assigned to a person under as many
+types as that person wants.  For example, the value "Laird" should be
+able to be designated my first name, my preferred salutation name, my
+given name, and so forth.
+
+*** Find a name value for a person by type
+The system needs to be able to quickly provide the value for a name
+owner's given name type.  The user should be able to ask the system
+for the sort name or display name for all users in a speedy fashion.

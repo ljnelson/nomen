@@ -27,6 +27,9 @@
  */
 package com.edugility.nomen;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import java.io.Serializable;
 
 import java.util.Map; // for javadoc only
@@ -85,6 +88,12 @@ public class Name extends AbstractValued {
    * serialization purposes}.
    */
   private static final long serialVersionUID = 1L;
+
+  /**
+   * An empty array of {@link PropertyChangeListener}s, for use by the
+   * {@link #getPropertyChangeListeners()} method.
+   */
+  private static final PropertyChangeListener[] EMPTY_PROPERTY_CHANGE_LISTENER_ARRAY = new PropertyChangeListener[0];
 
   /**
    * A {@link Pattern} {@linkplain Pattern#compile(String) compiled}
@@ -161,6 +170,8 @@ public class Name extends AbstractValued {
    * @see #getValue()
    */
   private transient CompiledTemplate compiledTemplate;
+
+  private transient PropertyChangeSupport propertyChangeSupport;
 
 
   /*
@@ -305,7 +316,11 @@ public class Name extends AbstractValued {
    * @see #getValue()
    */
   public void setWhitespaceReplacement(final String s) {
+    final Object old = this.getWhitespaceReplacement();
     this.whitespaceReplacement = s;
+    if (this.propertyChangeSupport != null) {
+      this.propertyChangeSupport.firePropertyChange("whitespaceReplacement", old, this.getWhitespaceReplacement());
+    }
   }
 
   /**
@@ -331,10 +346,16 @@ public class Name extends AbstractValued {
    */
   public void setNamed(final Named named) {
     final Named old = this.getNamed();
-    if (named != old) {
+    if ((named == null && old != null) || (named != null && !named.equals(old))) {
       this.named = named;
-      this.compiledTemplate = null;
-      this.installTemplate();
+      if (named != null) {
+        this.nameResolverFactory = new NameResolverFactory(named);
+      } else {
+        this.nameResolverFactory = null;
+      }
+      if (this.propertyChangeSupport != null) {
+        this.propertyChangeSupport.firePropertyChange("named", old, this.getNamed());
+      }
     }
   }
 
@@ -363,7 +384,8 @@ public class Name extends AbstractValued {
    * {@code null}
    *
    * @exception IllegalArgumentException if {@code nameValue} is
-   * {@code null}
+   * {@code null} or {@linkplain NameValue#isInitialized() not
+   * initialized}
    *
    * @exception IllegalStateException if the supplied {@link
    * NameValue} is {@linkplain NameValue#isAtomic() not atomic} and
@@ -380,12 +402,17 @@ public class Name extends AbstractValued {
   public void setNameValue(final NameValue nameValue) {
     if (nameValue == null) {
       throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
+    } else if (!nameValue.isInitialized()) {
+      throw new IllegalArgumentException("!nameValue.isInitialized()");
     }
     final NameValue old = this.getNameValue();
-    if (nameValue != old) {
+    if (!nameValue.equals(old)) {
       this.nameValue = nameValue;
       this.compiledTemplate = null;
       this.installTemplate();
+      if (this.propertyChangeSupport != null) {
+        this.propertyChangeSupport.firePropertyChange("nameValue", old, this.getNameValue());
+      }
     }
   }
 
@@ -400,6 +427,11 @@ public class Name extends AbstractValued {
    * VariableResolverFactory) execution} later by the {@link
    * #getValue()} method.
    *
+   * <h4>Design Notes</h4>
+   *
+   * <p>This method is not {@code final} only so this class can be
+   * used as a JPA entity.<p>
+   *
    * @exception IllegalStateException if a template compilation error
    * occurs
    *
@@ -409,7 +441,7 @@ public class Name extends AbstractValued {
    *
    * @see #getValue()
    */
-  private final void installTemplate() {
+  private void installTemplate() {
     if (this.compiledTemplate == null) {
       final NameValue nv = this.getNameValue();
       if (nv != null && !nv.isAtomic()) {
@@ -421,6 +453,9 @@ public class Name extends AbstractValued {
             throw new IllegalStateException(wrapMe);
           }
           assert this.compiledTemplate != null;
+          if (this.propertyChangeSupport != null) {
+            this.propertyChangeSupport.firePropertyChange("compiledTemplate", null, this.compiledTemplate);
+          }
         }          
       }
     }    
@@ -435,6 +470,9 @@ public class Name extends AbstractValued {
    *
    * <p>This method never returns {@code null}.</p>
    *
+   * <p>This method calls the {@link #computeValue()} method and
+   * returns its result.</p>
+   *
    * @return a non-{@code null} {@link String} with the
    * just-in-time-computed value of this {@link Name}
    *
@@ -442,50 +480,78 @@ public class Name extends AbstractValued {
    * template
    */
   public String getValue() {
+    return this.computeValue();
+  }
+
+  /**
+   * Converts the supplied {@link Object} to a {@link String}.
+   *
+   * <p>The default implementation of this method never returns {@code
+   * null}, but overrides are permitted to relax this restriction.</p>
+   *
+   * <p>This implementation returns the {@linkplain String#isEmpty()
+   * empty string} if the supplied {@link Object} is {@code null}, and
+   * otherwise returns the result of the supplied {@code object}'s
+   * {@link Object#toString()} method.</p>
+   *
+   * @param object the {@link Object} to convert; may be {@code null}
+   *
+   * @return a {@link String} representing the conversion, or {@code
+   * null}
+   */
+  protected String toString(final Object object) {
+    if (object == null) {
+      return "";
+    } else {
+      return object.toString();
+    }
+  }
+
+  /**
+   * Computes and returns the most up-to-date value possible for this
+   * {@link Name}.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * <p>This method is not declared {@code final} only so that this
+   * class may be used as a JPA entity.</p>
+   *
+   * @return a non-{@code null} {@link String} representing this
+   * {@link Name}'s value
+   *
+   * @exception IllegalStateException if there was a problem compiling
+   * a template
+   */
+  protected String computeValue() {
     final String returnValue;
-    final Named named = this.getNamed();
-    if (named == null) {
-      final NameValue nv = this.getNameValue();
-      if (nv == null) {
+    final NameValue nv = this.getNameValue();
+    if (nv == null) {
+      returnValue = "";
+    } else if (nv.isAtomic() || this.compiledTemplate == null) {
+      final String rawValue = nv.getValue();
+      if (rawValue == null) {
         returnValue = "";
       } else {
-        returnValue = nv.getValue();
+        returnValue = rawValue;
       }
     } else {
-      assert named != null;
-      this.installTemplate();
-      if (this.compiledTemplate == null) {
-        final NameValue nv = this.getNameValue();
-        if (nv == null || nv.isAtomic()) {
-          returnValue = "";
-        } else {
-          returnValue = nv.getValue();
-        }
+      Object rawValue = null;
+      try {
+        rawValue = TemplateRuntime.execute(this.compiledTemplate, this.getNamed(), this.nameResolverFactory);
+      } catch (final IllegalStateException throwMe) {
+        throw throwMe;
+      } catch (final RuntimeException wrapMe) {          
+        throw new IllegalStateException(wrapMe);
+      }
+      final String rawStringValue = this.toString(rawValue);
+      if (rawStringValue == null || rawStringValue.isEmpty()) {
+        returnValue = "";
       } else {
-        assert this.compiledTemplate != null;
-        assert named != null;
-        if (this.nameResolverFactory == null) {
-          this.nameResolverFactory = new NameResolverFactory(named);
-        }
-        Object rawValue = null;
-        try {
-          rawValue = TemplateRuntime.execute(this.compiledTemplate, named, this.nameResolverFactory);
-        } catch (final IllegalStateException throwMe) {
-          throw throwMe;
-        } catch (final RuntimeException wrapMe) {          
-          throw new IllegalStateException(wrapMe);
-        }
-        if (rawValue == null) {
-          returnValue = "";
+        final String whitespaceReplacement = this.getWhitespaceReplacement();
+        if (whitespaceReplacement != null) {
+          returnValue = whitespacePattern.matcher(rawStringValue).replaceAll(whitespaceReplacement);
         } else {
-          final String whitespaceReplacement = this.getWhitespaceReplacement();
-          if (whitespaceReplacement != null) {
-            final Matcher m = whitespacePattern.matcher(rawValue.toString());
-            assert m != null;
-            returnValue = m.replaceAll(whitespaceReplacement);
-          } else {
-            returnValue = rawValue.toString();
-          }
+          returnValue = rawStringValue;
         }
       }
     }
@@ -525,6 +591,253 @@ public class Name extends AbstractValued {
       sb.append(value);
     }
     return sb.toString();
+  }
+
+  /*
+   * PropertyChangeListener support.
+   */
+
+  /**
+   * Adds the supplied {@link PropertyChangeListener} to this {@link
+   * Name}, listening for changes to the JavaBeans property identified
+   * by the value of the {@code name} parameter.
+   *
+   * <p>If the supplied {@link PropertyChangeListener} has already
+   * been added, it <strong>will</strong> be added again.</p>
+   *
+   * <p>This method delegates to {@link
+   * PropertyChangeSupport#addPropertyChangeListener(String,
+   * PropertyChangeListener)}.</p>
+   *
+   * @param name the name of the property to be listened to; if {@code
+   * null} then no action will be taken
+   *
+   * @param listener the {@link PropertyChangeListener} to add; if
+   * {@code null}, then no action will be taken
+   *
+   * @see #getPropertyChangeListeners(String)
+   *
+   * @see
+   * PropertyChangeSupport#addPropertyChangeListener(String, PropertyChangeListener)
+   */
+  public void addPropertyChangeListener(final String name, final PropertyChangeListener listener) {
+    if (listener != null) {
+      if (this.propertyChangeSupport == null) {
+        this.propertyChangeSupport = new PropertyChangeSupport(this);
+      }
+      this.propertyChangeSupport.addPropertyChangeListener(name, listener);
+    }
+  }
+
+  /**
+   * Adds the supplied {@link PropertyChangeListener} to this {@link
+   * Name}.  The supplied {@link PropertyChangeListener} will be
+   * notified of all property changes fired by this {@link Name}.
+   *
+   * <p>If the supplied {@link PropertyChangeListener} has already
+   * been added, it <strong>will</strong> be added again.</p>
+   *
+   * <p>This method delegates to {@link
+   * PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)}.</p>
+   *
+   * @param listener the {@link PropertyChangeListener} to add; if
+   * {@code null}, then no action will be taken
+   *
+   * @see #getPropertyChangeListeners()
+   *
+   * @see
+   * PropertyChangeSupport#addPropertyChangeListener(PropertyChangeListener)
+   */
+  public void addPropertyChangeListener(final PropertyChangeListener listener) {
+    if (listener != null) {
+      if (this.propertyChangeSupport == null) {
+        this.propertyChangeSupport = new PropertyChangeSupport(this);
+      }
+      this.propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+  }
+
+  /**
+   * Removes the supplied {@link PropertyChangeListener} from this
+   * {@link Name}, so that it will no longer be listening for changes
+   * to the JavaBeans property identified by the value of the {@code
+   * name} parameter.
+   *
+   * <p>If the supplied {@link PropertyChangeListener} has been
+   * {@linkplain #addPropertyChangeListener(String,
+   * PropertyChangeListener) added} more than once, only one instance
+   * will be removed, and it is undefined which instance will be
+   * removed.</p>
+   *
+   * <p>This method delegates to {@link
+   * PropertyChangeSupport#removePropertyChangeListener(String,
+   * PropertyChangeListener)}.</p>
+   *
+   * @param name the name of the property to be listened to; if {@code
+   * null} then no action will be taken
+   *
+   * @param listener the {@link PropertyChangeListener} to add; if
+   * {@code null}, then no action will be taken
+   *
+   * @see #addPropertyChangeListener(String, PropertyChangeListener)
+   *
+   * @see #getPropertyChangeListeners(String)
+   *
+   * @see
+   * PropertyChangeSupport#removePropertyChangeListener(String, PropertyChangeListener)
+   */
+  public void removePropertyChangeListener(final String name, final PropertyChangeListener listener) {
+    if (listener != null && this.propertyChangeSupport != null) {
+      this.propertyChangeSupport.removePropertyChangeListener(name, listener);
+    }
+  }
+
+  /**
+   * Removes the supplied {@link PropertyChangeListener} from this
+   * {@link Name}, so that it will no longer be listening for changes
+   * to JavaBeans properties exposed by the {@link Name} class.
+   *
+   * <p>If the supplied {@link PropertyChangeListener} has been
+   * {@linkplain #addPropertyChangeListener(PropertyChangeListener)
+   * added} more than once, only one instance will be removed, and it
+   * is undefined which instance will be removed.</p>
+   *
+   * <p>This method delegates to {@link
+   * PropertyChangeSupport#removePropertyChangeListener(PropertyChangeListener)}.</p>
+   *
+   * @param listener the {@link PropertyChangeListener} to add; if
+   * {@code null}, then no action will be taken
+   *
+   * @see #addPropertyChangeListener(PropertyChangeListener)
+   *
+   * @see #getPropertyChangeListeners()
+   *
+   * @see
+   * PropertyChangeSupport#removePropertyChangeListener(PropertyChangeListener)
+   */
+  public void removePropertyChangeListener(final PropertyChangeListener listener) {
+    if (listener != null && this.propertyChangeSupport != null) {
+      this.propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+  }
+
+  /**
+   * Returns a non-{@code null} array of the {@link
+   * PropertyChangeListener}s that have been {@linkplain
+   * #addPropertyChangeListener(String, PropertyChangeListener) added}
+   * to this {@link Name} and that are listening for changes in the
+   * property identified by the supplied {@code name}.
+   *
+   * <p>This method delegates to {@link
+   * PropertyChangeSupport#getPropertyChangeListeners(String)}.</p>
+   *
+   * @param name the name of the property in question; may be {@code
+   * null} in which case a non-{@code null} empty {@link
+   * PropertyChangeListener} array will be returned
+   *
+   * @return a non-{@code null}, possibly empty, array of {@link
+   * PropertyChangeListener}s
+   *
+   * @see PropertyChangeSupport#getPropertyChangeListeners(String)
+   */
+  public PropertyChangeListener[] getPropertyChangeListeners(final String name) {
+    if (this.propertyChangeSupport != null) {
+      return this.propertyChangeSupport.getPropertyChangeListeners(name);
+    }
+    return EMPTY_PROPERTY_CHANGE_LISTENER_ARRAY;
+  }
+
+  /**
+   * Returns a non-{@code null} array of the {@link
+   * PropertyChangeListener}s that have been {@linkplain
+   * #addPropertyChangeListener(PropertyChangeListener) added} to this
+   * {@link Name} and that are listening for changes in all properties
+   * exposed by the {@link Name} class.
+   *
+   * <p>This method delegates to {@link
+   * PropertyChangeSupport#getPropertyChangeListeners()}.</p>
+   *
+   * @return a non-{@code null}, possibly empty, array of {@link
+   * PropertyChangeListener}s
+   *
+   * @see PropertyChangeSupport#getPropertyChangeListeners()
+   */
+  public PropertyChangeListener[] getPropertyChangeListeners() {
+    if (this.propertyChangeSupport != null) {
+      return this.propertyChangeSupport.getPropertyChangeListeners();
+    }
+    return EMPTY_PROPERTY_CHANGE_LISTENER_ARRAY;
+  }
+
+  /**
+   * If appropriate, notifies registered {@link
+   * PropertyChangeListener}s of a possible change in the property
+   * named by the supplied {@code propertyName} parameter.
+   *
+   * <p>This method delegates to {@link
+   * PropertyChangeSupport#firePropertyChange(String, Object,
+   * Object)}.</p>
+   *
+   * <p>This method is not declared {@code final} only so that this
+   * class may be used as a JPA entity.</p>
+   *
+   * @param propertyName the name of the property that has changed;
+   * may be {@code null}
+   *
+   * @param old the old value for the property; may be {@code null}
+   *
+   * @param newValue the newValue for the property; may be {@code
+   * null}
+   *
+   * @see PropertyChangeSupport#firePropertyChange(String, Object,
+   * Object)
+   */
+  protected void firePropertyChange(final String propertyName, final Object old, final Object newValue) {
+    if (this.propertyChangeSupport != null) {
+      this.propertyChangeSupport.firePropertyChange(propertyName, old, newValue);
+    }
+  }
+
+
+  /*
+   * Static methods.
+   */
+
+
+  /**
+   * A convenience method that creates and installs a new
+   * non-{@linkplain NameValue#isAtomic() atomic} {@link Name} into
+   * the supplied {@link AbstractNamed}.
+   *
+   * <h4>Design Notes</h4>
+   *
+   * <p>This method is not declared {@code final} only so that this
+   * class may be used as a JPA entity.</p>
+   *
+   * @param named the {@link AbstractNamed} that will own the new
+   * {@link Name}; must not be {@code null}
+   * 
+   * @param nameTypeValue the identifying information for the relevant
+   * {@link NameType} under which a new {@link Name} will be indexed; must not be {@code null}
+   *
+   * @param nameValue the identifying information for the relevant
+   * {@link NameValue}; must not be {@code null}
+   *
+   * @return a non-{@code null} {@link Name} {@linkplain #getNamed()
+   * owned} by the supplied {@link AbstractNamed} under an appropriate
+   * {@link NameType}
+   *
+   * @exception IllegalArgumentException if either {@code named},
+   * {@code nameTypeValue} or {@code nameValue} is {@code null}.
+   */
+  public static Name createName(final AbstractNamed named, final String nameTypeValue, final String nameValue, final boolean atomic, final String whitespaceReplacement) {
+    if (named == null) {
+      throw new IllegalArgumentException("named", new NullPointerException("named"));
+    }
+    final NameType nameType = NameType.valueOf(nameTypeValue);
+    assert nameType != null;    
+    named.putName(nameType, NameValue.valueOf(nameValue, atomic));
+    return named.getName(nameType);
   }
 
 }

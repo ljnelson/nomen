@@ -139,6 +139,10 @@ public abstract class AbstractNamed implements Named {
    * nameValue} is {@code null}
    */
   public Name putName(final NameType nameType, final NameValue nameValue) {
+    return this.putName(nameType, nameValue, " ");
+  }
+
+  public Name putName(final NameType nameType, final NameValue nameValue, final String whitespaceReplacement) {
     if (nameType == null) {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
     }
@@ -148,11 +152,12 @@ public abstract class AbstractNamed implements Named {
     if (this.names == null) {
       this.names = new HashMap<NameType, Name>(11);
     }
-    final Name returnValue = this.names.put(nameType, new Name(this, nameValue));
+    final Name returnValue = this.names.put(nameType, new Name(this, nameValue, whitespaceReplacement));
     if (returnValue != null) {
       returnValue.setNamed(null);
     }
     return returnValue;
+    
   }
 
   /**

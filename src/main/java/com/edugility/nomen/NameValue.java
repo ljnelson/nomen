@@ -29,13 +29,6 @@ package com.edugility.nomen;
 
 import java.io.Serializable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 /**
  * An {@link AbstractValued} implementation that represents the value
  * of a name of something.
@@ -98,44 +91,6 @@ public class NameValue extends AbstractValued {
    * @see Serializable
    */
   private static final long serialVersionUID = 1L;
-
-  /**
-   * The size of the cache used by the {@link #valueOf(String)}
-   * method; {@code 20} by default and linked to the {@code
-   * nomen.NameValue.cacheSize} {@linkplain System#getProperty(String,
-   * String) system property}.
-   *
-   * @see #valueOf(String)
-   */
-  private static final int cacheSize = Integer.getInteger("nomen.NameValue.cacheSize", 20);
-
-  /**
-   * A cache of {@link NameValue} instances used by the {@link
-   * #valueOf(String)} method.  A {@linkplain
-   * ReadWriteLock#writeLock() write lock} must be obtained from the
-   * {@link #cacheLock} field before modifying this field, and a
-   * {@linkplain ReadWriteLock#readLock() read lock} must be obtained
-   * from the {@link #cacheLock} field before reading from this field.
-   *
-   * <p>This field is never {@code null}.</p>
-   *
-   * @see #valueOf(String)
-   */
-  private static final Map<String, NameValue> cache = new LinkedHashMap<String, NameValue>(cacheSize, 0.75F, true) {
-    private static final long serialVersionUID = 1L;
-    @Override
-    protected final boolean removeEldestEntry(final Entry<String, NameValue> entry) {
-      return this.size() > cacheSize;
-    }
-  };
-
-  /**
-   * A {@link ReadWriteLock} used to synchronized access to the {@link
-   * #cache} field; used only by the {@link #valueOf(String)} method.
-   *
-   * <p>This field is never {@code null}.</p>
-   */
-  private static final ReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
 
   /*
@@ -367,73 +322,64 @@ public class NameValue extends AbstractValued {
    * @see #valueOf(String)
    */
   public static final NameValue nv(final String value) {
-    return valueOf(value);
+    return valueOf(value, false);
   }
 
   /**
    * Returns a non-{@code null} {@link NameValue} whose {@link
-   * AbstractValued#getValue()} method is guaranteed to return a
-   * non-{@code null} {@link String} that is {@linkplain
-   * String#equals(Object) equal to} the supplied {@code value}.
+   * #getValue()} method is guaranteed to return a non-{@code null}
+   * {@link String} that is {@linkplain String#equals(Object) equal
+   * to} the supplied {@code value}.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * <p>This method calls the {@link #valueOf(String, boolean)} method
+   * with {@code false} as the second parameter value and returns its
+   * result.</p>
+   *
+   * @param value the value for which a {@link NameValue} should be
+   * returned; must not be {@code null}
+   *
+   * @return a non-{@code null} {@link NameValue} whose {@link
+   * #getValue()} method will return a {@link String} equal to the
+   * supplied {@link String}
+   *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   */
+  public static final NameValue valueOf(final String value) {
+    return valueOf(value, false);
+  }
+
+  /**
+   * Returns a non-{@code null} {@link NameValue} whose {@link
+   * #getValue()} method is guaranteed to return a non-{@code null}
+   * {@link String} that is {@linkplain String#equals(Object) equal
+   * to} the supplied {@code value} and whose {@link #isAtomic()}
+   * method will return a value equal to the supplied {@code atomic}
+   * parameter.
    *
    * <p>This method never returns {@code null}.</p>
    *
    * @param value the value for which a {@link NameValue} should be
    * returned; must not be {@code null}
    *
+   * @param atomic whether the {@link NameValue} returned {@linkplain
+   * #isAtomic() is atomic}
+   *
    * @return a non-{@code null} {@link NameValue} whose {@link
-   * AbstractValued#getValue()} method will return a {@link String}
-   * equal to the supplied {@link String}
+   * #getValue()} method will return a {@link String} equal to the
+   * supplied {@link String} and whose {@link #isAtomic()} method will
+   * return a value equal to the supplied {@code atomic} parameter
    *
    * @exception IllegalArgumentException if {@code value} is {@code
    * null}
    */
-  public static final NameValue valueOf(final String value) {
+  public static final NameValue valueOf(final String value, final boolean atomic) {
     if (value == null) {
       throw new IllegalArgumentException("value", new NullPointerException("value"));
     }
-    NameValue nv = null;
-    // Because the cache is a LinkedHashMap in access order, get()
-    // calls are structural modifications.  Therefore we need a write
-    // lock.
-    cacheLock.writeLock().lock();
-    try {
-      nv = cache.get(value);
-      if (nv == null) {
-        nv = new NameValue(value);
-        cache.put(value, nv);
-      }
-    } finally {
-      cacheLock.writeLock().unlock();
-    }
-    return nv;
-  }
-
-  /**
-   * Returns {@code true} if the supplied {@link String} {@code value}
-   * indexes a {@link NameValue} currently contained by this {@link
-   * NameValue}'s internal cache of such {@link NameValue}s.
-   *
-   * @param value the value to check; must not be {@code null}
-   *
-   * @return {@code true} if a non-{@code null} {@link NameValue}
-   * exists in this {@link NameValue}'s internal cache that
-   * corresponds to the supplied {@code value}; {@code false}
-   * otherwise
-   *
-   * @exception IllegalArgumentException if {@code value} is {@code
-   * null}
-   */
-  static final boolean isCached(final String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("value", new NullPointerException("value"));
-    }
-    try {
-      cacheLock.readLock().lock();
-      return cache.containsKey(value);
-    } finally {
-      cacheLock.readLock().unlock();
-    }
+    return new NameValue(value, atomic);
   }
 
 }

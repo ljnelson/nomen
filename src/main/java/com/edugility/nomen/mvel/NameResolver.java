@@ -27,9 +27,11 @@
  */
 package com.edugility.nomen.mvel;
 
+import com.edugility.nomen.AbstractNamed;
 import com.edugility.nomen.Name;
 import com.edugility.nomen.Named;
 import com.edugility.nomen.NameType;
+import com.edugility.nomen.NameValue;
 
 import org.mvel2.integration.VariableResolver;
 
@@ -50,7 +52,7 @@ import org.mvel2.integration.impl.SimpleValueResolver;
  *
  * @see <a href="http://mvel.codehaus.org">MVEL</a>
  */
-public final class NameResolver implements VariableResolver {
+public final class NameResolver implements VariableResolver, Named {
 
   
   /*
@@ -83,12 +85,16 @@ public final class NameResolver implements VariableResolver {
   private final Named named;
 
   /**
-   * The name of the {@link Name} to be resolved by this {@link
-   * NameResolver}&mdash;akin to a variable name.
+   * The {@link NameType} used by this {@link NameResolver} to {@link
+   * #getName(NameType) look up <code>Name</code>s}.
    *
    * <p>This field will never be {@code null}.</p>
+   *
+   * @see #getName(NameType)
+   *
+   * @see NameType
    */
-  private final String name;
+  private final NameType nameType;
 
 
   /*
@@ -102,23 +108,22 @@ public final class NameResolver implements VariableResolver {
    * @param named the {@link Named} that will be used by the {@link
    * #getValue()} method; must not be {@code null}
    *
-   * @param name the name of the variable this {@link NameResolver}
-   * will return from its {@link #getName()} method; must not be
-   * {@code null}
+   * @param nameType the {@link NameType} with which this {@link
+   * NameResolver} will be affiliated; must not be {@code null}
    *
    * @exception IllegalArgumentException if either {@code named} or
-   * {@code name} is {@code null}
+   * {@code nameType} is {@code null}
    */
-  public NameResolver(final Named named, final String name) {
+  public NameResolver(final Named named, final NameType nameType) {
     super();
     if (named == null) {
       throw new IllegalArgumentException("named", new NullPointerException("named"));
     }
-    if (name == null) {
-      throw new IllegalArgumentException("name", new NullPointerException("name"));
+    if (nameType == null) {
+      throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
     }
     this.named = named;
-    this.name = name;
+    this.nameType = nameType;
   }
 
 
@@ -142,10 +147,9 @@ public final class NameResolver implements VariableResolver {
   }
 
   /**
-   * Returns the {@link String} supplied at {@linkplain
-   * #NameResolver(Named, String) construction time} as the value of
-   * {@linkplain #NameResolver(Named, String) that constructor}'s
-   * {@code name} parameter.
+   * Returns the {@link String} that is the {@linkplain
+   * NameType#getValue() value} of the {@link NameType} supplied at
+   * {@linkplain #NameResolver(Named, NameType) construction time}.
    *
    * <p>This method never returns {@code null}.</p>
    *
@@ -156,7 +160,25 @@ public final class NameResolver implements VariableResolver {
    */
   @Override
   public final String getName() {
-    return this.name;
+    assert this.nameType != null;
+    return this.nameType.getValue();
+  }
+
+  /**
+   * Returns a {@link Name} for the supplied {@link NameType}, or
+   * {@code null} if no such {@link Name} could be found.
+   *
+   * @param nameType the {@link NameType} to use as a key; may be
+   * {@code null}
+   *
+   * @return a {@link Name}, or {@code null}
+   *
+   * @see Named#getName(NameType)
+   */
+  @Override
+  public final Name getName(final NameType nameType) {
+    assert this.named != null;
+    return this.named.getName(nameType);
   }
 
   /**
@@ -189,14 +211,9 @@ public final class NameResolver implements VariableResolver {
   @Override
   public final Object getValue() {
     Object returnValue = null;
-    final String name = this.getName();
-    if (name != null) {
-      final NameType nt = NameType.valueOf(name);
-      assert nt != null;
-      final Name n = this.named.getName(nt);
-      if (n != null) {
-        returnValue = n.getValue();
-      }
+    final Name n = this.getName(this.nameType);
+    if (n != null) {
+      returnValue = n.getValue();
     }
     if (returnValue == null) {
       returnValue = "";
@@ -205,9 +222,11 @@ public final class NameResolver implements VariableResolver {
   }
 
   /**
-   * Does nothing on purpose.
+   * Does nothing.
    *
    * @param type ignored
+   *
+   * @see #getType()
    */
   @Override
   @SuppressWarnings("rawtypes")
@@ -216,13 +235,50 @@ public final class NameResolver implements VariableResolver {
   }
 
   /**
-   * Does nothing on purpose.
+   * <strong>Experimental</strong>; {@linkplain
+   * AbstractNamed#putName(NameType, NameValue, String) puts} a {@link
+   * Name} into the {@link Named} that is affiliated with this {@link
+   * NameResolver}, provided that it is an instance of {@link
+   * AbstractNamed}.
    *
-   * @param value ignored
+   * <p>In general, if the conditions described in the parameters
+   * section below are not met, this method does nothing.</p>
+   *
+   * @param value the value for a new name; may be {@code null}, a
+   * {@link NameValue}, a {@link String} or a {@link Name}.  If it is
+   * {@code null}, then any {@link Name} indexed under this {@link
+   * NameResolver}'s affiliated {@link NameType} present in the
+   * affiliated {@link AbstractNamed} will be removed.  If it is
+   * either a {@link NameValue}, a {@link String} or a {@link Name},
+   * then it is converted common-sensically into a {@link NameValue}
+   * and is {@linkplain AbstractNamed#putName(NameType, NameValue,
+   * String) installed into} the {@link AbstractNamed} in such a way
+   * that a subsequent call to {@link #getValue()} will return the
+   * expected result.
    */
   @Override
   public final void setValue(final Object value) {
-
+    if (this.named instanceof AbstractNamed) {
+      final AbstractNamed owner = (AbstractNamed)this.named;
+      if (value == null) {
+        // remove
+        owner.removeName(this.nameType);
+      } else {
+        NameValue nv = null;
+        if (value instanceof NameValue) {
+          nv = (NameValue)value;
+        } else if (value instanceof String) {
+          nv = NameValue.valueOf((String)value);
+        } else if (value instanceof Name) {
+          nv = ((Name)value).getNameValue();
+        } else {
+          nv = null;
+        }
+        if (nv != null) {
+          owner.putName(this.nameType, nv, " ");
+        }
+      }
+    }
   }
 
 }
