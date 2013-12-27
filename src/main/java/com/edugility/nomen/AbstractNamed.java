@@ -117,12 +117,11 @@ public abstract class AbstractNamed implements Named {
   }
 
   /**
-   * {@linkplain Name#Name(Named, NameValue, String) Creates a
-   * <code>Name</code>} from the supplied {@link NameType} and {@link
-   * NameValue} and stores it in this {@link AbstractNamed} in such a
-   * way that it can be retrieved later by the {@link
-   * #getName(NameType)} method when that method is supplied with the
-   * supplied {@link NameType}.
+   * Stores a {@link Name} under the supplied {@link NameType} in such
+   * a way that it can be retrieved later by the #getName(NameType)}
+   * method when that method is supplied with a {@link NameType}
+   * {@linkplain NameType#equals(Object) equal to} the supplied {@link
+   * NameType}.
    *
    * @param nameType a {@link NameType} under which a new {@link Name}
    * will be stored; must not be {@code null}
@@ -139,9 +138,35 @@ public abstract class AbstractNamed implements Named {
    * nameValue} is {@code null}
    */
   public Name putName(final NameType nameType, final NameValue nameValue) {
-    return this.putName(nameType, nameValue, " ");
+    return this.putName(nameType, this.nameFor(nameValue, " "));
   }
 
+  /**
+   * Stores a {@link Name} under the supplied {@link NameType} in such
+   * a way that it can be retrieved later by the #getName(NameType)}
+   * method when that method is supplied with a {@link NameType}
+   * {@linkplain NameType#equals(Object) equal to} the supplied {@link
+   * NameType}.
+   *
+   * @param nameType a {@link NameType} under which a new {@link Name}
+   * will be stored; must not be {@code null}
+   *
+   * @param nameValue a {@link NameValue} that a new {@link Name} will
+   * have; must not be {@code null}
+   *
+   * @param whitespaceReplacement the {@link String} that will be used
+   * to replace one or more occurrences of whitespace in the new
+   * {@link Name}'s {@linkplain Name#getValue() value}; may be {@code
+   * null} in which case no whitespace replacement will occur
+   *
+   * @return the prior {@link Name} stored under the supplied {@link
+   * NameType}, or {@code null} if there was no such {@link Name}.
+   * The returned {@link Name}, if non-{@code null}, will return
+   * {@code null} from its {@link Name#getNamed()} method.
+   *
+   * @exception IllegalArgumentException if {@code nameType} or {@code
+   * nameValue} is {@code null}
+   */
   public Name putName(final NameType nameType, final NameValue nameValue, final String whitespaceReplacement) {
     if (nameType == null) {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
@@ -149,15 +174,107 @@ public abstract class AbstractNamed implements Named {
     if (nameValue == null) {
       throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
     }
+    return this.putName(nameType, this.nameFor(nameValue, whitespaceReplacement));
+  }
+
+  /**
+   * Stores the supplied {@link Name} under the supplied {@link
+   * NameType} in such a way that it can be retrieved later by the
+   * #getName(NameType)} method when that method is supplied with a
+   * {@link NameType} {@linkplain NameType#equals(Object) equal to}
+   * the supplied {@link NameType}.
+   *
+   * @param nameType a {@link NameType} under which a new {@link Name}
+   * will be stored; must not be {@code null}
+   *
+   * @param name a {@link Name} to store; must not be {@code null};
+   * its {@link Name#setNamed(Named)} method will be called with
+   * {@code this} as its argument
+   *
+   * @return the prior {@link Name} stored under the supplied {@link
+   * NameType}, or {@code null} if there was no such {@link Name}.
+   * The returned {@link Name}, if non-{@code null}, will return
+   * {@code null} from its {@link Name#getNamed()} method.
+   *
+   * @exception IllegalArgumentException if {@code nameType} or {@code
+   * name} is {@code null}
+   */
+  public Name putName(final NameType nameType, final Name name) {
+    if (nameType == null) {
+      throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
+    }
+    if (name == null) {
+      throw new IllegalArgumentException("name", new NullPointerException("name"));
+    }
     if (this.names == null) {
       this.names = new HashMap<NameType, Name>(11);
     }
-    final Name returnValue = this.names.put(nameType, new Name(this, nameValue, whitespaceReplacement));
+    name.setNamed(this);
+    final Name returnValue = this.names.put(nameType, name);
     if (returnValue != null) {
       returnValue.setNamed(null);
     }
     return returnValue;
-    
+  }
+
+  /**
+   * Returns a non-{@code null} {@link Name} that is in some way
+   * appropriate for the supplied {@link NameValue} and whitespace
+   * replacement {@link String}.
+   *
+   * <p>This implementation calls the {@link #getNames()} method and
+   * iterates through its return value to find a {@link Name} whose
+   * {@linkplain Name#getNameValue() associated
+   * <code>NameValue</code>} is equal to the supplied {@link
+   * NameValue}, whose {@linkplain Name#getNamed() associated
+   * <code>Named</code>} is identical to this {@link AbstractNamed}
+   * implementation, and whose {@linkplain
+   * Name#getWhitespaceReplacement() whitespace replacement text} is
+   * equal to the supplied {@code whitespaceReplacement} parameter
+   * value.  If no such {@link Name} exists, then a new {@link Name}
+   * is {@linkplain Name#Name(Named, NameValue, String) created} and
+   * returned instead.</p>
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @param nameValue the {@link NameValue} for which a {@link Name}
+   * should be returned; must not be {@code null}
+   *
+   * @param whitespaceReplacement the text with which to replace one
+   * or more consecutive occurrences of whitespace in the {@link Name}
+   * that is returned by this method; may be {@code null} in which
+   * case no whitespace replacement will be performed
+   *
+   * @return a non-{@code null} {@link Name}
+   *
+   * @exception IllegalArgumentException if {@code nameValue} is
+   * {@code null}
+   */
+  public Name nameFor(final NameValue nameValue, final String whitespaceReplacement) {
+    if (nameValue == null) {
+      throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
+    }
+    Name returnValue = null;
+    final Iterable<? extends Name> names = this.getNames();
+    if (names != null) {
+      for (final Name name : names) {
+        if (name != null && name.getNamed() == this && nameValue.equals(name.getNameValue())) {
+          if (whitespaceReplacement == null) {
+            if (name.getWhitespaceReplacement() == null) {
+              returnValue = name;
+              break;
+            }
+          } else if (whitespaceReplacement.equals(name.getWhitespaceReplacement())) {
+            returnValue = name;
+            break;
+          }
+        }
+      }
+    }
+    if (returnValue == null) {
+      returnValue = new Name(this, nameValue, whitespaceReplacement);
+    }
+    return returnValue;
   }
 
   /**

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>950</x>
+      <y>120</y>
+      <w>370</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>/AbstractValued/
+--
++getValue():String
++setValue(String)
+--
++hashCode():int
++equals(Object other):boolean
+--
++toString():String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>1060</x>
+      <y>20</y>
+      <w>160</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Valued
+--
++getString():String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1110</x>
+      <y>10</y>
+      <w>50</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;110</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1020</x>
+      <y>280</y>
+      <w>90</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>NameType
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1030</x>
+      <y>210</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1190</x>
+      <y>280</y>
+      <w>220</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>NameValue
+--
++isInitialized():boolean
+--
++isAtomic():boolean
++setAtomic(boolean atomic)
+--
++hashCode():int
++equals(Object other):boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1200</x>
+      <y>210</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>520</y>
+      <w>670</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>/AbstractNamed/
+--
++getName(NameType nameType):Name
++putName(NameType nameType, Name name):Name
++putName(NameType nameType, NameValue nameValue, String whitespaceReplacement):Name
+--
++nameFor(NameValue nameValue, String whitespaceReplacement):Name</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>530</x>
+      <y>320</y>
+      <w>280</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Named
+--
++getName(NameType nameType):Name</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>510</x>
+      <y>360</y>
+      <w>50</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>680</x>
+      <y>520</y>
+      <w>550</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>Name
+--
++getWhitespaceReplacement():String
++setWhitespaceReplacement(String s)
+--
++getNameValue():NameValue
++setNameValue(NameValue nameValue)
+--
++getNamed():Named
++setNamed(Named named)
+--
++addPropertyChangeListener(PropertyChangeListener pcl)
++addPropertyChangeListener(String property, PropertyChangeListener pcl)
+--
++removePropertyChangeListener(PropertyChangeListener pcl)
++removePropertyChangeListener(String property, PropertyChangeListener pcl)
+--
++getPropertyChangeListeners(String property):PropertyChangeListener[]
++getPropertyChangeListeners():PropertyChangeListener[]
+--
++getValue():String &lt;&lt;override&gt;&gt;
++setValue(String value) &lt;&lt;override&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>940</x>
+      <y>210</y>
+      <w>50</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;310</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1170</x>
+      <y>370</y>
+      <w>96</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+r1=nameValue</panel_attributes>
+    <additional_attributes>50;30;50;150</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>760</x>
+      <y>360</y>
+      <w>50</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>30;30;30;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>590</x>
+      <y>360</y>
+      <w>196</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+q1=nameType:NameType
+m1=1
+m2=0..1
+</panel_attributes>
+    <additional_attributes>100;30;100;160</additional_attributes>
+  </element>
+</diagram>
