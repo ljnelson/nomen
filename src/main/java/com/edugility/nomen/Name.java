@@ -233,6 +233,23 @@ public class Name extends AbstractValued {
     this.setNameValue(nameValue);
   }
 
+  /**
+   * Creates a new {@link Name} with the supplied {@link NameValue}
+   * that is initially {@linkplain #getNamed() unowned}.  The caller
+   * is expected to call {@link #setNamed(Named)} with a non-{@code
+   * null} {@link Named} to complete initialization.
+   *
+   * @param nameValue the {@link NameValue} that represents the actual
+   * name value; must not be {@code null}
+   *
+   * @exception IllegalArgumentException if {@code nameValue} is
+   * {@code null}
+   */
+  public Name(final NameValue nameValue) {
+    super();
+    this.setNameValue(nameValue);
+  }
+
 
   /*
    * Instance methods.
@@ -739,7 +756,7 @@ public class Name extends AbstractValued {
    *
    * <p>This method calls the {@link #name(AbstractNamed,
    * String, String, boolean, String)} method passing {@code false}
-   * and a space character (" ") as the value of the penultimate and
+   * and a space character ("&nbsp;") as the value of the penultimate and
    * final parameters, and returns its return value.</p>
    *
    * @param named the {@link AbstractNamed} that will own the new
@@ -778,7 +795,7 @@ public class Name extends AbstractValued {
    *
    * <p>This method calls the {@link #name(AbstractNamed,
    * String, String, boolean, String)} method passing a space
-   * character (" ") as the value of the final parameter, and returns
+   * character ("&nbsp;") as the value of the final parameter, and returns
    * its return value.</p>
    *
    * @param named the {@link AbstractNamed} that will own the new
@@ -801,7 +818,7 @@ public class Name extends AbstractValued {
    * {@code nameTypeValue} or {@code nameValue} is {@code null}.
    */
   public static Name name(final AbstractNamed named, final String nameTypeValue, final String nameValue, final boolean atomic) {
-    return name(named, nameTypeValue, nameValue, atomic, " ");
+    return name(named, nameTypeValue, nameValue, atomic, atomic ? null : " ");
   }
 
 
@@ -833,7 +850,7 @@ public class Name extends AbstractValued {
    * replacing {@linkplain Character#isWhitespace(char) whitespace
    * characters}; may be {@code null} in which case no whitespace
    * replacement will occur.  A good reasonable default is a single
-   * space (" ").
+   * space ("&nbsp;").
    *
    * @return a non-{@code null} {@link Name} {@linkplain #getNamed()
    * owned} by the supplied {@link AbstractNamed} under an appropriate
@@ -848,7 +865,7 @@ public class Name extends AbstractValued {
     }
     final NameType nameType = NameType.valueOf(nameTypeValue);
     assert nameType != null;    
-    named.putName(nameType, NameValue.valueOf(nameValue, atomic, whitespaceReplacement));
+    named.putName(nameType, NameValue.valueOf(nameValue, atomic, atomic ? null : whitespaceReplacement));
     return named.getName(nameType);
   }
 

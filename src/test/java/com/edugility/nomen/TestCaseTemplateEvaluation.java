@@ -39,25 +39,32 @@ public class TestCaseTemplateEvaluation {
 
   @Test
   public void testEvaluation() {
-    final NameValue laird = new NameValue("Laird");
-    final NameValue jarrett = new NameValue("Jarrett");
-    final NameValue nelson = new NameValue("Nelson");
+    final NameValue laird = new NameValue("Laird", true);
+    assertTrue(laird.isAtomic());
+    assertNull(laird.getWhitespaceReplacement());
+
+    final NameValue jarrett = new NameValue("Jarrett", true);
+    assertTrue(jarrett.isAtomic());
+    assertNull(jarrett.getWhitespaceReplacement());
+
+    final NameValue nelson = new NameValue("Nelson", true);
+    assertTrue(nelson.isAtomic());
+    assertNull(nelson.getWhitespaceReplacement());
+
     final NameValue lairdJarrettNelson = new NameValue("${firstName}        ${middleName} ${lastName}");
     assertFalse(lairdJarrettNelson.isAtomic());
     assertEquals(" ", lairdJarrettNelson.getWhitespaceReplacement());
 
-    final Name firstName = new Name();
-    firstName.setNameValue(laird);
+    final Name firstName = new Name(laird);
+    final Name middleName = new Name(jarrett);
+    final Name lastName = new Name(nelson);
+    final Name fullName = new Name(lairdJarrettNelson);
 
-    final Name middleName = new Name();
-    middleName.setNameValue(jarrett);
-
-    final Name lastName = new Name();
-    lastName.setNameValue(nelson);
-
-
-    final Name fullName = new Name();
-    fullName.setNameValue(lairdJarrettNelson);
+    // All these Names are initially unowned.
+    assertNull(firstName.getNamed());
+    assertNull(middleName.getNamed());
+    assertNull(lastName.getNamed());
+    assertNull(fullName.getNamed());
 
     final Named dude = new Named() {
         private static final long serialVersionUID = 1L;
@@ -81,10 +88,18 @@ public class TestCaseTemplateEvaluation {
         }
       };
 
+    // Now that we've got the chicken-and-egg problem out of the way,
+    // "own" all the names.
     firstName.setNamed(dude);
     middleName.setNamed(dude);
     lastName.setNamed(dude);
     fullName.setNamed(dude);
+
+    // Make sure the ownership "stuck".
+    assertSame(dude, firstName.getNamed());
+    assertSame(dude, middleName.getNamed());
+    assertSame(dude, lastName.getNamed());
+    assertSame(dude, fullName.getNamed());
 
     final String value = fullName.getValue();
     assertEquals("Laird Jarrett Nelson", value);
