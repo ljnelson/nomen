@@ -38,8 +38,15 @@ public class TestCaseNameValue {
   }
 
   @Test
-  public void testCaching() {
-    
+  public void testEquality() {
+    final NameValue nv1 = new NameValue("Laird", true);
+    final NameValue nv2 = new NameValue("Laird", true);
+    assertEquals(nv1, nv2);
+    assertEquals(nv1.hashCode(), nv2.hashCode());
+
+    final NameValue nv3 = new NameValue("Laird", true, "");
+    final NameValue nv4 = new NameValue("Laird", true, null);
+    assertNotEquals(nv3, nv4);
   }
 
 }

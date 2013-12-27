@@ -57,17 +57,23 @@ import org.mvel2.templates.TemplateRuntime;
  * as any kind of unique identifier.</p>
  *
  * <p>Two {@link Name}s are considered {@linkplain #equals(Object)
- * equal} if their {@linkplain #getValue() values} are equal.</p>
+ * equal} if their {@linkplain #getValue() values} are equal.  Note in
+ * particular that for {@linkplain #equals(Object) equality purposes}
+ * a {@link Name}'s {@linkplain #getNamed() owner} is deliberately not
+ * also considered.</p>
  *
  * <p>The {@linkplain #getValue() value} of a {@link Name} may change,
  * since the {@linkplain NameValue#getValue() value of its associated
  * <code>NameValue</code>} may change.  Bear this in mind if you are
- * using {@link Name}s as keys in a {@link Map}.</p>
+ * using {@link Name}s as keys in a {@link Map}.  In normal usage,
+ * however, a {@link Name} is set up and then not further altered.</p>
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
  *
  * @see #getValue()
+ *
+ * @see #computeValue()
  *
  * @see NameValue
  *
@@ -384,6 +390,8 @@ public class Name extends AbstractValued {
    *
    * @exception IllegalStateException if there was a problem compiling the
    * template
+   *
+   * @see #computeValue()
    */
   public String getValue() {
     return this.computeValue();
@@ -399,6 +407,9 @@ public class Name extends AbstractValued {
    * empty string} if the supplied {@link Object} is {@code null}, and
    * otherwise returns the result of the supplied {@code object}'s
    * {@link Object#toString()} method.</p>
+   *
+   * <p>This method is called by the {@link #computeValue()}
+   * method.</p>
    *
    * @param object the {@link Object} to convert; may be {@code null}
    *
@@ -750,7 +761,6 @@ public class Name extends AbstractValued {
   public static Name name(final AbstractNamed named, final String nameTypeValue, final String nameValue) {
     return name(named, nameTypeValue, nameValue, false, " ");
   }
-
 
   /**
    * A convenience method that creates and installs a new

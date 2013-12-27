@@ -42,25 +42,41 @@ import java.io.Serializable;
  * <p>A {@link NameValue} may be <em>atomic</em>&mdash;basically a
  * glorified {@link String}, indivisible, not subject to any further
  * interpretation&mdash;or not atomic&mdash;in which case it is
- * interpreted as an <a href="http://mvel.codehaus.org/>MVEL</a>
- * template that will be interpolated once the given {@link NameValue}
- * is {@linkplain Name#getNameValue() owned} by a {@link Name}.
- * {@link NameValue}s are <em>not</em> atomic by default.</p>
+ * interpreted as an <a href="http://mvel.codehaus.org/">MVEL</a>
+ * template that will be {@linkplain Name#computeValue() interpolated}
+ * once the given {@link NameValue} is {@linkplain Name#getNameValue()
+ * owned} by a {@link Name}.  {@link NameValue}s are <em>not</em>
+ * atomic by default.</p>
+ *
+ * <p>A {@link NameValue} may have an {@linkplain
+ * #getWhitespaceReplacement() associated whitespace replacement
+ * <code>String</code>} that will be used to replace any sequence of
+ * one or more consecutive whitespace characters that occur after any
+ * {@linkplain Name#computeValue() interpolation} of a {@link
+ * NameValue} within the context of a given {@linkplain
+ * Name#getNamed() owner} when that {@link NameValue} is not
+ * {@linkplain #isAtomic() atomic}.</p>
  *
  * <p>A {@link NameValue}, once initialized with a {@linkplain
- * #setValue(String) value}, whether via {@linkplain
- * #NameValue(String, boolean) the constructor} or the {@link
- * #setValue(String)} and {@link #setAtomic(boolean)} methods, can be
- * treated as though it is immutable.  Subsequent attempts to call
- * either the {@link #setValue(String)} or {@link #setAtomic(boolean)}
- * methods will fail with {@link IllegalStateException}s.</p>
+ * #setValue(String) value} and an {@linkplain #setAtomic(boolean)
+ * atomicity}&mdash;whether via {@linkplain #NameValue(String,
+ * boolean, String) the constructor} or the {@link #setValue(String)}
+ * and {@link #setAtomic(boolean)} and {@link
+ * #setWhitespaceReplacement(String)} methods&mdash;can be treated as
+ * though it is immutable.  Subsequent attempts to call either the
+ * {@link #setValue(String)} or {@link #setAtomic(boolean)} or {@link
+ * #setWhitespaceReplacement(String)} methods will fail with {@link
+ * IllegalStateException}s.</p>
  *
  * <p>Two {@link NameValue}s are {@linkplain #equals(Object) equal} if
  * their {@linkplain AbstractValued#getValue() values} are {@linkplain
  * String#equals(Object) equal} and if they are both {@linkplain
- * #isAtomic() atomic}.</p>
+ * #isAtomic() atomic} and if their {@linkplain
+ * #getWhitespaceReplacement() whitespace replacement
+ * <code>String</code>}s are {@linkplain String#equals(Object)
+ * equal}.</p>
  *
- * <h4>Design Notes</h4>
+ * <h3>Design Notes</h3>
  *
  * <p>Methods and fields that might otherwise be {@code final} are
  * explicitly left non-{@code final} so that this class may be used as
@@ -118,8 +134,27 @@ public class NameValue extends AbstractValued {
    */
   private Boolean atomic;
 
+  /**
+   * A {@link String} that will replace one or more consecutive
+   * occurrences of whitespace characters in a non-{@linkplain
+   * #isAtomic() atomic} {@link NameValue}.
+   *
+   * <p>This field may be {@code null} in which case no whitespace
+   * replacement will occur.</p>
+   *
+   * @see #getWhitespaceReplacement()
+   *
+   * @see #setWhitespaceReplacement(String)
+   */
   private String whitespaceReplacement;
 
+  /**
+   * Indicates whether the {@link #whitespaceReplacement} field has
+   * been set via the {@link #setWhitespaceReplacement(String)} method
+   * or not.
+   *
+   * @see #setWhitespaceReplacement(String)
+   */
   private boolean whitespaceReplacementSet;
 
 
@@ -161,9 +196,7 @@ public class NameValue extends AbstractValued {
    * @exception IllegalArgumentException if {@code value} is {@code
    * null}
    *
-   * @see #NameValue(String, boolean)
-   *
-   * @see #isAtomic()
+   * @see #NameValue(String, boolean, String)
    */
   public NameValue(final String value) {
     this(value, false, " ");
@@ -182,10 +215,31 @@ public class NameValue extends AbstractValued {
    * null}
    */
   public NameValue(final String value, final boolean atomic) {
-    super(value);
-    this.setAtomic(atomic);
+    this(value, atomic, " ");
   }
 
+  /**
+   * Creates a new {@link NameValue}.
+   *
+   * <p>This constructor calls the {@link #NameValue(String, boolean,
+   * String)} constructor with {@code false} as the value for its
+   * second parameter and a space (" ") as the value for its third
+   * parameter.</p>
+   *
+   * @param value the {@linkplain #setValue(String) value} for this
+   * {@link NameValue}; must not be {@code null}
+   *
+   * @param atomic the {@linkplain #setAtomic(boolean) atomicity} for
+   * this {@link NameValue}
+   *
+   * @param whitespaceReplacement the {@link String} to be used for
+   * whitespace replacement; may be {@code null} in which case no
+   * whitespace replacement will be performed.  Normally, a single
+   * space (" ") is a good value for this parameter.
+   *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   */
   public NameValue(final String value, final boolean atomic, final String whitespaceReplacement) {
     super(value);
     this.setAtomic(atomic);
@@ -198,10 +252,34 @@ public class NameValue extends AbstractValued {
    */
 
 
+  /**
+   * Returns the {@link String} that will be used instead of
+   * consecutive occurrences of one or more whitespace characters when
+   * this {@link NameValue}'s {@linkplain #getValue() value} is
+   * interpolated by a {@link Name}.
+   *
+   * <p>This method may return {@code null}, in which case no
+   * whitespace replacement will occur.</p>
+   *
+   * @return a whitespace replacement {@link String}, or {@code null}
+   *
+   * @see #setWhitespaceReplacement(String)
+   */
   public String getWhitespaceReplacement() {
     return this.whitespaceReplacement;
   }
 
+  /**
+   * Sets the {@link String} that will be used instead of consecutive
+   * occurences of one or more whitespace characters when this {@link
+   * NameValue}'s {@linkplain #getValue() value} is interpolated by a
+   * {@link Name}.
+   *
+   * @param whitespaceReplacement the replacement {@link String}; if
+   * {@code null} then no whitespace replacement will occur
+   *
+   * @see Name#getValue()
+   */
   public void setWhitespaceReplacement(final String whitespaceReplacement) {
     if (this.whitespaceReplacementSet) {
       if (whitespaceReplacement == null) {
@@ -382,26 +460,64 @@ public class NameValue extends AbstractValued {
    * Returns a non-{@code null} {@link NameValue} whose {@link
    * #getValue()} method is guaranteed to return a non-{@code null}
    * {@link String} that is {@linkplain String#equals(Object) equal
-   * to} the supplied {@code value}.
+   * to} the supplied {@code value} and whose {@link #isAtomic()}
+   * method will return {@code false} and whose {@link
+   * #getWhitespaceReplacement()} method will return a single space
+   * ("&nbsp;").
    *
    * <p>This method never returns {@code null}.</p>
    *
-   * <p>This method calls the {@link #valueOf(String, boolean)} method
-   * with {@code false} as the second parameter value and returns its
-   * result.</p>
+   * <p>This method calls the {@link #valueOf(String, boolean,
+   * String)} method with {@code false} as the second parameter value
+   * and a single space ("&nbsp;") as the third parameter and returns
+   * its result.</p>
    *
    * @param value the value for which a {@link NameValue} should be
    * returned; must not be {@code null}
    *
    * @return a non-{@code null} {@link NameValue} whose {@link
    * #getValue()} method will return a {@link String} equal to the
-   * supplied {@link String}
+   * supplied {@link String} and whose {@link #isAtomic()} method will
+   * return a value equal to the supplied {@code atomic} parameter and
+   * whose {@link #getWhitespaceReplacement()} method will return a
+   * single space ("&nbsp;")
    *
    * @exception IllegalArgumentException if {@code value} is {@code
    * null}
    */
   public static final NameValue valueOf(final String value) {
     return valueOf(value, false, " ");
+  }
+
+  /**
+   * Returns a non-{@code null} {@link NameValue} whose {@link
+   * #getValue()} method is guaranteed to return a non-{@code null}
+   * {@link String} that is {@linkplain String#equals(Object) equal
+   * to} the supplied {@code value} and whose {@link #isAtomic()}
+   * method will return a value equal to the supplied {@code atomic}
+   * parameter and whose {@link #getWhitespaceReplacement()} method
+   * will return a single space (" ").
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @param value the value for which a {@link NameValue} should be
+   * returned; must not be {@code null}
+   *
+   * @param atomic whether the {@link NameValue} returned {@linkplain
+   * #isAtomic() is atomic}
+   *
+   * @return a non-{@code null} {@link NameValue} whose {@link
+   * #getValue()} method will return a {@link String} equal to the
+   * supplied {@link String} and whose {@link #isAtomic()} method will
+   * return a value equal to the supplied {@code atomic} parameter and
+   * whose {@link #getWhitespaceReplacement()} method will return a
+   * single space (" ")
+   *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   */
+  public static final NameValue valueOf(final String value, final boolean atomic) {
+    return valueOf(value, atomic, " ");
   }
 
   /**
@@ -420,6 +536,13 @@ public class NameValue extends AbstractValued {
    * @param atomic whether the {@link NameValue} returned {@linkplain
    * #isAtomic() is atomic}
    *
+   * @param whitespaceReplacement the {@link String} that will be used
+   * instead of one or more consecutive occurrences of whitespace
+   * characters in the {@linkplain Name#getValue() value of this
+   * <code>NameValue</code> when interpolated by an owning
+   * <code>Name</code>}; may be {@code null} in which case no
+   * whitespace replacement will occur
+   *
    * @return a non-{@code null} {@link NameValue} whose {@link
    * #getValue()} method will return a {@link String} equal to the
    * supplied {@link String} and whose {@link #isAtomic()} method will
@@ -428,10 +551,6 @@ public class NameValue extends AbstractValued {
    * @exception IllegalArgumentException if {@code value} is {@code
    * null}
    */
-  public static final NameValue valueOf(final String value, final boolean atomic) {
-    return valueOf(value, atomic, " ");
-  }
-
   public static final NameValue valueOf(final String value, final boolean atomic, final String whitespaceReplacement) {
     if (value == null) {
       throw new IllegalArgumentException("value", new NullPointerException("value"));
