@@ -140,6 +140,8 @@ public final class NameResolver implements VariableResolver, Named {
    * what this method is used for.</p>
    *
    * @return {@code 0}
+   *
+   * @see VariableResolver#getFlags()
    */
   @Override
   public final int getFlags() {
@@ -182,7 +184,7 @@ public final class NameResolver implements VariableResolver, Named {
   }
 
   /**
-   * Returns the value of {@code Name.class} when invoked.
+   * Returns the value of {@link Name}{@code .class} when invoked.
    *
    * <p>This method never returns {@code null}.</p>
    *
