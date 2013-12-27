@@ -263,9 +263,7 @@ public class Name extends AbstractValued {
       } else {
         this.nameResolverFactory = null;
       }
-      if (this.propertyChangeSupport != null) {
-        this.propertyChangeSupport.firePropertyChange("named", old, this.getNamed());
-      }
+      this.firePropertyChange("named", old, this.getNamed());
     }
   }
 
@@ -320,9 +318,7 @@ public class Name extends AbstractValued {
       this.nameValue = nameValue;
       this.compiledTemplate = null;
       this.installTemplate();
-      if (this.propertyChangeSupport != null) {
-        this.propertyChangeSupport.firePropertyChange("nameValue", old, this.getNameValue());
-      }
+      this.firePropertyChange("nameValue", old, this.getNameValue());
     }
   }
 
@@ -363,9 +359,7 @@ public class Name extends AbstractValued {
             throw new IllegalStateException(wrapMe);
           }
           assert this.compiledTemplate != null;
-          if (this.propertyChangeSupport != null) {
-            this.propertyChangeSupport.firePropertyChange("compiledTemplate", null, this.compiledTemplate);
-          }
+          this.firePropertyChange("compiledTemplate", null, this.compiledTemplate);
         }          
       }
     }    
@@ -379,6 +373,8 @@ public class Name extends AbstractValued {
    * href="http://mvel.codehaus.org/">MVEL template</a>.
    *
    * <p>This method never returns {@code null}.</p>
+   *
+   * <h4>Implementation Notes</h4>
    *
    * <p>This method calls the {@link #computeValue()} method and
    * returns its result.</p>
@@ -483,7 +479,9 @@ public class Name extends AbstractValued {
    */
   @Override
   public void setValue(final String value) {
+    final String old = this.getValue();
     this.setNameValue(NameValue.valueOf(value));
+    this.firePropertyChange("value", old, this.getValue());
   }
 
   /**
