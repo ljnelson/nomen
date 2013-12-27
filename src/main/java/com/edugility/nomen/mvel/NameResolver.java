@@ -236,8 +236,8 @@ public final class NameResolver implements VariableResolver, Named {
 
   /**
    * <strong>Experimental</strong>; {@linkplain
-   * AbstractNamed#putName(NameType, NameValue, String) puts} a {@link
-   * Name} into the {@link Named} that is affiliated with this {@link
+   * AbstractNamed#putName(NameType, NameValue) puts} a {@link Name}
+   * into the {@link Named} that is affiliated with this {@link
    * NameResolver}, provided that it is an instance of {@link
    * AbstractNamed}.
    *
@@ -251,10 +251,10 @@ public final class NameResolver implements VariableResolver, Named {
    * affiliated {@link AbstractNamed} will be removed.  If it is
    * either a {@link NameValue}, a {@link String} or a {@link Name},
    * then it is converted common-sensically into a {@link NameValue}
-   * and is {@linkplain AbstractNamed#putName(NameType, NameValue,
-   * String) installed into} the {@link AbstractNamed} in such a way
-   * that a subsequent call to {@link #getValue()} will return the
-   * expected result.
+   * and is {@linkplain AbstractNamed#putName(NameType, NameValue)
+   * installed into} the {@link AbstractNamed} in such a way that a
+   * subsequent call to {@link #getValue()} will return the expected
+   * result.
    */
   @Override
   public final void setValue(final Object value) {
@@ -268,14 +268,14 @@ public final class NameResolver implements VariableResolver, Named {
         if (value instanceof NameValue) {
           nv = (NameValue)value;
         } else if (value instanceof String) {
-          nv = NameValue.valueOf((String)value);
+          nv = NameValue.valueOf((String)value, false, " ");
         } else if (value instanceof Name) {
           nv = ((Name)value).getNameValue();
         } else {
           nv = null;
         }
         if (nv != null) {
-          owner.putName(this.nameType, nv, " ");
+          owner.putName(this.nameType, nv);
         }
       }
     }

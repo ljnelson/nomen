@@ -43,6 +43,8 @@ public class TestCaseTemplateEvaluation {
     final NameValue jarrett = new NameValue("Jarrett");
     final NameValue nelson = new NameValue("Nelson");
     final NameValue lairdJarrettNelson = new NameValue("${firstName}        ${middleName} ${lastName}");
+    assertFalse(lairdJarrettNelson.isAtomic());
+    assertEquals(" ", lairdJarrettNelson.getWhitespaceReplacement());
 
     final Name firstName = new Name();
     firstName.setNameValue(laird);
@@ -55,7 +57,6 @@ public class TestCaseTemplateEvaluation {
 
 
     final Name fullName = new Name();
-    fullName.setWhitespaceReplacement(" ");
     fullName.setNameValue(lairdJarrettNelson);
 
     final Named dude = new Named() {
@@ -92,7 +93,6 @@ public class TestCaseTemplateEvaluation {
   @Test(expected = IllegalStateException.class)
   public void testSyntacticallyInvalidTemplate() {
     final Name firstName = new Name();
-    assertEquals(" ", firstName.getWhitespaceReplacement());
     final NameValue template = new NameValue("${BAD SYNTAX ON PURPOSE");
     assertFalse(template.isAtomic());
 

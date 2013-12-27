@@ -118,6 +118,10 @@ public class NameValue extends AbstractValued {
    */
   private Boolean atomic;
 
+  private String whitespaceReplacement;
+
+  private boolean whitespaceReplacementSet;
+
 
   /*
    * Constructors.
@@ -162,7 +166,7 @@ public class NameValue extends AbstractValued {
    * @see #isAtomic()
    */
   public NameValue(final String value) {
-    this(value, false);
+    this(value, false, " ");
   }
 
   /**
@@ -182,11 +186,36 @@ public class NameValue extends AbstractValued {
     this.setAtomic(atomic);
   }
 
+  public NameValue(final String value, final boolean atomic, final String whitespaceReplacement) {
+    super(value);
+    this.setAtomic(atomic);
+    this.setWhitespaceReplacement(whitespaceReplacement);
+  }
+
 
   /*
    * Instance methods.
    */
 
+
+  public String getWhitespaceReplacement() {
+    return this.whitespaceReplacement;
+  }
+
+  public void setWhitespaceReplacement(final String whitespaceReplacement) {
+    if (this.whitespaceReplacementSet) {
+      if (whitespaceReplacement == null) {
+        if (this.getWhitespaceReplacement() != null) {
+          throw new IllegalStateException();
+        }
+      } else if (!whitespaceReplacement.equals(this.getWhitespaceReplacement())) {
+        throw new IllegalStateException();
+      }
+    } else {
+      this.whitespaceReplacement = whitespaceReplacement;
+      this.whitespaceReplacementSet = true;
+    }
+  }
   
   /**
    * Returns {@code true} if this {@link NameValue} is fully
@@ -200,7 +229,7 @@ public class NameValue extends AbstractValued {
    * @see #setAtomic(boolean)
    */
   public boolean isInitialized() {
-    return this.atomic != null && this.getValue() != null;
+    return this.atomic != null && this.getValue() != null && this.whitespaceReplacementSet;
   }
 
   /**
@@ -242,8 +271,9 @@ public class NameValue extends AbstractValued {
   /**
    * Returns a hashcode for this {@link NameValue} based off the
    * return value of this {@link NameValue}'s {@link #isAtomic()}
-   * method as well as its {@linkplain AbstractValued#hashCode()
-   * superclass' hashcode}.
+   * method, the return value of this {@link NameValue}'s {@link
+   * #getWhitespaceReplacement()} method and its {@linkplain
+   * AbstractValued#hashCode() superclass' hashcode}.
    *
    * @return a hashcode for this {@link NameValue}
    */
@@ -254,6 +284,14 @@ public class NameValue extends AbstractValued {
     int c = Boolean.valueOf(this.isAtomic()).hashCode();
     result = result * 37 + c;
     
+    final String whitespaceReplacement = this.getWhitespaceReplacement();
+    if (whitespaceReplacement == null) {
+      c = 0;
+    } else {
+      c = whitespaceReplacement.hashCode();
+    }
+    result = result * 37 + c;
+
     c = super.hashCode();
     result = result * 37 + c;
     
@@ -265,7 +303,11 @@ public class NameValue extends AbstractValued {
    * instance of {@link NameValue} and returns the same value from its
    * {@link #isAtomic()} method as is returned from this {@link
    * NameValue}'s {@link #isAtomic()} method and returns a value from
-   * its {@link AbstractValued#getValue()} method that is {@linkplain
+   * its {@link #getWhitespaceReplacement()} method that is
+   * {@linkplain String#equals(Object) equal to} the value returned by
+   * this {@link NameValue}'s {@link #getWhitespaceReplacement()}
+   * method and returns a value from its {@link
+   * AbstractValued#getValue()} method that is {@linkplain
    * String#equals(Object) equal to} the value returned by this {@link
    * NameValue}'s {@link AbstractValued#getValue()} method.
    *
@@ -283,11 +325,22 @@ public class NameValue extends AbstractValued {
       return true;
     } else if (other instanceof NameValue) {
       final NameValue him = (NameValue)other;
+
       if (this.isAtomic()) {
         if (!him.isAtomic()) {
           return false;
         }
       }
+
+      final String whitespaceReplacement = this.getWhitespaceReplacement();
+      if (whitespaceReplacement == null) {
+        if (him.getWhitespaceReplacement() != null) {
+          return false;
+        }
+      } else if (!whitespaceReplacement.equals(him.getWhitespaceReplacement())) {
+        return false;
+      }
+      
       return super.equals(other);
     } else {
       return false;
@@ -322,7 +375,7 @@ public class NameValue extends AbstractValued {
    * @see #valueOf(String)
    */
   public static final NameValue nv(final String value) {
-    return valueOf(value, false);
+    return valueOf(value, false, " ");
   }
 
   /**
@@ -348,7 +401,7 @@ public class NameValue extends AbstractValued {
    * null}
    */
   public static final NameValue valueOf(final String value) {
-    return valueOf(value, false);
+    return valueOf(value, false, " ");
   }
 
   /**
@@ -376,10 +429,14 @@ public class NameValue extends AbstractValued {
    * null}
    */
   public static final NameValue valueOf(final String value, final boolean atomic) {
+    return valueOf(value, atomic, " ");
+  }
+
+  public static final NameValue valueOf(final String value, final boolean atomic, final String whitespaceReplacement) {
     if (value == null) {
       throw new IllegalArgumentException("value", new NullPointerException("value"));
     }
-    return new NameValue(value, atomic);
+    return new NameValue(value, atomic, whitespaceReplacement);
   }
 
 }

@@ -102,7 +102,7 @@ public class Name extends AbstractValued {
    *
    * @see #getValue()
    *
-   * @see #getWhitespaceReplacement()
+   * @see NameValue#getWhitespaceReplacement()
    */
   public static final Pattern whitespacePattern = Pattern.compile("\\s+");
 
@@ -131,19 +131,6 @@ public class Name extends AbstractValued {
    * @see #setNameValue(NameValue)
    */
   private NameValue nameValue;
-
-  /**
-   * The {@link String} used to replace whitespace during computation
-   * of the result of the {@link #getValue()} method.
-   *
-   * <p>This field may be {@code null}, in which case no whitespace
-   * replacement is performed.</p>
-   *
-   * @see #getWhitespaceReplacement()
-   *
-   * @see #setWhitespaceReplacement(String)
-   */
-  private String whitespaceReplacement;
 
   /**
    * The {@link NameResolverFactory} used to refer to other {@link
@@ -186,25 +173,22 @@ public class Name extends AbstractValued {
    * subsequently call {@link #setNamed(Named)} and {@link
    * #setNameValue(NameValue)}.
    *
-   * @see #Name(Named, NameValue, String)
+   * @see #Name(Named, NameValue)
    *
    * @see #setNamed(Named)
    *
    * @see #setNameValue(NameValue)
-   *
-   * @see #setWhitespaceReplacement(String)
    */
   protected Name() {
     super();
-    this.setWhitespaceReplacement(" ");
   }
 
   /**
    * Creates a new {@link Name} that is owned by the supplied {@link
    * Named}.
    *
-   * <p>This constructor calls the {@link #Name(Named, NameValue,
-   * String)} constructor.</p>
+   * <p>This constructor calls the {@link #Name(Named, NameValue)}
+   * constructor.</p>
    *
    * @param named the {@link Named} named by this {@link Name}; may be
    * {@code null} in which case this {@link Name} is for all intents
@@ -217,15 +201,15 @@ public class Name extends AbstractValued {
    * {@code null}
    */
   public Name(final Named named, final String nameValue) {
-    this(named, NameValue.valueOf(nameValue), " ");
+    this(named, NameValue.valueOf(nameValue, false, " "));
   }
 
   /**
    * Creates a new {@link Name} that is owned by the supplied {@link
    * Named}.
    *
-   * <p>This constructor calls the {@link #Name(Named, NameValue,
-   * String)} constructor.</p>
+   * <p>This constructor calls the {@link #Name(Named, NameValue)}
+   * constructor.</p>
    *
    * @param named the {@link Named} named by this {@link Name}; may be
    * {@code null} in which case this {@link Name} is for all intents
@@ -238,38 +222,7 @@ public class Name extends AbstractValued {
    * {@code null}
    */
   public Name(final Named named, final NameValue nameValue) {
-    this(named, nameValue, " ");
-  }
-
-  /**
-   * Creates a new {@link Name}.
-   *
-   * @param named the {@link Named} named by this {@link Name}; may be
-   * {@code null} in which case this {@link Name} is for all intents
-   * and purposes just a glorified {@link NameValue}
-   *
-   * @param nameValue the {@link NameValue} that represents the actual
-   * name value; must not be {@code null}
-   *
-   * @param whitespaceReplacement the {@link String} used as a
-   * replacement value for whitespace characters within the
-   * {@linkplain #getValue() value} of this {@link Name}; if {@code
-   * null}, no whitespace replacement will occur; a {@link String}
-   * consisting of a single space character ("&nbsp;") is usually the
-   * best value to supply for this parameter for most {@code Name}s
-   *
-   * @exception IllegalArgumentException if {@code nameValue} is
-   * {@code null}
-   *
-   * @see #setNamed(Named)
-   *
-   * @see #setNameValue(NameValue)
-   *
-   * @see #setWhitespaceReplacement(String)
-   */
-  public Name(final Named named, final NameValue nameValue, final String whitespaceReplacement) {
     super();
-    this.setWhitespaceReplacement(whitespaceReplacement);
     this.setNamed(named);
     this.setNameValue(nameValue);
   }
@@ -279,49 +232,6 @@ public class Name extends AbstractValued {
    * Instance methods.
    */
 
-
-  /**
-   * Returns the {@link String} that will be used to replace
-   * occurrences of whitespace in the {@linkplain #getValue() value}
-   * of this {@link Name}.
-   *
-   * <p>This method may return {@code null}.</p>
-   *
-   * <p>If this method returns {@code null}, then no whitespace
-   * replacement will be performed.</p>
-   *
-   * @return a {@link String} that will be used to replace
-   * occurrences of whitespace in the {@linkplain #getValue() value}
-   * of this {@link Name}, or {@code null}
-   *
-   * @see #setWhitespaceReplacement(String)
-   */
-  public String getWhitespaceReplacement() {
-    return this.whitespaceReplacement;
-  }
-
-  /**
-   * Sets the {@link String} that will be used to replace occurrences
-   * of whitespace in the {@linkplain #getValue() value} of this
-   * {@link Name}.  If the supplied {@link String} is {@code null},
-   * then no whitespace replacement will occur.
-   *
-   * @param s the {@link String} that will be used to replace
-   * occurrences of whitespace in the {@linkplain #getValue() value}
-   * of this {@link Name}; if {@code null} then no whitespace
-   * replacement will occur
-   *
-   * @see #getWhitespaceReplacement()
-   *
-   * @see #getValue()
-   */
-  public void setWhitespaceReplacement(final String s) {
-    final Object old = this.getWhitespaceReplacement();
-    this.whitespaceReplacement = s;
-    if (this.propertyChangeSupport != null) {
-      this.propertyChangeSupport.firePropertyChange("whitespaceReplacement", old, this.getWhitespaceReplacement());
-    }
-  }
 
   /**
    * Returns the {@link Named} that <em>owns</em> this {@link Name}.
@@ -547,7 +457,7 @@ public class Name extends AbstractValued {
       if (rawStringValue == null || rawStringValue.isEmpty()) {
         returnValue = "";
       } else {
-        final String whitespaceReplacement = this.getWhitespaceReplacement();
+        final String whitespaceReplacement = nv.getWhitespaceReplacement();
         if (whitespaceReplacement != null) {
           returnValue = whitespacePattern.matcher(rawStringValue).replaceAll(whitespaceReplacement);
         } else {
@@ -930,7 +840,7 @@ public class Name extends AbstractValued {
     }
     final NameType nameType = NameType.valueOf(nameTypeValue);
     assert nameType != null;    
-    named.putName(nameType, NameValue.valueOf(nameValue, atomic));
+    named.putName(nameType, NameValue.valueOf(nameValue, atomic, whitespaceReplacement));
     return named.getName(nameType);
   }
 
