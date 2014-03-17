@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2013 Edugility LLC.
+ * Copyright (c) 2013-2014 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -56,17 +56,20 @@ import org.mvel2.templates.TemplateRuntime;
  * tangible concept.  There is no guarantee that a {@link Name} serves
  * as any kind of unique identifier.</p>
  *
+ * <p>In normal usage, a {@link Name} is set up and then not further
+ * altered.</p>
+ *
  * <p>Two {@link Name}s are considered {@linkplain #equals(Object)
  * equal} if their {@linkplain #getValue() values} are equal.  Note in
  * particular that for {@linkplain #equals(Object) equality purposes}
- * a {@link Name}'s {@linkplain #getNamed() owner} is deliberately not
- * also considered.</p>
+ * <strong>a {@link Name}'s {@linkplain #getNamed() owner} is deliberately not
+ * also considered.</strong></p>
  *
- * <p>The {@linkplain #getValue() value} of a {@link Name} may change,
- * since the {@linkplain NameValue#getValue() value of its associated
- * <code>NameValue</code>} may change.  Bear this in mind if you are
- * using {@link Name}s as keys in a {@link Map}.  In normal usage,
- * however, a {@link Name} is set up and then not further altered.</p>
+ * <p>The {@linkplain #getValue() value} of a non-{@linkplain
+ * NameValue#isAtomic() atomic} {@link Name} may change as its
+ * {@linkplain #getNamed() associated owner}'s set of names changes.
+ * Bear this in mind if you are using {@link Name}s as keys in a
+ * {@link Map}.
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
@@ -248,6 +251,30 @@ public class Name extends AbstractValued {
   public Name(final NameValue nameValue) {
     super();
     this.setNameValue(nameValue);
+  }
+
+  /**
+   * Creates a new {@link Name} that is initially {@linkplain
+   * #getNamed() unowned} with a {@link NameValue} representing the
+   * supplied {@code nameValue} {@link String}.  The caller is
+   * expected to call {@link #setNamed(Named)} with a non-{@code null}
+   * {@link Named} to complete initialization.
+   *
+   * <p>This constructor calls the {@link #Name(NameValue)}
+   * constructor.</p>
+   *
+   * @param nameValue the value that represents the actual
+   * name value; must not be {@code null}
+   *
+   * @exception IllegalArgumentException if {@code nameValue} is
+   * {@code null}
+   *
+   * @see #Name(NameValue)
+   *
+   * @see NameValue#valueOf(String, boolean, String)
+   */
+  public Name(final String nameValue) {
+    this(NameValue.valueOf(nameValue, false, " "));
   }
 
 

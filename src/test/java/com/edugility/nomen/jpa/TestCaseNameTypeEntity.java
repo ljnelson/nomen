@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2013-2014 Edugility LLC.
+ * Copyright (c) 2011-2013 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,20 +25,41 @@
  * The original copy of this license is available at
  * http://www.opensource.org/license/mit-license.html.
  */
+package com.edugility.nomen.jpa;
 
-/**
- * Provides classes and interfaces for working with names of all
- * varieties.
- *
- * @author <a href="http://about.me/lairdnelson"
- * target="_parent">Laird Nelson</a>
- *
- * @see com.edugility.nomen.Name
- *
- * @see com.edugility.nomen.Named
- *
- * @see com.edugility.nomen.NameType
- *
- * @see com.edugility.nomen.NameValue
- */
-package com.edugility.nomen;
+import javax.persistence.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.edugility.nomen.*;
+
+import static org.junit.Assert.*;
+
+public class TestCaseNameTypeEntity {
+
+  public static EntityManagerFactory emf;
+
+  public TestCaseNameTypeEntity() {
+    super();
+  }
+
+  @BeforeClass
+  public static final void createEntityManagerFactory() {
+    emf = Persistence.createEntityManagerFactory("test");
+  }
+
+  @AfterClass
+  public static final void closeEntityManagerFactory() {
+    emf.close();
+  }
+
+  @Test
+  public void testPersist() {
+    
+  }
+
+}

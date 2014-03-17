@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2013 Edugility LLC.
+ * Copyright (c) 2013-2014 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -79,7 +79,11 @@ public abstract class AbstractValued implements Serializable, Valued {
 
 
   /**
-   * Creates a new {@link AbstractValued}.
+   * Creates a new {@link AbstractValued} with no {@linkplain
+   * #getValue() value}.  The caller is expected to invoke the {@link
+   * #setValue(String)} method to complete initialization.
+   *
+   * @see #setValue(String)
    */
   protected AbstractValued() {
     super();
@@ -114,6 +118,10 @@ public abstract class AbstractValued implements Serializable, Valued {
    *
    * @return the value of this {@link AbstractValued}, or {@code
    * null}
+   *
+   * @see #setValue(String)
+   *
+   * @see #NameType(String)
    */
   @Override
   public String getValue() {
@@ -124,14 +132,17 @@ public abstract class AbstractValued implements Serializable, Valued {
    * Sets the value of this {@link AbstractValued}.
    *
    * <p>The default implementation of this method may only be called
-   * once.  Subsequent calls will throw an {@link
-   * IllegalStateException}.  Subclasses are free to override this
-   * restriction.</p>
+   * once, whether by {@linkplain #NameType(String) an appropriate
+   * constructor} or afterwards.  Subsequent calls will throw an
+   * {@link IllegalStateException}.  Subclasses are free to override
+   * this restriction.</p>
    * 
    * @param value the new value; must not be {@code null}
    *
    * @exception IllegalStateException if this method is called more
    * than once
+   *
+   * @see #NameType(String)
    */
   public void setValue(final String value) {
     if (value == null) {
@@ -204,6 +215,8 @@ public abstract class AbstractValued implements Serializable, Valued {
    * @return the return value of invoking {@link
    * String#valueOf(Object)} on the return value of the {@link
    * #getValue()} method; never {@code null}
+   *
+   * @see String#valueOf(Object)
    */
   @Override
   public String toString() {

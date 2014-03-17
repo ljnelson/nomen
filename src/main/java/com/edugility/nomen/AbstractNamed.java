@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2013 Edugility LLC.
+ * Copyright (c) 2013-2014 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -123,6 +123,13 @@ public abstract class AbstractNamed implements Named {
    * {@linkplain NameType#equals(Object) equal to} the supplied {@link
    * NameType}.
    *
+   * <h4>Implementation Notes</h4>
+   * 
+   * <p>This implementation calls the {@link #putName(NameType, Name)}
+   * method, passing the return value of the {@link
+   * #nameFor(NameValue)} method as the value for the second
+   * parameter.</p>
+   *
    * @param nameType a {@link NameType} under which a new {@link Name}
    * will be stored; must not be {@code null}
    *
@@ -135,13 +142,14 @@ public abstract class AbstractNamed implements Named {
    * {@code null} from its {@link Name#getNamed()} method.
    *
    * @exception IllegalArgumentException if {@code nameType} or {@code
-   * nameValue} is {@code null}
+   * nameValue} is {@code null} or otherwise unsuitable
+   *
+   * @see #putName(NameType, Name)
    */
   public Name putName(final NameType nameType, final NameValue nameValue) {
     if (nameType == null) {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
-    }
-    if (nameValue == null) {
+    } else if (nameValue == null) {
       throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
     }
     return this.putName(nameType, this.nameFor(nameValue));
@@ -154,35 +162,71 @@ public abstract class AbstractNamed implements Named {
    * {@link NameType} {@linkplain NameType#equals(Object) equal to}
    * the supplied {@link NameType}.
    *
+   * <h4>Implementation Notes</h4>
+   *
+   * <p>To properly orphan {@link Name}s that are no longer indexed
+   * under a given {@link NameType} in this {@link AbstractNamed},
+   * {@linkplain #getNames() all the <code>Name</code>s affiliated
+   * with this <code>AbstractNamed</code> implementation} must be
+   * scanned, so this operation has performance that decreases as
+   * the total number of {@link Name}s stored by this {@link
+   * AbstractNamed} implementation increases.</p>
+   *
    * @param nameType a {@link NameType} under which a new {@link Name}
    * will be stored; must not be {@code null}
    *
    * @param name a {@link Name} to store; must not be {@code null};
    * its {@link Name#setNamed(Named)} method will be called with
-   * {@code this} as its argument
+   * {@code this} as its argument.
    *
    * @return the prior {@link Name} stored under the supplied {@link
    * NameType}, or {@code null} if there was no such {@link Name}.
    * The returned {@link Name}, if non-{@code null}, will return
-   * {@code null} from its {@link Name#getNamed()} method.
+   * {@code null} from its {@link Name#getNamed()} method only if it
+   * is now truly orphaned, that is only if it is not indexed in this
+   * {@link AbstractNamed} under any other {@link NameType}.
    *
    * @exception IllegalArgumentException if {@code nameType} or {@code
-   * name} is {@code null}
+   * name} is {@code null}, or if {@code nameType} is unsuitable, or
+   * if {@code name} is unsuitable
    */
   public Name putName(final NameType nameType, final Name name) {
     if (nameType == null) {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
-    }
-    if (name == null) {
+    } else if (name == null) {
       throw new IllegalArgumentException("name", new NullPointerException("name"));
-    }
-    if (this.names == null) {
+    } else if (this.names == null) {
       this.names = new HashMap<NameType, Name>(11);
     }
-    name.setNamed(this);
-    final Name returnValue = this.names.put(nameType, name);
-    if (returnValue != null) {
-      returnValue.setNamed(null);
+    final Name returnValue;
+    final Name old = this.names.get(nameType);
+    if (old == name) {
+      returnValue = old;
+    } else {
+      name.setNamed(this);
+      returnValue = this.names.put(nameType, name);
+      assert returnValue == old;
+      if (returnValue != null) {
+        final Collection<?> values = this.names.values();
+        if (values != null && !values.isEmpty()) {
+          boolean found = false;
+          for (final Object value : values) {
+            if (value == returnValue) {
+              // Can't use equals() here, because two Names are equal
+              // if their computed values result in the same string.
+              // Here we are truly interested in object identity, not
+              // equality.
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            // This returnValue is not stored anywhere else in the
+            // map.
+            returnValue.setNamed(null);
+          }
+        }
+      }
     }
     return returnValue;
   }
@@ -226,9 +270,38 @@ public abstract class AbstractNamed implements Named {
       }
     }
     if (returnValue == null) {
-      returnValue = new Name(this, nameValue);
+      returnValue = this.createName(nameValue);
+      if (returnValue == null) {
+        throw new IllegalStateException("createName(NameValue) == null");
+      }
+      returnValue.setNamed(this);
     }
     return returnValue;
+  }
+
+  /**
+   * Creates a new {@link Name} implementation given a non-{@code
+   * null} {@link NameValue}.
+   *
+   * <p>Overrides of this method must not directly or indirectly call
+   * the {@link #nameFor(NameValue)} method.</p>
+   *
+   * <p>This implementation simply {@linkplain Name#Name(Named,
+   * NameValue) calls the relevant <code>Name</code> constructor}.</p>
+   *
+   * @param nameValue the {@link NameValue} that will serve as the
+   * value for the new {@link Name}; must not be {@code null}
+   *
+   * @return a non-{@code null} {@link Name}
+   *
+   * @exception IllegalArgumentException if {@code nameValue} is
+   * {@code null}
+   */
+  protected Name createName(final NameValue nameValue) {
+    if (nameValue == null) {
+      throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
+    }
+    return new Name(this, nameValue);
   }
 
   /**

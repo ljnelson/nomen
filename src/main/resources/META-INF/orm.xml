@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+                                     http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+                 version="2.1">
+  <description></description>
+  <!-- generators go here -->
+  <!-- named queries go here -->
+  <!-- named native queries go here -->
+  <mapped-superclass access="FIELD" class="com.edugility.nomen.AbstractValued">
+    <description></description>
+    <attributes>
+      <description></description>
+      <basic optional="false" name="value">
+        <column></column>
+      </basic>
+    </attributes>
+  </mapped-superclass>
+  <entity></entity>
+  
+</entity-mappings>

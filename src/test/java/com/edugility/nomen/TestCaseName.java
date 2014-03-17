@@ -58,4 +58,21 @@ public class TestCaseName {
     assertSame(name, n);
   }
 
+  @Test
+  public void testSameNamePutTwice() {
+    final Name laird = new Name(this.dude, "Laird");
+    final NameType first = new NameType("first");
+    final NameType preferred = new NameType("preferred");
+    assertNull(this.dude.putName(first, laird));
+    assertNull(this.dude.putName(preferred, laird));
+    final Name lj = new Name(this.dude, "L. J.");
+    Name old = this.dude.putName(preferred, lj);
+    assertNotNull(old);
+    assertSame(laird, old);
+    assertSame(this.dude, laird.getNamed());
+    old = this.dude.putName(first, lj);
+    assertNotNull(old);
+    assertNull(old.getNamed());
+  }
+
 }
