@@ -27,6 +27,7 @@
  */
 package com.edugility.nomen;
 
+import java.beans.PropertyChangeEvent; // for javadoc only
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -50,13 +51,19 @@ import org.mvel2.templates.TemplateRuntime;
 /**
  * A {@link Serializable} {@link AbstractValued} implementation that
  * is a combination of a {@link NameValue} and the {@link Named} that
- * it is currently assigned to.
+ * it is currently assigned to.  A {@link Name} joins a {@link
+ * NameValue} with a {@link Named} so that {@link NameValue}s can be
+ * shared among several {@link Named}s.
  *
  * <p>A {@link Name} may be a name for a party or agent or less
  * tangible concept.  There is no guarantee that a {@link Name} serves
  * as any kind of unique identifier.</p>
  *
  * <p>In normal usage, a {@link Name} is set up and then not further
+ * altered.  However, it can be {@linkplain #setNamed(Named)
+ * reassigned} and have its {@linkplain #setNameValue(NameValue) value
+ * changed}.  Both its {@code named} and {@code nameValue} properties
+ * are bound and thus fire {@link PropertyChangeEvent}s when
  * altered.</p>
  *
  * <p>Two {@link Name}s are considered {@linkplain #equals(Object)
@@ -69,7 +76,7 @@ import org.mvel2.templates.TemplateRuntime;
  * NameValue#isAtomic() atomic} {@link Name} may change as its
  * {@linkplain #getNamed() associated owner}'s set of names changes.
  * Bear this in mind if you are using {@link Name}s as keys in a
- * {@link Map}.
+ * {@link Map} (generally a bad idea).</p>
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
@@ -83,6 +90,7 @@ import org.mvel2.templates.TemplateRuntime;
  * @see Named
  *
  * @see Valued
+ *
  */
 public class Name extends AbstractValued {
 
@@ -161,12 +169,18 @@ public class Name extends AbstractValued {
    *
    * @see #installTemplate()
    *
-   * @see CompiledTemplate
+   * @see #setNameValue(NameValue)
    *
    * @see #getValue()
+   *
+   * @see CompiledTemplate
    */
   private transient CompiledTemplate compiledTemplate;
 
+  /**
+   * A {@link PropertyChangeSupport} that assists with firing Java
+   * Beans-compatible {@link PropertyChangeEvent}s.
+   */
   private transient PropertyChangeSupport propertyChangeSupport;
 
 
@@ -383,7 +397,7 @@ public class Name extends AbstractValued {
    * VariableResolverFactory) execution} later by the {@link
    * #getValue()} method.
    *
-   * <h4>Design Notes</h4>
+   * <h3>Design Notes</h3>
    *
    * <p>This method is not {@code final} only so this class can be
    * used as a JPA entity.<p>
@@ -424,7 +438,7 @@ public class Name extends AbstractValued {
    *
    * <p>This method never returns {@code null}.</p>
    *
-   * <h4>Implementation Notes</h4>
+   * <h3>Implementation Notes</h3>
    *
    * <p>This method calls the {@link #computeValue()} method and
    * returns its result.</p>
@@ -489,11 +503,11 @@ public class Name extends AbstractValued {
     if (nv == null) {
       returnValue = "";
     } else if (nv.isAtomic() || this.compiledTemplate == null) {
-      final String rawValue = nv.getValue();
+      final Object rawValue = nv.getValue();
       if (rawValue == null) {
         returnValue = "";
       } else {
-        returnValue = rawValue;
+        returnValue = this.toString(rawValue);
       }
     } else {
       Object rawValue = null;
@@ -543,22 +557,28 @@ public class Name extends AbstractValued {
    * Returns a non-{@code null} {@link String} representation of this
    * {@link Name}.
    *
+   * <h3>Implementation Notes</h3>
+   *
+   * <p>This implementation calls the {@link #toString(Object)} method
+   * with the return value of the {@link #getValue()} method.</p>
+   *
    * @return a non-{@code null} {@link String} representation of this
    * {@link Name}
    */
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    final Object value = this.getValue();
-    if (value != null) {
-      sb.append(value);
+    String returnValue = this.toString(this.getValue());
+    if (returnValue == null) {
+      returnValue = "";
     }
-    return sb.toString();
+    return returnValue;
   }
+
 
   /*
    * PropertyChangeListener support.
    */
+
 
   /**
    * Adds the supplied {@link PropertyChangeListener} to this {@link
@@ -772,7 +792,7 @@ public class Name extends AbstractValued {
    * non-{@linkplain NameValue#isAtomic() atomic} {@link Name} into
    * the supplied {@link AbstractNamed}.
    *
-   * <h4>Design Notes</h4>
+   * <h3>Design Notes</h3>
    *
    * <p>This method is not declared {@code final} only so that this
    * class may be used as a JPA entity.  The JPA specification
@@ -811,7 +831,7 @@ public class Name extends AbstractValued {
    * non-{@linkplain NameValue#isAtomic() atomic} {@link Name} into
    * the supplied {@link AbstractNamed}.
    *
-   * <h4>Design Notes</h4>
+   * <h3>Design Notes</h3>
    *
    * <p>This method is not declared {@code final} only so that this
    * class may be used as a JPA entity.  The JPA specification
@@ -854,7 +874,7 @@ public class Name extends AbstractValued {
    * non-{@linkplain NameValue#isAtomic() atomic} {@link Name} into
    * the supplied {@link AbstractNamed}.
    *
-   * <h4>Design Notes</h4>
+   * <h3>Design Notes</h3>
    *
    * <p>This method is not declared {@code final} only so that this
    * class may be used as a JPA entity.  The JPA specification

@@ -27,18 +27,6 @@
     <url>https://github.com/ljnelson/${project.artifactId}/</url>
   </scm>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.jboss.arquillian</groupId>
-        <artifactId>arquillian-bom</artifactId>
-        <version>1.1.2.Final</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
 
     <dependency>
@@ -53,33 +41,6 @@
       <version>2.1.9.Final</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>org.eclipse.persistence.jpa</artifactId>
-      <version>2.5.1</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.3.175</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.liquibase</groupId>
-      <artifactId>liquibase-core</artifactId>
-      <version>3.1.1</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.arquillian.junit</groupId>
-      <artifactId>arquillian-junit-container</artifactId>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -88,6 +49,20 @@
         <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
+            <additionalparam>
+              -all
+              -collpackages "java.util.*"
+              -hide "java.*"
+              -inferrel
+              -qualify
+              -views
+            </additionalparam>
+            <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+            <docletArtifact>
+              <groupId>org.umlgraph</groupId>
+              <artifactId>umlgraph</artifactId>
+              <version>${umlGraphVersion}</version>
+            </docletArtifact>
             <groups>
               <group>
                 <title>Core API</title>
@@ -98,17 +73,42 @@
                 <packages>com.edugility.nomen.mvel</packages>
               </group>
             </groups>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <systemPropertyVariables>
-              <testEclipseLinkLogging>${testEclipseLinkLogging}</testEclipseLinkLogging>
-              <testDatabaseConnectionURL>${testDatabaseConnectionURL}</testDatabaseConnectionURL>
-              <testDatabasePassword>${testDatabasePassword}</testDatabasePassword>
-              <testDatabaseUser>${testDatabaseUser}</testDatabaseUser>
-            </systemPropertyVariables>
+            <tags>
+              <tag>
+                <name>depend</name>
+                <placement>X</placement>
+              </tag>
+              <tag>
+                <name>note</name>
+                <placement>a</placement>
+              </tag>
+              <tag>
+                <name>opt</name>
+                <placement>a</placement>
+              </tag>
+              <tag>
+                <name>hidden</name>
+                <placement>a</placement>
+              </tag>
+              <tag>
+                <name>navassoc</name>
+                <placement>a</placement>
+              </tag>
+              <tag>
+                <name>assoc</name>
+                <placement>a</placement>
+              </tag>
+              <tag>
+                <name>has</name>
+                <placement>a</placement>
+              </tag>
+              <tag>
+                <name>stereotype</name>
+                <placement>a</placement>
+                <head>Stereotypes:</head>
+              </tag>
+            </tags>
+            <useStandardDocletOptions>true</useStandardDocletOptions>
           </configuration>
         </plugin>
       </plugins>
@@ -129,18 +129,17 @@
 
   <properties>
 
-    <testDatabaseConnectionURL>jdbc:h2:mem:test</testDatabaseConnectionURL>
-    <testDatabasePassword/>
-    <testDatabaseUser>sa</testDatabaseUser>
-    <testEclipseLinkLogging>finer</testEclipseLinkLogging>
-
     <!-- maven-compiler-plugin properties -->
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
 
     <!-- maven-javadoc-plugin properties -->
     <links>http://mvel.codehaus.org/javadoc/2.0/,http://junit.org/javadoc/4.10/</links>
+    <!--
     <stylesheetfile>css/styles.css</stylesheetfile>
+    -->
+
+    <umlGraphVersion>5.6.6</umlGraphVersion>
 
   </properties>
 
@@ -149,18 +148,68 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${mavenJavadocPluginVersion}</version>
-          <configuration>
-            <groups>
-              <group>
-                <title>Core API</title>
-                <packages>com.edugility.nomen</packages>
-              </group>
-              <group>
-                <title><![CDATA[<a href="http://mvel.codehaus.org/">MVEL</a>-Related Packages]]></title>
-                <packages>com.edugility.nomen.mvel</packages>
-              </group>
-            </groups>
-          </configuration>
+        <configuration>
+          <additionalparam>
+            -all
+            -collpackages "java.util.*"
+            -hide "java.*"
+            -inferrel
+            -qualify
+            -views
+          </additionalparam>
+          <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+          <docletArtifact>
+            <groupId>org.umlgraph</groupId>
+            <artifactId>umlgraph</artifactId>
+            <version>${umlGraphVersion}</version>
+          </docletArtifact>
+          <groups>
+            <group>
+              <title>Core API</title>
+              <packages>com.edugility.nomen</packages>
+            </group>
+            <group>
+              <title><![CDATA[<a href="http://mvel.codehaus.org/">MVEL</a>-Related Packages]]></title>
+              <packages>com.edugility.nomen.mvel</packages>
+            </group>
+          </groups>
+          <tags>
+            <tag>
+              <name>depend</name>
+              <placement>X</placement>
+            </tag>
+            <tag>
+              <name>note</name>
+              <placement>a</placement>
+            </tag>
+            <tag>
+              <name>opt</name>
+              <placement>a</placement>
+            </tag>
+            <tag>
+              <name>hidden</name>
+              <placement>a</placement>
+            </tag>
+            <tag>
+              <name>navassoc</name>
+              <placement>a</placement>
+            </tag>
+            <tag>
+              <name>assoc</name>
+              <placement>a</placement>
+            </tag>
+            <tag>
+              <name>has</name>
+              <placement>a</placement>
+            </tag>
+            <tag>
+              <name>stereotype</name>
+              <placement>a</placement>
+              <head>Stereotypes:</head>
+            </tag>
+          </tags>
+          <useStandardDocletOptions>true</useStandardDocletOptions>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>

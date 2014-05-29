@@ -121,7 +121,7 @@ public abstract class AbstractValued implements Serializable, Valued {
    *
    * @see #setValue(String)
    *
-   * @see #NameType(String)
+   * @see #AbstractValued(String)
    */
   @Override
   public String getValue() {
@@ -132,17 +132,17 @@ public abstract class AbstractValued implements Serializable, Valued {
    * Sets the value of this {@link AbstractValued}.
    *
    * <p>The default implementation of this method may only be called
-   * once, whether by {@linkplain #NameType(String) an appropriate
-   * constructor} or afterwards.  Subsequent calls will throw an
-   * {@link IllegalStateException}.  Subclasses are free to override
-   * this restriction.</p>
+   * once, whether by {@linkplain #AbstractValued(String) an
+   * appropriate constructor} or afterwards.  Subsequent calls will
+   * throw an {@link IllegalStateException}.  Subclasses are free to
+   * override this restriction.</p>
    * 
    * @param value the new value; must not be {@code null}
    *
    * @exception IllegalStateException if this method is called more
    * than once
    *
-   * @see #NameType(String)
+   * @see #AbstractValued(String)
    */
   public void setValue(final String value) {
     if (value == null) {

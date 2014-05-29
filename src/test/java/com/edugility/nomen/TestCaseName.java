@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2011-2013 Edugility LLC.
+ * Copyright (c) 2011-2014 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -49,7 +49,7 @@ public class TestCaseName {
 
   @Test
   public void testNameMethod() {
-    final Name name = Name.name(this.dude, "first", "Laird", true);
+    final Name name = Name.name(this.dude, "first", "Laird", true /* atomic */);
     assertNotNull(name);
     final NameValue nameValue = name.getNameValue();
     assertNotNull(nameValue);
@@ -60,15 +60,27 @@ public class TestCaseName {
 
   @Test
   public void testSameNamePutTwice() {
+
+    // Create a new Name, consisting of a just-in-time-created
+    // NameValue of "Laird" assigned to dude.
     final Name laird = new Name(this.dude, "Laird");
+
     final NameType first = new NameType("first");
+
     final NameType preferred = new NameType("preferred");
+
+    // Store the very same Name under two types.  The assertNull()
+    // call makes sure that there wasn't one in there already.
     assertNull(this.dude.putName(first, laird));
     assertNull(this.dude.putName(preferred, laird));
+
     final Name lj = new Name(this.dude, "L. J.");
+
+
     Name old = this.dude.putName(preferred, lj);
     assertNotNull(old);
     assertSame(laird, old);
+
     assertSame(this.dude, laird.getNamed());
     old = this.dude.putName(first, lj);
     assertNotNull(old);

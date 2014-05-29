@@ -44,7 +44,7 @@ public class TestCaseNameValue {
     assertEquals(nv1, nv2);
     assertEquals(nv1.hashCode(), nv2.hashCode());
 
-    final NameValue nv3 = new NameValue("Laird", true, "");
+    final NameValue nv3 = new NameValue("Laird", true);
     final NameValue nv4 = new NameValue("Laird", true, null);
 
     // Both are atomic, so the whitespace parameter is ignored.

@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2013 Edugility LLC.
+ * Copyright (c) 2013-2014 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,6 +26,8 @@
  * http://www.opensource.org/license/mit-license.html.
  */
 package com.edugility.nomen.mvel;
+
+import java.io.Serializable; // for javadoc only
 
 import com.edugility.nomen.AbstractNamed;
 import com.edugility.nomen.Name;
@@ -85,7 +87,7 @@ public final class NameResolver implements VariableResolver, Named {
   private final Named named;
 
   /**
-   * The {@link NameType} used by this {@link NameResolver} to {@link
+   * The {@link NameType} used by this {@link NameResolver} to {@linkplain
    * #getName(NameType) look up <code>Name</code>s}.
    *
    * <p>This field will never be {@code null}.</p>
@@ -159,6 +161,8 @@ public final class NameResolver implements VariableResolver, Named {
    * whose value will be returned by the {@link #getValue()} method
    *
    * @see #getValue()
+   *
+   * @see VariableResolver#getName()
    */
   @Override
   public final String getName() {
@@ -209,6 +213,8 @@ public final class NameResolver implements VariableResolver, Named {
    * @return a non-{@code null} {@link String}
    *
    * @see #getName()
+   *
+   * @see VariableResolver#getValue()
    */
   @Override
   public final Object getValue() {

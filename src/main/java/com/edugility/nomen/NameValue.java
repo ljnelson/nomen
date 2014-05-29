@@ -137,11 +137,11 @@ public class NameValue extends AbstractValued {
    *
    * <p>This field may be {@code null}.</p>
    *
-   * <h4>Design Notes</h4>
+   * <h3>Design Notes</h3>
    *
    * <p>This field is a {@link Boolean} and not a {@code boolean} so
    * that its initial setting via the {@link #setAtomic(boolean)}
-   * method can be tracked.  It is not {@code final} so that this
+   * method can be tracked.  It is not {@code final} only so that this
    * class may be used as a JPA entity.</p>
    *
    * @see #isAtomic()
@@ -188,12 +188,13 @@ public class NameValue extends AbstractValued {
    * use a {@linkplain #NameValue(String, boolean, String) more
    * suitable constructor} instead.
    *
-   * <h4>Design Notes</h4>
+   * <h3>Design Notes</h3>
    *
    * <p>This constructor exists primarily for JavaBeans, serialization
    * and JPA compatibility.  Please consider using the {@link
-   * #NameValue(String, boolean)} constructor instead which fully
-   * initializes a {@link NameValue} instance as it creates it.</p>
+   * #NameValue(String, boolean, String)} constructor instead which
+   * fully initializes a {@link NameValue} instance as it creates
+   * it.</p>
    *
    * @see #NameValue(String, boolean, String)
    *
@@ -221,7 +222,7 @@ public class NameValue extends AbstractValued {
    * @see #NameValue(String, boolean, String)
    */
   public NameValue(final String value) {
-    this(value, false, " ");
+    this(value, false /* not atomic */, " ");
   }
 
   /**
@@ -271,7 +272,7 @@ public class NameValue extends AbstractValued {
    * @see #NameValue(String, boolean, String)
    */
   public NameValue(final String value, final String whitespaceReplacement) {
-    this(value, false, whitespaceReplacement);
+    this(value, false /* not atomic */, whitespaceReplacement);
   }
 
   /**
@@ -287,13 +288,13 @@ public class NameValue extends AbstractValued {
    * whitespace replacement; may be {@code null} in which case no
    * whitespace replacement will be performed.  Normally, a single
    * space ("&nbsp;") is a good value for this parameter.  <strong>If
-   * the {@code atomic} parameter value is {@code true}, then {@code
-   * null} will be used as the value of the {@code
-   * whitespaceReplacement} parameter, regardless of what value was
-   * actually supplied for it.</strong>
+   * the {@code atomic} parameter value is {@code true}, then no other
+   * value besides {@code null} may be used as the value of the {@code
+   * whitespaceReplacement} parameter.</strong>
    *
    * @exception IllegalArgumentException if {@code value} is {@code
-   * null}
+   * null}, or if {@code atomic} is {@code true} and {@code
+   * whitespaceReplacement} is any value other than {@code null}
    *
    * @see AbstractValued#AbstractValued(String)
    *
@@ -306,7 +307,7 @@ public class NameValue extends AbstractValued {
   public NameValue(final String value, final boolean atomic, final String whitespaceReplacement) {
     super(value);
     this.setAtomic(atomic);
-    this.setWhitespaceReplacement(atomic ? null : whitespaceReplacement);
+    this.setWhitespaceReplacement(whitespaceReplacement);
   }
 
 
@@ -372,10 +373,9 @@ public class NameValue extends AbstractValued {
       } else if (!whitespaceReplacement.equals(this.getWhitespaceReplacement())) {
         throw new IllegalStateException("setWhitespaceReplacement() cannot be called more than once with different parameter values");
       }
+    } else if (this.isAtomic() && whitespaceReplacement != null) {
+      throw new IllegalArgumentException("whitespaceReplacement", new IllegalStateException("isAtomic()"));
     } else {
-      if (this.isAtomic() && whitespaceReplacement != null) {
-        throw new IllegalArgumentException("whitespaceReplacement", new IllegalStateException("isAtomic()"));
-      }
       this.whitespaceReplacement = whitespaceReplacement;
       this.whitespaceReplacementSet = true;
     }
@@ -641,7 +641,7 @@ public class NameValue extends AbstractValued {
    *
    * <p>This method never returns {@code null}.</p>
    *
-   * <h4>Implementation Notes</h4>
+   * <h3>Implementation Notes</h3>
    *
    * <p>This method currently invokes the {@linkplain
    * #NameValue(String, boolean, String) relevant constructor} but
@@ -685,7 +685,7 @@ public class NameValue extends AbstractValued {
    *
    * <p>This method never returns {@code null}.</p>
    *
-   * <h4>Implementation Notes</h4>
+   * <h3>Implementation Notes</h3>
    *
    * <p>This method currently invokes the {@linkplain
    * #NameValue(String, boolean, String) relevant constructor} but

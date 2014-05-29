@@ -123,7 +123,7 @@ public abstract class AbstractNamed implements Named {
    * {@linkplain NameType#equals(Object) equal to} the supplied {@link
    * NameType}.
    *
-   * <h4>Implementation Notes</h4>
+   * <h3>Implementation Notes</h3>
    * 
    * <p>This implementation calls the {@link #putName(NameType, Name)}
    * method, passing the return value of the {@link
@@ -162,7 +162,7 @@ public abstract class AbstractNamed implements Named {
    * {@link NameType} {@linkplain NameType#equals(Object) equal to}
    * the supplied {@link NameType}.
    *
-   * <h4>Implementation Notes</h4>
+   * <h3>Implementation Notes</h3>
    *
    * <p>To properly orphan {@link Name}s that are no longer indexed
    * under a given {@link NameType} in this {@link AbstractNamed},
@@ -195,7 +195,8 @@ public abstract class AbstractNamed implements Named {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
     } else if (name == null) {
       throw new IllegalArgumentException("name", new NullPointerException("name"));
-    } else if (this.names == null) {
+    }
+    if (this.names == null) {
       this.names = new HashMap<NameType, Name>(11);
     }
     final Name returnValue;
