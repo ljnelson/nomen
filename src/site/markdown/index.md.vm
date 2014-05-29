@@ -1,0 +1,32 @@
+<!-- -*- markdown -*- -->
+# Introduction
+
+Welcome to the `${project.artifactId}` project.
+`${project.artifactId}` provides classes and interfaces for working
+with names of all varieties.
+
+## Core Concepts
+
+In `nomen`'s world, a `Name` binds a `Named` with a `NameValue` and
+indexes it under a `NameType`.
+
+So a `NameType` of `firstName` might serve to index a `NameValue` of
+`Bill` in the context of a `Named` who is a person.  That person might
+also have a `lastName`-indexed `NameValue` of `Gates`.
+
+`NameValue`s may be templates.  The `Named` in our example above might
+have, for example, a `NameValue` of `${firstName} ${lastName}` that is
+indexed under a `NameType` of `fullName`.  When this particular `Name`
+is evaluated, it would yield the `String` value of `Bill Gates`.
+
+`NameValue`s are designed to be shared, or not.  `Jr.` might be an
+example of a `NameValue` that could be shared among many `Named`s; an
+organization might decide that its spelling should be normalized for
+all `Named`s to `Junior` instead.
+
+# API Documentation
+
+The API is fully documented.  Please see the [API documentation][1] to
+get started.
+
+[1]: apidocs/index.html
