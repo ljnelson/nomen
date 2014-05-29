@@ -121,7 +121,7 @@ public class Name extends AbstractValued {
    *
    * @see NameValue#getWhitespaceReplacement()
    */
-  public static final Pattern whitespacePattern = Pattern.compile("\\s+");
+  private static final Pattern whitespacePattern = Pattern.compile("\\s+");
 
 
   /*
