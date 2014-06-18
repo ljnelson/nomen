@@ -217,27 +217,6 @@ public class Name extends AbstractValued {
    * {@code null} in which case this {@link Name} is for all intents
    * and purposes just a glorified {@link NameValue}
    *
-   * @param nameValue the value that this {@link Name} will have; must
-   * not be {@code null}
-   *
-   * @exception IllegalArgumentException if {@code nameValue} is
-   * {@code null}
-   */
-  public Name(final Named named, final String nameValue) {
-    this(named, new NameValue(nameValue, false, " "));
-  }
-
-  /**
-   * Creates a new {@link Name} that is owned by the supplied {@link
-   * Named}.
-   *
-   * <p>This constructor calls the {@link #Name(Named, NameValue)}
-   * constructor.</p>
-   *
-   * @param named the {@link Named} named by this {@link Name}; may be
-   * {@code null} in which case this {@link Name} is for all intents
-   * and purposes just a glorified {@link NameValue}
-   *
    * @param nameValue the {@link NameValue} that represents the actual
    * name value; must not be {@code null}
    *
@@ -265,30 +244,6 @@ public class Name extends AbstractValued {
   public Name(final NameValue nameValue) {
     super();
     this.setNameValue(nameValue);
-  }
-
-  /**
-   * Creates a new {@link Name} that is initially {@linkplain
-   * #getNamed() unowned} with a {@link NameValue} representing the
-   * supplied {@code nameValue} {@link String}.  The caller is
-   * expected to call {@link #setNamed(Named)} with a non-{@code null}
-   * {@link Named} to complete initialization.
-   *
-   * <p>This constructor calls the {@link #Name(NameValue)}
-   * constructor.</p>
-   *
-   * @param nameValue the value that represents the actual
-   * name value; must not be {@code null}
-   *
-   * @exception IllegalArgumentException if {@code nameValue} is
-   * {@code null}
-   *
-   * @see #Name(NameValue)
-   *
-   * @see NameValue#valueOf(String, boolean, String)
-   */
-  public Name(final String nameValue) {
-    this(new NameValue(nameValue, false, " "));
   }
 
 
@@ -536,21 +491,52 @@ public class Name extends AbstractValued {
 
 
   /**
-   * Calls {@link #setNameValue(NameValue)
-   * setNameValue(NameValue.valueOf(value))}.
+   * Overrides the {@link AbstractValued#setValue(String)} method to
+   * call <code>{@linkplain #setNameValue(NameValue)
+   * setNameValue}({@link NameValue#NameValue(String) new
+   * NameValue(value)})</code>.
    *
    * @param value the value to set; must not be {@code null}
    *
    * @exception IllegalArgumentException if {@code value} is {@code
    * null}
    * 
+   * @exception IllegalStateException if the {@link
+   * #createNameValue(String)} method, called internally, returns
+   * {@code null}
+   *
    * @see #setNameValue(NameValue)
+   *
+   * @see #createNameValue(String)
    */
   @Override
   public void setValue(final String value) {
+    final NameValue nv = this.createNameValue(value);
+    if (nv == null) {
+      throw new IllegalStateException("createNameValue(\"" + value + "\") == null");
+    }
     final String old = this.getValue();
-    this.setNameValue(new NameValue(value));
+    this.setNameValue(nv);
     this.firePropertyChange("value", old, this.getValue());
+  }
+
+  /**
+   * Returns a new {@link NameValue}.
+   *
+   * <p>This method never returns {@code null} and overrides of it
+   * must not return {@code null} either.</p>
+   *
+   * @param value the value for the new {@link NameValue}; must not be
+   * {@code null}
+   *
+   * @return a new {@link NameValue} with {@code value} as its
+   * {@linkplain AbstractValued#getValue() value}; never {@code null}
+   *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   */
+  protected NameValue createNameValue(final String value) {
+    return new NameValue(value);
   }
 
   /**

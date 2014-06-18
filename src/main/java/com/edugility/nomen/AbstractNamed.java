@@ -197,24 +197,20 @@ public abstract class AbstractNamed implements Named {
    * Creates a new {@link Name} implementation given a non-{@code
    * null} {@link NameValue}.
    *
-   * <p>Overrides of this method must not directly or indirectly call
-   * the {@link #nameFor(NameValue)} method.</p>
-   *
    * <p>This implementation simply {@linkplain Name#Name(Named,
    * NameValue) calls the relevant <code>Name</code> constructor}.</p>
    *
    * @param nameValue the {@link NameValue} that will serve as the
    * value for the new {@link Name}; must not be {@code null}
    *
-   * @return a non-{@code null} {@link Name}
+   * @return a new, non-{@code null} {@link Name}
    *
    * @exception IllegalArgumentException if {@code nameValue} is
    * {@code null}
+   *
+   * @see Name#Name(Named, NameValue)
    */
   protected Name createName(final NameValue nameValue) {
-    if (nameValue == null) {
-      throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
-    }
     return new Name(this, nameValue);
   }
 
