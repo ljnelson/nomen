@@ -6,17 +6,9 @@ For example, is a NameType of "firstName" shared by all people who
 have Names indexed under it?  Or can a given person define his own
 NameType as he wishes, and if it happens to be a duplicate, so what?
 
-The valueOf(String) method, though, is predicated on the fact that
-two NameTypes with the same values are completely
-indistinguishable--in fact, there really shouldn't be two of them at
-all.  They are both equal and but for some kind of fluke should be
-identical as well.  In an enterprise application setting, their value
-attribute or column is their primary key.
-
-
 * NameValue
-NameValues must not have their values be their primary keys.  That
-is, two NameValues with the same value must nevertheless be treated
-as distinct, because if one person changes his last name from Smith
-to Smyth, we don't want all people in the application to have a
-similar change.
+In an enterprise setting, NameValues must not have their values be
+their primary keys.  That is, two NameValues with the same value must
+nevertheless be treated as distinct, because if one person changes his
+last name from Smith to Smyth, we don't want all people in the
+application to have a similar change.
