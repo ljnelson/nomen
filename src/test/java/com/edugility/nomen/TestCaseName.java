@@ -52,7 +52,7 @@ public class TestCaseName {
 
     // Create a new Name, consisting of a just-in-time-created
     // NameValue of "Laird" assigned to dude.
-    final Name laird = new Name(this.dude, "Laird");
+    final Name laird = new Name(this.dude, new NameValue("Laird"));
 
     final NameType first = new NameType("first");
 
@@ -63,7 +63,7 @@ public class TestCaseName {
     assertNull(this.dude.putName(first, laird));
     assertNull(this.dude.putName(preferred, laird));
 
-    final Name lj = new Name(this.dude, "L. J.");
+    final Name lj = new Name(this.dude, new NameValue("L. J."));
 
 
     Name old = this.dude.putName(preferred, lj);
