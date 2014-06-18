@@ -242,51 +242,16 @@ public final class NameResolver implements VariableResolver, Named {
 
   }
 
+
   /**
-   * <strong>Experimental</strong>; {@linkplain
-   * AbstractNamed#putName(NameType, NameValue) puts} a {@link Name}
-   * into the {@link Named} that is affiliated with this {@link
-   * NameResolver}, provided that it is an instance of {@link
-   * AbstractNamed}.
+   * Does nothing when invoked.
    *
-   * <p>In general, if the conditions described in the parameters
-   * section below are not met, this method does nothing.</p>
-   *
-   * @param value the value for a new name; may be {@code null}, a
-   * {@link NameValue}, a {@link String} or a {@link Name}.  If it is
-   * {@code null}, then any {@link Name} indexed under this {@link
-   * NameResolver}'s affiliated {@link NameType} present in the
-   * affiliated {@link AbstractNamed} will be removed.  If it is
-   * either a {@link NameValue}, a {@link String} or a {@link Name},
-   * then it is converted common-sensically into a {@link NameValue}
-   * and is {@linkplain AbstractNamed#putName(NameType, NameValue)
-   * installed into} the {@link AbstractNamed} in such a way that a
-   * subsequent call to {@link #getValue()} will return the expected
-   * result.
+   * @param value ignored
    */
   @Override
   public final void setValue(final Object value) {
-    if (this.named instanceof AbstractNamed) {
-      final AbstractNamed owner = (AbstractNamed)this.named;
-      if (value == null) {
-        // remove
-        owner.removeName(this.nameType);
-      } else {
-        NameValue nv = null;
-        if (value instanceof NameValue) {
-          nv = (NameValue)value;
-        } else if (value instanceof String) {
-          nv = NameValue.valueOf((String)value, false, " ");
-        } else if (value instanceof Name) {
-          nv = ((Name)value).getNameValue();
-        } else {
-          nv = null;
-        }
-        if (nv != null) {
-          owner.putName(this.nameType, nv);
-        }
-      }
-    }
+
   }
+
 
 }

@@ -117,45 +117,6 @@ public abstract class AbstractNamed implements Named {
   }
 
   /**
-   * Stores a {@link Name} under the supplied {@link NameType} in such
-   * a way that it can be retrieved later by the #getName(NameType)}
-   * method when that method is supplied with a {@link NameType}
-   * {@linkplain NameType#equals(Object) equal to} the supplied {@link
-   * NameType}.
-   *
-   * <h3>Implementation Notes</h3>
-   * 
-   * <p>This implementation calls the {@link #putName(NameType, Name)}
-   * method, passing the return value of the {@link
-   * #nameFor(NameValue)} method as the value for the second
-   * parameter.</p>
-   *
-   * @param nameType a {@link NameType} under which a new {@link Name}
-   * will be stored; must not be {@code null}
-   *
-   * @param nameValue a {@link NameValue} that a new {@link Name} will
-   * have; must not be {@code null}
-   *
-   * @return the prior {@link Name} stored under the supplied {@link
-   * NameType}, or {@code null} if there was no such {@link Name}.
-   * The returned {@link Name}, if non-{@code null}, will return
-   * {@code null} from its {@link Name#getNamed()} method.
-   *
-   * @exception IllegalArgumentException if {@code nameType} or {@code
-   * nameValue} is {@code null} or otherwise unsuitable
-   *
-   * @see #putName(NameType, Name)
-   */
-  public Name putName(final NameType nameType, final NameValue nameValue) {
-    if (nameType == null) {
-      throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
-    } else if (nameValue == null) {
-      throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
-    }
-    return this.putName(nameType, this.nameFor(nameValue));
-  }
-
-  /**
    * Stores the supplied {@link Name} under the supplied {@link
    * NameType} in such a way that it can be retrieved later by the
    * #getName(NameType)} method when that method is supplied with a
@@ -223,59 +184,11 @@ public abstract class AbstractNamed implements Named {
           }
           if (!found) {
             // This returnValue is not stored anywhere else in the
-            // map.
+            // map, so we can orphan it.
             returnValue.setNamed(null);
           }
         }
       }
-    }
-    return returnValue;
-  }
-
-  /**
-   * Returns a non-{@code null} {@link Name} that is in some way
-   * appropriate for the supplied {@link NameValue}.
-   *
-   * <p>This implementation calls the {@link #getNames()} method and
-   * iterates through its return value to find a {@link Name} whose
-   * {@linkplain Name#getNameValue() associated
-   * <code>NameValue</code>} is {@linkplain NameValue#equals(Object)
-   * equal to} the supplied {@link NameValue} and whose {@linkplain
-   * Name#getNamed() associated <code>Named</code>} is identical to
-   * this {@link AbstractNamed} implementation.  If no such {@link
-   * Name} exists, then a new {@link Name} is {@linkplain
-   * Name#Name(Named, NameValue) created} and returned instead.</p>
-   *
-   * <p>This method never returns {@code null}.</p>
-   *
-   * @param nameValue the {@link NameValue} for which a {@link Name}
-   * should be returned; must not be {@code null}
-   *
-   * @return a non-{@code null} {@link Name}
-   *
-   * @exception IllegalArgumentException if {@code nameValue} is
-   * {@code null}
-   */
-  public Name nameFor(final NameValue nameValue) {
-    if (nameValue == null) {
-      throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
-    }
-    Name returnValue = null;
-    final Iterable<? extends Name> names = this.getNames();
-    if (names != null) {
-      for (final Name name : names) {
-        if (name != null && name.getNamed() == this && nameValue.equals(name.getNameValue())) {
-          returnValue = name;
-          break;
-        }
-      }
-    }
-    if (returnValue == null) {
-      returnValue = this.createName(nameValue);
-      if (returnValue == null) {
-        throw new IllegalStateException("createName(NameValue) == null");
-      }
-      returnValue.setNamed(this);
     }
     return returnValue;
   }

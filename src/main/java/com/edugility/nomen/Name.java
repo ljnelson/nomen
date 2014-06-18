@@ -224,7 +224,7 @@ public class Name extends AbstractValued {
    * {@code null}
    */
   public Name(final Named named, final String nameValue) {
-    this(named, NameValue.valueOf(nameValue, false, " "));
+    this(named, new NameValue(nameValue, false, " "));
   }
 
   /**
@@ -288,7 +288,7 @@ public class Name extends AbstractValued {
    * @see NameValue#valueOf(String, boolean, String)
    */
   public Name(final String nameValue) {
-    this(NameValue.valueOf(nameValue, false, " "));
+    this(new NameValue(nameValue, false, " "));
   }
 
 
@@ -549,7 +549,7 @@ public class Name extends AbstractValued {
   @Override
   public void setValue(final String value) {
     final String old = this.getValue();
-    this.setNameValue(NameValue.valueOf(value));
+    this.setNameValue(new NameValue(value));
     this.firePropertyChange("value", old, this.getValue());
   }
 
@@ -779,141 +779,6 @@ public class Name extends AbstractValued {
     if (this.propertyChangeSupport != null) {
       this.propertyChangeSupport.firePropertyChange(propertyName, old, newValue);
     }
-  }
-
-
-  /*
-   * Static methods.
-   */
-
-
-  /**
-   * A convenience method that creates and installs a new
-   * non-{@linkplain NameValue#isAtomic() atomic} {@link Name} into
-   * the supplied {@link AbstractNamed}.
-   *
-   * <h3>Design Notes</h3>
-   *
-   * <p>This method is not declared {@code final} only so that this
-   * class may be used as a JPA entity.  The JPA specification
-   * requires that no method on a potential entity may be {@code
-   * final}.</p>
-   *
-   * <h4>Implementation Notes</h4>
-   *
-   * <p>This method calls the {@link #name(AbstractNamed,
-   * String, String, boolean, String)} method passing {@code false}
-   * and a space character ("&nbsp;") as the value of the penultimate and
-   * final parameters, and returns its return value.</p>
-   *
-   * @param named the {@link AbstractNamed} that will own the new
-   * {@link Name}; must not be {@code null}
-   * 
-   * @param nameTypeValue the identifying information for the relevant
-   * {@link NameType} under which a new {@link Name} will be indexed; must not be {@code null}
-   *
-   * @param nameValue the identifying information for the relevant
-   * {@link NameValue}; must not be {@code null}
-   *
-   * @return a non-{@code null} {@link Name} {@linkplain #getNamed()
-   * owned} by the supplied {@link AbstractNamed} under an appropriate
-   * {@link NameType}
-   *
-   * @exception IllegalArgumentException if either {@code named},
-   * {@code nameTypeValue} or {@code nameValue} is {@code null}.
-   */
-  public static Name name(final AbstractNamed named, final String nameTypeValue, final String nameValue) {
-    return name(named, nameTypeValue, nameValue, false, " ");
-  }
-
-  /**
-   * A convenience method that creates and installs a new
-   * non-{@linkplain NameValue#isAtomic() atomic} {@link Name} into
-   * the supplied {@link AbstractNamed}.
-   *
-   * <h3>Design Notes</h3>
-   *
-   * <p>This method is not declared {@code final} only so that this
-   * class may be used as a JPA entity.  The JPA specification
-   * requires that no method on a potential entity may be {@code
-   * final}.</p>
-   *
-   * <h4>Implementation Notes</h4>
-   *
-   * <p>This method calls the {@link #name(AbstractNamed,
-   * String, String, boolean, String)} method passing a space
-   * character ("&nbsp;") as the value of the final parameter, and returns
-   * its return value.</p>
-   *
-   * @param named the {@link AbstractNamed} that will own the new
-   * {@link Name}; must not be {@code null}
-   * 
-   * @param nameTypeValue the identifying information for the relevant
-   * {@link NameType} under which a new {@link Name} will be indexed; must not be {@code null}
-   *
-   * @param nameValue the identifying information for the relevant
-   * {@link NameValue}; must not be {@code null}
-   *
-   * @param atomic whether the {@code nameValue} parameter is
-   * notionally {@linkplain NameValue#isAtomic() atomic}
-   *
-   * @return a non-{@code null} {@link Name} {@linkplain #getNamed()
-   * owned} by the supplied {@link AbstractNamed} under an appropriate
-   * {@link NameType}
-   *
-   * @exception IllegalArgumentException if either {@code named},
-   * {@code nameTypeValue} or {@code nameValue} is {@code null}.
-   */
-  public static Name name(final AbstractNamed named, final String nameTypeValue, final String nameValue, final boolean atomic) {
-    return name(named, nameTypeValue, nameValue, atomic, atomic ? null : " ");
-  }
-
-
-  /**
-   * A convenience method that creates and installs a new
-   * non-{@linkplain NameValue#isAtomic() atomic} {@link Name} into
-   * the supplied {@link AbstractNamed}.
-   *
-   * <h3>Design Notes</h3>
-   *
-   * <p>This method is not declared {@code final} only so that this
-   * class may be used as a JPA entity.  The JPA specification
-   * requires that no method on a potential entity may be {@code
-   * final}.</p>
-   *
-   * @param named the {@link AbstractNamed} that will own the new
-   * {@link Name}; must not be {@code null}
-   * 
-   * @param nameTypeValue the identifying information for the relevant
-   * {@link NameType} under which a new {@link Name} will be indexed; must not be {@code null}
-   *
-   * @param nameValue the identifying information for the relevant
-   * {@link NameValue}; must not be {@code null}
-   *
-   * @param atomic whether the {@code nameValue} parameter is
-   * notionally {@linkplain NameValue#isAtomic() atomic}
-   *
-   * @param whitespaceReplacement the {@link String} to use in
-   * replacing {@linkplain Character#isWhitespace(char) whitespace
-   * characters}; may be {@code null} in which case no whitespace
-   * replacement will occur.  A good reasonable default is a single
-   * space ("&nbsp;").
-   *
-   * @return a non-{@code null} {@link Name} {@linkplain #getNamed()
-   * owned} by the supplied {@link AbstractNamed} under an appropriate
-   * {@link NameType}
-   *
-   * @exception IllegalArgumentException if either {@code named},
-   * {@code nameTypeValue} or {@code nameValue} is {@code null}.
-   */
-  public static Name name(final AbstractNamed named, final String nameTypeValue, final String nameValue, final boolean atomic, final String whitespaceReplacement) {
-    if (named == null) {
-      throw new IllegalArgumentException("named", new NullPointerException("named"));
-    }
-    final NameType nameType = NameType.valueOf(nameTypeValue);
-    assert nameType != null;    
-    named.putName(nameType, NameValue.valueOf(nameValue, atomic, atomic ? null : whitespaceReplacement));
-    return named.getName(nameType);
   }
 
 }

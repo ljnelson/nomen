@@ -164,7 +164,7 @@ public class NameResolverFactory extends BaseVariableResolverFactory implements 
     } else if (this.isTarget(name)) {
       returnValue = true;
     } else {
-      final Name n = this.getName(NameType.valueOf(name));
+      final Name n = this.getName(new NameType(name));
       if (n == null) {
         returnValue = this.isNextResolveable(null);
       } else {
@@ -198,7 +198,7 @@ public class NameResolverFactory extends BaseVariableResolverFactory implements 
    * {@code name} is {@code null}
    */
   protected NameResolver createNameResolver(final Named named, final String name) {
-    return new NameResolver(named, NameType.valueOf(name));
+    return new NameResolver(named, new NameType(name));
   }
 
   /**

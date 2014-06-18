@@ -48,17 +48,6 @@ public class TestCaseName {
   }
 
   @Test
-  public void testNameMethod() {
-    final Name name = Name.name(this.dude, "first", "Laird", true /* atomic */);
-    assertNotNull(name);
-    final NameValue nameValue = name.getNameValue();
-    assertNotNull(nameValue);
-    assertEquals("Laird", nameValue.getValue());
-    final Name n = this.dude.getName(NameType.valueOf("first"));
-    assertSame(name, n);
-  }
-
-  @Test
   public void testSameNamePutTwice() {
 
     // Create a new Name, consisting of a just-in-time-created
