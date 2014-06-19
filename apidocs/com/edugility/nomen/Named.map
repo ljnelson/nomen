@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="789,11,1067,101"/>
+<area shape="rect" id="node1" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="779,6,1077,106"/>
+<area shape="rect" id="node3_1" href="./AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="477,169,843,338"/>
+<area shape="rect" id="node3" href="./AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="467,163,853,343"/>
+<area shape="rect" id="node4_2" href="./mvel/NameResolverFactory.html" title="com.edugility.nomen.mvel.NameResolverFactory" alt="" coords="15,843,819,1013"/>
+<area shape="rect" id="node4" href="./mvel/NameResolverFactory.html" title="&lt;TABLE&gt;" alt="" coords="5,838,830,1018"/>
+<area shape="rect" id="node5_3" href="./mvel/NameResolver.html" title="com.edugility.nomen.mvel.NameResolver" alt="" coords="889,161,1506,346"/>
+<area shape="rect" id="node5" href="./mvel/NameResolver.html" title="&lt;TABLE&gt;" alt="" coords="878,155,1517,351"/>
+<area shape="rect" id="node2_4" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="478,406,991,783"/>
+<area shape="rect" id="node2" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="467,401,1002,789"/>
+</map>

@@ -1,72 +1,77 @@
-<HTML>
-<BODY BGCOLOR="white">
-<PRE>
-<FONT color="green">001</FONT>    /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-<a name="line.1"></a>
-<FONT color="green">002</FONT>     *<a name="line.2"></a>
-<FONT color="green">003</FONT>     * Copyright (c) 2013 Edugility LLC.<a name="line.3"></a>
-<FONT color="green">004</FONT>     *<a name="line.4"></a>
-<FONT color="green">005</FONT>     * Permission is hereby granted, free of charge, to any person<a name="line.5"></a>
-<FONT color="green">006</FONT>     * obtaining a copy of this software and associated documentation<a name="line.6"></a>
-<FONT color="green">007</FONT>     * files (the "Software"), to deal in the Software without<a name="line.7"></a>
-<FONT color="green">008</FONT>     * restriction, including without limitation the rights to use, copy,<a name="line.8"></a>
-<FONT color="green">009</FONT>     * modify, merge, publish, distribute, sublicense and/or sell copies<a name="line.9"></a>
-<FONT color="green">010</FONT>     * of the Software, and to permit persons to whom the Software is<a name="line.10"></a>
-<FONT color="green">011</FONT>     * furnished to do so, subject to the following conditions:<a name="line.11"></a>
-<FONT color="green">012</FONT>     *<a name="line.12"></a>
-<FONT color="green">013</FONT>     * The above copyright notice and this permission notice shall be<a name="line.13"></a>
-<FONT color="green">014</FONT>     * included in all copies or substantial portions of the Software.<a name="line.14"></a>
-<FONT color="green">015</FONT>     *<a name="line.15"></a>
-<FONT color="green">016</FONT>     * THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,<a name="line.16"></a>
-<FONT color="green">017</FONT>     * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF<a name="line.17"></a>
-<FONT color="green">018</FONT>     * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND<a name="line.18"></a>
-<FONT color="green">019</FONT>     * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT<a name="line.19"></a>
-<FONT color="green">020</FONT>     * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,<a name="line.20"></a>
-<FONT color="green">021</FONT>     * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<a name="line.21"></a>
-<FONT color="green">022</FONT>     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER<a name="line.22"></a>
-<FONT color="green">023</FONT>     * DEALINGS IN THE SOFTWARE.<a name="line.23"></a>
-<FONT color="green">024</FONT>     *<a name="line.24"></a>
-<FONT color="green">025</FONT>     * The original copy of this license is available at<a name="line.25"></a>
-<FONT color="green">026</FONT>     * http://www.opensource.org/license/mit-license.html.<a name="line.26"></a>
-<FONT color="green">027</FONT>     */<a name="line.27"></a>
-<FONT color="green">028</FONT>    package com.edugility.nomen;<a name="line.28"></a>
-<FONT color="green">029</FONT>    <a name="line.29"></a>
-<FONT color="green">030</FONT>    import java.io.Serializable;<a name="line.30"></a>
-<FONT color="green">031</FONT>    <a name="line.31"></a>
-<FONT color="green">032</FONT>    /**<a name="line.32"></a>
-<FONT color="green">033</FONT>     * An owner of {@link Name}s that can retrieve them efficiently when<a name="line.33"></a>
-<FONT color="green">034</FONT>     * {@linkplain #getName(NameType) asked for them} by {@link NameType}.<a name="line.34"></a>
-<FONT color="green">035</FONT>     *<a name="line.35"></a>
-<FONT color="green">036</FONT>     * @author &lt;a href="http://about.me/lairdnelson"<a name="line.36"></a>
-<FONT color="green">037</FONT>     * target="_parent"&gt;Laird Nelson&lt;/a&gt;<a name="line.37"></a>
-<FONT color="green">038</FONT>     *<a name="line.38"></a>
-<FONT color="green">039</FONT>     * @see #getName(NameType)<a name="line.39"></a>
-<FONT color="green">040</FONT>     *<a name="line.40"></a>
-<FONT color="green">041</FONT>     * @see Name<a name="line.41"></a>
-<FONT color="green">042</FONT>     */<a name="line.42"></a>
-<FONT color="green">043</FONT>    public interface Named extends Serializable {<a name="line.43"></a>
-<FONT color="green">044</FONT>    <a name="line.44"></a>
-<FONT color="green">045</FONT>      /**<a name="line.45"></a>
-<FONT color="green">046</FONT>       * Retrieves a {@link Name} that belongs to this {@link Named} that<a name="line.46"></a>
-<FONT color="green">047</FONT>       * is appropriate for the supplied {@link NameType}, or {@code null}<a name="line.47"></a>
-<FONT color="green">048</FONT>       * if no such {@link Name} can be found.<a name="line.48"></a>
-<FONT color="green">049</FONT>       *<a name="line.49"></a>
-<FONT color="green">050</FONT>       * &lt;p&gt;Implementations of this method are permitted to return {@code<a name="line.50"></a>
-<FONT color="green">051</FONT>       * null}.&lt;/p&gt;<a name="line.51"></a>
-<FONT color="green">052</FONT>       *<a name="line.52"></a>
-<FONT color="green">053</FONT>       * @param nameType the {@link NameType} for which a {@link Name}<a name="line.53"></a>
-<FONT color="green">054</FONT>       * will be sought; may be {@code null} in which case the<a name="line.54"></a>
-<FONT color="green">055</FONT>       * implementation may decide what kind of {@link Name} to return<a name="line.55"></a>
-<FONT color="green">056</FONT>       * (including {@code null})<a name="line.56"></a>
-<FONT color="green">057</FONT>       *<a name="line.57"></a>
-<FONT color="green">058</FONT>       * @return a {@link Name} indexed under the supplied {@link<a name="line.58"></a>
-<FONT color="green">059</FONT>       * NameType}, or {@code null}<a name="line.59"></a>
-<FONT color="green">060</FONT>       *<a name="line.60"></a>
-<FONT color="green">061</FONT>       * @exception IllegalArgumentException if {@code nameType} is not<a name="line.61"></a>
-<FONT color="green">062</FONT>       * accepted by the implementation of this method for any reason<a name="line.62"></a>
-<FONT color="green">063</FONT>       */<a name="line.63"></a>
-<FONT color="green">064</FONT>      public Name getName(final NameType nameType);<a name="line.64"></a>
-<FONT color="green">065</FONT>    <a name="line.65"></a>
-<FONT color="green">066</FONT>    }<a name="line.66"></a>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-<a name="line.1"></a>
+<span class="sourceLineNo">002</span> *<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Copyright (c) 2013-2014 Edugility LLC.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Permission is hereby granted, free of charge, to any person<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * obtaining a copy of this software and associated documentation<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * files (the "Software"), to deal in the Software without<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * restriction, including without limitation the rights to use, copy,<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * modify, merge, publish, distribute, sublicense and/or sell copies<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * of the Software, and to permit persons to whom the Software is<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * furnished to do so, subject to the following conditions:<a name="line.11"></a>
+<span class="sourceLineNo">012</span> *<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * The above copyright notice and this permission notice shall be<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * included in all copies or substantial portions of the Software.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> *<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * DEALINGS IN THE SOFTWARE.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * The original copy of this license is available at<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * http://www.opensource.org/license/mit-license.html.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>package com.edugility.nomen;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.io.Serializable;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>/**<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * An owner of {@link Name}s that can retrieve them efficiently when<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * {@linkplain #getName(NameType) asked for them} by {@link NameType}.<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * @author &lt;a href="http://about.me/lairdnelson"<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * target="_parent"&gt;Laird Nelson&lt;/a&gt;<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * @see #getName(NameType)<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * @see Name<a name="line.41"></a>
+<span class="sourceLineNo">042</span> */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>public interface Named extends Serializable {<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>  /**<a name="line.45"></a>
+<span class="sourceLineNo">046</span>   * Retrieves a {@link Name} that belongs to this {@link Named} that<a name="line.46"></a>
+<span class="sourceLineNo">047</span>   * is appropriate for the supplied {@link NameType}, or {@code null}<a name="line.47"></a>
+<span class="sourceLineNo">048</span>   * if no such {@link Name} can be found.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>   *<a name="line.49"></a>
+<span class="sourceLineNo">050</span>   * &lt;p&gt;Implementations of this method are permitted to return {@code<a name="line.50"></a>
+<span class="sourceLineNo">051</span>   * null}.&lt;/p&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>   *<a name="line.52"></a>
+<span class="sourceLineNo">053</span>   * @param nameType the {@link NameType} for which a {@link Name}<a name="line.53"></a>
+<span class="sourceLineNo">054</span>   * will be sought; may be {@code null} in which case the<a name="line.54"></a>
+<span class="sourceLineNo">055</span>   * implementation may decide what kind of {@link Name} to return<a name="line.55"></a>
+<span class="sourceLineNo">056</span>   * (including {@code null})<a name="line.56"></a>
+<span class="sourceLineNo">057</span>   *<a name="line.57"></a>
+<span class="sourceLineNo">058</span>   * @return a {@link Name} indexed under the supplied {@link<a name="line.58"></a>
+<span class="sourceLineNo">059</span>   * NameType}, or {@code null}<a name="line.59"></a>
+<span class="sourceLineNo">060</span>   *<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   * @exception IllegalArgumentException if {@code nameType} is not<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   * accepted by the implementation of this method for any reason<a name="line.62"></a>
+<span class="sourceLineNo">063</span>   */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>  public Name getName(final NameType nameType);<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>}<a name="line.66"></a>
 
 
 
@@ -127,6 +132,7 @@
 
 
 
-</PRE>
-</BODY>
-</HTML>
+</pre>
+</div>
+</body>
+</html>

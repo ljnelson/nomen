@@ -1,290 +1,268 @@
-<HTML>
-<BODY BGCOLOR="white">
-<PRE>
-<FONT color="green">001</FONT>    /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-<a name="line.1"></a>
-<FONT color="green">002</FONT>     *<a name="line.2"></a>
-<FONT color="green">003</FONT>     * Copyright (c) 2013 Edugility LLC.<a name="line.3"></a>
-<FONT color="green">004</FONT>     *<a name="line.4"></a>
-<FONT color="green">005</FONT>     * Permission is hereby granted, free of charge, to any person<a name="line.5"></a>
-<FONT color="green">006</FONT>     * obtaining a copy of this software and associated documentation<a name="line.6"></a>
-<FONT color="green">007</FONT>     * files (the "Software"), to deal in the Software without<a name="line.7"></a>
-<FONT color="green">008</FONT>     * restriction, including without limitation the rights to use, copy,<a name="line.8"></a>
-<FONT color="green">009</FONT>     * modify, merge, publish, distribute, sublicense and/or sell copies<a name="line.9"></a>
-<FONT color="green">010</FONT>     * of the Software, and to permit persons to whom the Software is<a name="line.10"></a>
-<FONT color="green">011</FONT>     * furnished to do so, subject to the following conditions:<a name="line.11"></a>
-<FONT color="green">012</FONT>     *<a name="line.12"></a>
-<FONT color="green">013</FONT>     * The above copyright notice and this permission notice shall be<a name="line.13"></a>
-<FONT color="green">014</FONT>     * included in all copies or substantial portions of the Software.<a name="line.14"></a>
-<FONT color="green">015</FONT>     *<a name="line.15"></a>
-<FONT color="green">016</FONT>     * THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,<a name="line.16"></a>
-<FONT color="green">017</FONT>     * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF<a name="line.17"></a>
-<FONT color="green">018</FONT>     * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND<a name="line.18"></a>
-<FONT color="green">019</FONT>     * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT<a name="line.19"></a>
-<FONT color="green">020</FONT>     * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,<a name="line.20"></a>
-<FONT color="green">021</FONT>     * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<a name="line.21"></a>
-<FONT color="green">022</FONT>     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER<a name="line.22"></a>
-<FONT color="green">023</FONT>     * DEALINGS IN THE SOFTWARE.<a name="line.23"></a>
-<FONT color="green">024</FONT>     *<a name="line.24"></a>
-<FONT color="green">025</FONT>     * The original copy of this license is available at<a name="line.25"></a>
-<FONT color="green">026</FONT>     * http://www.opensource.org/license/mit-license.html.<a name="line.26"></a>
-<FONT color="green">027</FONT>     */<a name="line.27"></a>
-<FONT color="green">028</FONT>    package com.edugility.nomen.mvel;<a name="line.28"></a>
-<FONT color="green">029</FONT>    <a name="line.29"></a>
-<FONT color="green">030</FONT>    import com.edugility.nomen.AbstractNamed;<a name="line.30"></a>
-<FONT color="green">031</FONT>    import com.edugility.nomen.Name;<a name="line.31"></a>
-<FONT color="green">032</FONT>    import com.edugility.nomen.Named;<a name="line.32"></a>
-<FONT color="green">033</FONT>    import com.edugility.nomen.NameType;<a name="line.33"></a>
-<FONT color="green">034</FONT>    import com.edugility.nomen.NameValue;<a name="line.34"></a>
-<FONT color="green">035</FONT>    <a name="line.35"></a>
-<FONT color="green">036</FONT>    import org.mvel2.integration.VariableResolver;<a name="line.36"></a>
-<FONT color="green">037</FONT>    <a name="line.37"></a>
-<FONT color="green">038</FONT>    import org.mvel2.integration.impl.BaseVariableResolverFactory;<a name="line.38"></a>
-<FONT color="green">039</FONT>    import org.mvel2.integration.impl.SimpleValueResolver;<a name="line.39"></a>
-<FONT color="green">040</FONT>    <a name="line.40"></a>
-<FONT color="green">041</FONT>    /**<a name="line.41"></a>
-<FONT color="green">042</FONT>     * An &lt;a href="http://mvel.codehaus.org/"&gt;MVEL&lt;/a&gt; {@link<a name="line.42"></a>
-<FONT color="green">043</FONT>     * VariableResolver} for resolving MVEL variables from a {@link<a name="line.43"></a>
-<FONT color="green">044</FONT>     * Named}.<a name="line.44"></a>
-<FONT color="green">045</FONT>     *<a name="line.45"></a>
-<FONT color="green">046</FONT>     * @author &lt;a href="http://about.me/lairdnelson"<a name="line.46"></a>
-<FONT color="green">047</FONT>     * target="_parent"&gt;Laird Nelson&lt;/a&gt;<a name="line.47"></a>
-<FONT color="green">048</FONT>     *<a name="line.48"></a>
-<FONT color="green">049</FONT>     * @see NameResolverFactory<a name="line.49"></a>
-<FONT color="green">050</FONT>     *<a name="line.50"></a>
-<FONT color="green">051</FONT>     * @see VariableResolver<a name="line.51"></a>
-<FONT color="green">052</FONT>     *<a name="line.52"></a>
-<FONT color="green">053</FONT>     * @see &lt;a href="http://mvel.codehaus.org"&gt;MVEL&lt;/a&gt;<a name="line.53"></a>
-<FONT color="green">054</FONT>     */<a name="line.54"></a>
-<FONT color="green">055</FONT>    public final class NameResolver implements VariableResolver, Named {<a name="line.55"></a>
-<FONT color="green">056</FONT>    <a name="line.56"></a>
-<FONT color="green">057</FONT>      <a name="line.57"></a>
-<FONT color="green">058</FONT>      /*<a name="line.58"></a>
-<FONT color="green">059</FONT>       * Static fields.<a name="line.59"></a>
-<FONT color="green">060</FONT>       */<a name="line.60"></a>
-<FONT color="green">061</FONT>    <a name="line.61"></a>
-<FONT color="green">062</FONT>    <a name="line.62"></a>
-<FONT color="green">063</FONT>      /**<a name="line.63"></a>
-<FONT color="green">064</FONT>       * The version of this class for {@linkplain Serializable<a name="line.64"></a>
-<FONT color="green">065</FONT>       * serialization purposes}.<a name="line.65"></a>
-<FONT color="green">066</FONT>       *<a name="line.66"></a>
-<FONT color="green">067</FONT>       * @see Serializable<a name="line.67"></a>
-<FONT color="green">068</FONT>       */<a name="line.68"></a>
-<FONT color="green">069</FONT>      private static final long serialVersionUID = 1L;<a name="line.69"></a>
-<FONT color="green">070</FONT>    <a name="line.70"></a>
-<FONT color="green">071</FONT>    <a name="line.71"></a>
-<FONT color="green">072</FONT>      /*<a name="line.72"></a>
-<FONT color="green">073</FONT>       * Instance fields.<a name="line.73"></a>
-<FONT color="green">074</FONT>       */<a name="line.74"></a>
-<FONT color="green">075</FONT>    <a name="line.75"></a>
-<FONT color="green">076</FONT>    <a name="line.76"></a>
-<FONT color="green">077</FONT>      /**<a name="line.77"></a>
-<FONT color="green">078</FONT>       * The {@link Named} that owns {@link Name}s that might be resolved<a name="line.78"></a>
-<FONT color="green">079</FONT>       * by this {@link NameResolver}.<a name="line.79"></a>
-<FONT color="green">080</FONT>       *<a name="line.80"></a>
-<FONT color="green">081</FONT>       * &lt;p&gt;This field will never be {@code null}.&lt;/p&gt;<a name="line.81"></a>
-<FONT color="green">082</FONT>       *<a name="line.82"></a>
-<FONT color="green">083</FONT>       * @see Named<a name="line.83"></a>
-<FONT color="green">084</FONT>       */<a name="line.84"></a>
-<FONT color="green">085</FONT>      private final Named named;<a name="line.85"></a>
-<FONT color="green">086</FONT>    <a name="line.86"></a>
-<FONT color="green">087</FONT>      /**<a name="line.87"></a>
-<FONT color="green">088</FONT>       * The {@link NameType} used by this {@link NameResolver} to {@link<a name="line.88"></a>
-<FONT color="green">089</FONT>       * #getName(NameType) look up &lt;code&gt;Name&lt;/code&gt;s}.<a name="line.89"></a>
-<FONT color="green">090</FONT>       *<a name="line.90"></a>
-<FONT color="green">091</FONT>       * &lt;p&gt;This field will never be {@code null}.&lt;/p&gt;<a name="line.91"></a>
-<FONT color="green">092</FONT>       *<a name="line.92"></a>
-<FONT color="green">093</FONT>       * @see #getName(NameType)<a name="line.93"></a>
-<FONT color="green">094</FONT>       *<a name="line.94"></a>
-<FONT color="green">095</FONT>       * @see NameType<a name="line.95"></a>
-<FONT color="green">096</FONT>       */<a name="line.96"></a>
-<FONT color="green">097</FONT>      private final NameType nameType;<a name="line.97"></a>
-<FONT color="green">098</FONT>    <a name="line.98"></a>
-<FONT color="green">099</FONT>    <a name="line.99"></a>
-<FONT color="green">100</FONT>      /*<a name="line.100"></a>
-<FONT color="green">101</FONT>       * Constructors.<a name="line.101"></a>
-<FONT color="green">102</FONT>       */<a name="line.102"></a>
-<FONT color="green">103</FONT>    <a name="line.103"></a>
-<FONT color="green">104</FONT>    <a name="line.104"></a>
-<FONT color="green">105</FONT>      /**<a name="line.105"></a>
-<FONT color="green">106</FONT>       * Creates a new {@link NameResolver}.<a name="line.106"></a>
-<FONT color="green">107</FONT>       *<a name="line.107"></a>
-<FONT color="green">108</FONT>       * @param named the {@link Named} that will be used by the {@link<a name="line.108"></a>
-<FONT color="green">109</FONT>       * #getValue()} method; must not be {@code null}<a name="line.109"></a>
-<FONT color="green">110</FONT>       *<a name="line.110"></a>
-<FONT color="green">111</FONT>       * @param nameType the {@link NameType} with which this {@link<a name="line.111"></a>
-<FONT color="green">112</FONT>       * NameResolver} will be affiliated; must not be {@code null}<a name="line.112"></a>
-<FONT color="green">113</FONT>       *<a name="line.113"></a>
-<FONT color="green">114</FONT>       * @exception IllegalArgumentException if either {@code named} or<a name="line.114"></a>
-<FONT color="green">115</FONT>       * {@code nameType} is {@code null}<a name="line.115"></a>
-<FONT color="green">116</FONT>       */<a name="line.116"></a>
-<FONT color="green">117</FONT>      public NameResolver(final Named named, final NameType nameType) {<a name="line.117"></a>
-<FONT color="green">118</FONT>        super();<a name="line.118"></a>
-<FONT color="green">119</FONT>        if (named == null) {<a name="line.119"></a>
-<FONT color="green">120</FONT>          throw new IllegalArgumentException("named", new NullPointerException("named"));<a name="line.120"></a>
-<FONT color="green">121</FONT>        }<a name="line.121"></a>
-<FONT color="green">122</FONT>        if (nameType == null) {<a name="line.122"></a>
-<FONT color="green">123</FONT>          throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));<a name="line.123"></a>
-<FONT color="green">124</FONT>        }<a name="line.124"></a>
-<FONT color="green">125</FONT>        this.named = named;<a name="line.125"></a>
-<FONT color="green">126</FONT>        this.nameType = nameType;<a name="line.126"></a>
-<FONT color="green">127</FONT>      }<a name="line.127"></a>
-<FONT color="green">128</FONT>    <a name="line.128"></a>
-<FONT color="green">129</FONT>    <a name="line.129"></a>
-<FONT color="green">130</FONT>      /*<a name="line.130"></a>
-<FONT color="green">131</FONT>       * Instance methods.<a name="line.131"></a>
-<FONT color="green">132</FONT>       */<a name="line.132"></a>
-<FONT color="green">133</FONT>    <a name="line.133"></a>
-<FONT color="green">134</FONT>    <a name="line.134"></a>
-<FONT color="green">135</FONT>      /**<a name="line.135"></a>
-<FONT color="green">136</FONT>       * Returns {@code 0}, following the recommendations of the &lt;a<a name="line.136"></a>
-<FONT color="green">137</FONT>       * href="http://mvel.codehaus.org/"&gt;MVEL&lt;/a&gt; project.<a name="line.137"></a>
-<FONT color="green">138</FONT>       *<a name="line.138"></a>
-<FONT color="green">139</FONT>       * &lt;p&gt;The {@link VariableResolver} documentation does not describe<a name="line.139"></a>
-<FONT color="green">140</FONT>       * what this method is used for.&lt;/p&gt;<a name="line.140"></a>
-<FONT color="green">141</FONT>       *<a name="line.141"></a>
-<FONT color="green">142</FONT>       * @return {@code 0}<a name="line.142"></a>
-<FONT color="green">143</FONT>       */<a name="line.143"></a>
-<FONT color="green">144</FONT>      @Override<a name="line.144"></a>
-<FONT color="green">145</FONT>      public final int getFlags() {<a name="line.145"></a>
-<FONT color="green">146</FONT>        return 0; // per VariableResolver "documentation"<a name="line.146"></a>
-<FONT color="green">147</FONT>      }<a name="line.147"></a>
-<FONT color="green">148</FONT>    <a name="line.148"></a>
-<FONT color="green">149</FONT>      /**<a name="line.149"></a>
-<FONT color="green">150</FONT>       * Returns the {@link String} that is the {@linkplain<a name="line.150"></a>
-<FONT color="green">151</FONT>       * NameType#getValue() value} of the {@link NameType} supplied at<a name="line.151"></a>
-<FONT color="green">152</FONT>       * {@linkplain #NameResolver(Named, NameType) construction time}.<a name="line.152"></a>
-<FONT color="green">153</FONT>       *<a name="line.153"></a>
-<FONT color="green">154</FONT>       * &lt;p&gt;This method never returns {@code null}.&lt;/p&gt;<a name="line.154"></a>
-<FONT color="green">155</FONT>       *<a name="line.155"></a>
-<FONT color="green">156</FONT>       * @return a non-{@code null} {@link String} naming the {@link Name}<a name="line.156"></a>
-<FONT color="green">157</FONT>       * whose value will be returned by the {@link #getValue()} method<a name="line.157"></a>
-<FONT color="green">158</FONT>       *<a name="line.158"></a>
-<FONT color="green">159</FONT>       * @see #getValue()<a name="line.159"></a>
-<FONT color="green">160</FONT>       */<a name="line.160"></a>
-<FONT color="green">161</FONT>      @Override<a name="line.161"></a>
-<FONT color="green">162</FONT>      public final String getName() {<a name="line.162"></a>
-<FONT color="green">163</FONT>        assert this.nameType != null;<a name="line.163"></a>
-<FONT color="green">164</FONT>        return this.nameType.getValue();<a name="line.164"></a>
-<FONT color="green">165</FONT>      }<a name="line.165"></a>
-<FONT color="green">166</FONT>    <a name="line.166"></a>
-<FONT color="green">167</FONT>      /**<a name="line.167"></a>
-<FONT color="green">168</FONT>       * Returns a {@link Name} for the supplied {@link NameType}, or<a name="line.168"></a>
-<FONT color="green">169</FONT>       * {@code null} if no such {@link Name} could be found.<a name="line.169"></a>
-<FONT color="green">170</FONT>       *<a name="line.170"></a>
-<FONT color="green">171</FONT>       * @param nameType the {@link NameType} to use as a key; may be<a name="line.171"></a>
-<FONT color="green">172</FONT>       * {@code null}<a name="line.172"></a>
-<FONT color="green">173</FONT>       *<a name="line.173"></a>
-<FONT color="green">174</FONT>       * @return a {@link Name}, or {@code null}<a name="line.174"></a>
-<FONT color="green">175</FONT>       *<a name="line.175"></a>
-<FONT color="green">176</FONT>       * @see Named#getName(NameType)<a name="line.176"></a>
-<FONT color="green">177</FONT>       */<a name="line.177"></a>
-<FONT color="green">178</FONT>      @Override<a name="line.178"></a>
-<FONT color="green">179</FONT>      public final Name getName(final NameType nameType) {<a name="line.179"></a>
-<FONT color="green">180</FONT>        assert this.named != null;<a name="line.180"></a>
-<FONT color="green">181</FONT>        return this.named.getName(nameType);<a name="line.181"></a>
-<FONT color="green">182</FONT>      }<a name="line.182"></a>
-<FONT color="green">183</FONT>    <a name="line.183"></a>
-<FONT color="green">184</FONT>      /**<a name="line.184"></a>
-<FONT color="green">185</FONT>       * Returns the value of {@code Name.class} when invoked.<a name="line.185"></a>
-<FONT color="green">186</FONT>       *<a name="line.186"></a>
-<FONT color="green">187</FONT>       * &lt;p&gt;This method never returns {@code null}.&lt;/p&gt;<a name="line.187"></a>
-<FONT color="green">188</FONT>       *<a name="line.188"></a>
-<FONT color="green">189</FONT>       * @return {@code Name.class}<a name="line.189"></a>
-<FONT color="green">190</FONT>       */<a name="line.190"></a>
-<FONT color="green">191</FONT>      @Override<a name="line.191"></a>
-<FONT color="green">192</FONT>      public final Class&lt;Name&gt; getType() {<a name="line.192"></a>
-<FONT color="green">193</FONT>        return Name.class;<a name="line.193"></a>
-<FONT color="green">194</FONT>      }<a name="line.194"></a>
-<FONT color="green">195</FONT>    <a name="line.195"></a>
-<FONT color="green">196</FONT>      /**<a name="line.196"></a>
-<FONT color="green">197</FONT>       * Returns the value of a {@link Name} reference in a &lt;a<a name="line.197"></a>
-<FONT color="green">198</FONT>       * href="http://mvel.codehaus.org/"&gt;MVEL&lt;/a&gt; program whose name is<a name="line.198"></a>
-<FONT color="green">199</FONT>       * given by the return value of this {@link NameResolver}'s {@link<a name="line.199"></a>
-<FONT color="green">200</FONT>       * #getName()} method.<a name="line.200"></a>
-<FONT color="green">201</FONT>       *<a name="line.201"></a>
-<FONT color="green">202</FONT>       * &lt;p&gt;If a suitable value cannot be determined, then the {@linkplain<a name="line.202"></a>
-<FONT color="green">203</FONT>       * String#isEmpty() empty string} ("") is returned.&lt;/p&gt;<a name="line.203"></a>
-<FONT color="green">204</FONT>       *<a name="line.204"></a>
-<FONT color="green">205</FONT>       * &lt;p&gt;This method never returns {@code null}.&lt;/p&gt;<a name="line.205"></a>
-<FONT color="green">206</FONT>       *<a name="line.206"></a>
-<FONT color="green">207</FONT>       * @return a non-{@code null} {@link String}<a name="line.207"></a>
-<FONT color="green">208</FONT>       *<a name="line.208"></a>
-<FONT color="green">209</FONT>       * @see #getName()<a name="line.209"></a>
-<FONT color="green">210</FONT>       */<a name="line.210"></a>
-<FONT color="green">211</FONT>      @Override<a name="line.211"></a>
-<FONT color="green">212</FONT>      public final Object getValue() {<a name="line.212"></a>
-<FONT color="green">213</FONT>        Object returnValue = null;<a name="line.213"></a>
-<FONT color="green">214</FONT>        final Name n = this.getName(this.nameType);<a name="line.214"></a>
-<FONT color="green">215</FONT>        if (n != null) {<a name="line.215"></a>
-<FONT color="green">216</FONT>          returnValue = n.getValue();<a name="line.216"></a>
-<FONT color="green">217</FONT>        }<a name="line.217"></a>
-<FONT color="green">218</FONT>        if (returnValue == null) {<a name="line.218"></a>
-<FONT color="green">219</FONT>          returnValue = "";<a name="line.219"></a>
-<FONT color="green">220</FONT>        }<a name="line.220"></a>
-<FONT color="green">221</FONT>        return returnValue;<a name="line.221"></a>
-<FONT color="green">222</FONT>      }<a name="line.222"></a>
-<FONT color="green">223</FONT>    <a name="line.223"></a>
-<FONT color="green">224</FONT>      /**<a name="line.224"></a>
-<FONT color="green">225</FONT>       * Does nothing.<a name="line.225"></a>
-<FONT color="green">226</FONT>       *<a name="line.226"></a>
-<FONT color="green">227</FONT>       * @param type ignored<a name="line.227"></a>
-<FONT color="green">228</FONT>       *<a name="line.228"></a>
-<FONT color="green">229</FONT>       * @see #getType()<a name="line.229"></a>
-<FONT color="green">230</FONT>       */<a name="line.230"></a>
-<FONT color="green">231</FONT>      @Override<a name="line.231"></a>
-<FONT color="green">232</FONT>      @SuppressWarnings("rawtypes")<a name="line.232"></a>
-<FONT color="green">233</FONT>      public final void setStaticType(final Class type) {<a name="line.233"></a>
-<FONT color="green">234</FONT>    <a name="line.234"></a>
-<FONT color="green">235</FONT>      }<a name="line.235"></a>
-<FONT color="green">236</FONT>    <a name="line.236"></a>
-<FONT color="green">237</FONT>      /**<a name="line.237"></a>
-<FONT color="green">238</FONT>       * &lt;strong&gt;Experimental&lt;/strong&gt;; {@linkplain<a name="line.238"></a>
-<FONT color="green">239</FONT>       * AbstractNamed#putName(NameType, NameValue) puts} a {@link Name}<a name="line.239"></a>
-<FONT color="green">240</FONT>       * into the {@link Named} that is affiliated with this {@link<a name="line.240"></a>
-<FONT color="green">241</FONT>       * NameResolver}, provided that it is an instance of {@link<a name="line.241"></a>
-<FONT color="green">242</FONT>       * AbstractNamed}.<a name="line.242"></a>
-<FONT color="green">243</FONT>       *<a name="line.243"></a>
-<FONT color="green">244</FONT>       * &lt;p&gt;In general, if the conditions described in the parameters<a name="line.244"></a>
-<FONT color="green">245</FONT>       * section below are not met, this method does nothing.&lt;/p&gt;<a name="line.245"></a>
-<FONT color="green">246</FONT>       *<a name="line.246"></a>
-<FONT color="green">247</FONT>       * @param value the value for a new name; may be {@code null}, a<a name="line.247"></a>
-<FONT color="green">248</FONT>       * {@link NameValue}, a {@link String} or a {@link Name}.  If it is<a name="line.248"></a>
-<FONT color="green">249</FONT>       * {@code null}, then any {@link Name} indexed under this {@link<a name="line.249"></a>
-<FONT color="green">250</FONT>       * NameResolver}'s affiliated {@link NameType} present in the<a name="line.250"></a>
-<FONT color="green">251</FONT>       * affiliated {@link AbstractNamed} will be removed.  If it is<a name="line.251"></a>
-<FONT color="green">252</FONT>       * either a {@link NameValue}, a {@link String} or a {@link Name},<a name="line.252"></a>
-<FONT color="green">253</FONT>       * then it is converted common-sensically into a {@link NameValue}<a name="line.253"></a>
-<FONT color="green">254</FONT>       * and is {@linkplain AbstractNamed#putName(NameType, NameValue)<a name="line.254"></a>
-<FONT color="green">255</FONT>       * installed into} the {@link AbstractNamed} in such a way that a<a name="line.255"></a>
-<FONT color="green">256</FONT>       * subsequent call to {@link #getValue()} will return the expected<a name="line.256"></a>
-<FONT color="green">257</FONT>       * result.<a name="line.257"></a>
-<FONT color="green">258</FONT>       */<a name="line.258"></a>
-<FONT color="green">259</FONT>      @Override<a name="line.259"></a>
-<FONT color="green">260</FONT>      public final void setValue(final Object value) {<a name="line.260"></a>
-<FONT color="green">261</FONT>        if (this.named instanceof AbstractNamed) {<a name="line.261"></a>
-<FONT color="green">262</FONT>          final AbstractNamed owner = (AbstractNamed)this.named;<a name="line.262"></a>
-<FONT color="green">263</FONT>          if (value == null) {<a name="line.263"></a>
-<FONT color="green">264</FONT>            // remove<a name="line.264"></a>
-<FONT color="green">265</FONT>            owner.removeName(this.nameType);<a name="line.265"></a>
-<FONT color="green">266</FONT>          } else {<a name="line.266"></a>
-<FONT color="green">267</FONT>            NameValue nv = null;<a name="line.267"></a>
-<FONT color="green">268</FONT>            if (value instanceof NameValue) {<a name="line.268"></a>
-<FONT color="green">269</FONT>              nv = (NameValue)value;<a name="line.269"></a>
-<FONT color="green">270</FONT>            } else if (value instanceof String) {<a name="line.270"></a>
-<FONT color="green">271</FONT>              nv = NameValue.valueOf((String)value, false, " ");<a name="line.271"></a>
-<FONT color="green">272</FONT>            } else if (value instanceof Name) {<a name="line.272"></a>
-<FONT color="green">273</FONT>              nv = ((Name)value).getNameValue();<a name="line.273"></a>
-<FONT color="green">274</FONT>            } else {<a name="line.274"></a>
-<FONT color="green">275</FONT>              nv = null;<a name="line.275"></a>
-<FONT color="green">276</FONT>            }<a name="line.276"></a>
-<FONT color="green">277</FONT>            if (nv != null) {<a name="line.277"></a>
-<FONT color="green">278</FONT>              owner.putName(this.nameType, nv);<a name="line.278"></a>
-<FONT color="green">279</FONT>            }<a name="line.279"></a>
-<FONT color="green">280</FONT>          }<a name="line.280"></a>
-<FONT color="green">281</FONT>        }<a name="line.281"></a>
-<FONT color="green">282</FONT>      }<a name="line.282"></a>
-<FONT color="green">283</FONT>    <a name="line.283"></a>
-<FONT color="green">284</FONT>    }<a name="line.284"></a>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-<a name="line.1"></a>
+<span class="sourceLineNo">002</span> *<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Copyright (c) 2013-2014 Edugility LLC.<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Permission is hereby granted, free of charge, to any person<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * obtaining a copy of this software and associated documentation<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * files (the "Software"), to deal in the Software without<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * restriction, including without limitation the rights to use, copy,<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * modify, merge, publish, distribute, sublicense and/or sell copies<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * of the Software, and to permit persons to whom the Software is<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * furnished to do so, subject to the following conditions:<a name="line.11"></a>
+<span class="sourceLineNo">012</span> *<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * The above copyright notice and this permission notice shall be<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * included in all copies or substantial portions of the Software.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> *<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * DEALINGS IN THE SOFTWARE.<a name="line.23"></a>
+<span class="sourceLineNo">024</span> *<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * The original copy of this license is available at<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * http://www.opensource.org/license/mit-license.html.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>package com.edugility.nomen.mvel;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>import java.io.Serializable; // for javadoc only<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>import com.edugility.nomen.AbstractNamed;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>import com.edugility.nomen.Name;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>import com.edugility.nomen.Named;<a name="line.34"></a>
+<span class="sourceLineNo">035</span>import com.edugility.nomen.NameType;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>import com.edugility.nomen.NameValue;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>import org.mvel2.integration.VariableResolver;<a name="line.38"></a>
+<span class="sourceLineNo">039</span><a name="line.39"></a>
+<span class="sourceLineNo">040</span>import org.mvel2.integration.impl.BaseVariableResolverFactory;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>import org.mvel2.integration.impl.SimpleValueResolver;<a name="line.41"></a>
+<span class="sourceLineNo">042</span><a name="line.42"></a>
+<span class="sourceLineNo">043</span>/**<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * An &lt;a href="http://mvel.codehaus.org/"&gt;MVEL&lt;/a&gt; {@link<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * VariableResolver} for resolving MVEL variables from a {@link<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * Named}.<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * @author &lt;a href="http://about.me/lairdnelson"<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * target="_parent"&gt;Laird Nelson&lt;/a&gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * @see NameResolverFactory<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * @see VariableResolver<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * @see &lt;a href="http://mvel.codehaus.org"&gt;MVEL&lt;/a&gt;<a name="line.55"></a>
+<span class="sourceLineNo">056</span> */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>public final class NameResolver implements VariableResolver, Named {<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>  <a name="line.59"></a>
+<span class="sourceLineNo">060</span>  /*<a name="line.60"></a>
+<span class="sourceLineNo">061</span>   * Static fields.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>   */<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>  /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>   * The version of this class for {@linkplain Serializable<a name="line.66"></a>
+<span class="sourceLineNo">067</span>   * serialization purposes}.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>   *<a name="line.68"></a>
+<span class="sourceLineNo">069</span>   * @see Serializable<a name="line.69"></a>
+<span class="sourceLineNo">070</span>   */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>  private static final long serialVersionUID = 1L;<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>  /*<a name="line.74"></a>
+<span class="sourceLineNo">075</span>   * Instance fields.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>   */<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>  /**<a name="line.79"></a>
+<span class="sourceLineNo">080</span>   * The {@link Named} that owns {@link Name}s that might be resolved<a name="line.80"></a>
+<span class="sourceLineNo">081</span>   * by this {@link NameResolver}.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>   *<a name="line.82"></a>
+<span class="sourceLineNo">083</span>   * &lt;p&gt;This field will never be {@code null}.&lt;/p&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>   *<a name="line.84"></a>
+<span class="sourceLineNo">085</span>   * @see Named<a name="line.85"></a>
+<span class="sourceLineNo">086</span>   */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>  private final Named named;<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>  /**<a name="line.89"></a>
+<span class="sourceLineNo">090</span>   * The {@link NameType} used by this {@link NameResolver} to {@linkplain<a name="line.90"></a>
+<span class="sourceLineNo">091</span>   * #getName(NameType) look up &lt;code&gt;Name&lt;/code&gt;s}.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>   *<a name="line.92"></a>
+<span class="sourceLineNo">093</span>   * &lt;p&gt;This field will never be {@code null}.&lt;/p&gt;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>   *<a name="line.94"></a>
+<span class="sourceLineNo">095</span>   * @see #getName(NameType)<a name="line.95"></a>
+<span class="sourceLineNo">096</span>   *<a name="line.96"></a>
+<span class="sourceLineNo">097</span>   * @see NameType<a name="line.97"></a>
+<span class="sourceLineNo">098</span>   */<a name="line.98"></a>
+<span class="sourceLineNo">099</span>  private final NameType nameType;<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>  /*<a name="line.102"></a>
+<span class="sourceLineNo">103</span>   * Constructors.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>   */<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>  /**<a name="line.107"></a>
+<span class="sourceLineNo">108</span>   * Creates a new {@link NameResolver}.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>   *<a name="line.109"></a>
+<span class="sourceLineNo">110</span>   * @param named the {@link Named} that will be used by the {@link<a name="line.110"></a>
+<span class="sourceLineNo">111</span>   * #getValue()} method; must not be {@code null}<a name="line.111"></a>
+<span class="sourceLineNo">112</span>   *<a name="line.112"></a>
+<span class="sourceLineNo">113</span>   * @param nameType the {@link NameType} with which this {@link<a name="line.113"></a>
+<span class="sourceLineNo">114</span>   * NameResolver} will be affiliated; must not be {@code null}<a name="line.114"></a>
+<span class="sourceLineNo">115</span>   *<a name="line.115"></a>
+<span class="sourceLineNo">116</span>   * @exception IllegalArgumentException if either {@code named} or<a name="line.116"></a>
+<span class="sourceLineNo">117</span>   * {@code nameType} is {@code null}<a name="line.117"></a>
+<span class="sourceLineNo">118</span>   */<a name="line.118"></a>
+<span class="sourceLineNo">119</span>  public NameResolver(final Named named, final NameType nameType) {<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    super();<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    if (named == null) {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>      throw new IllegalArgumentException("named", new NullPointerException("named"));<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    if (nameType == null) {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>      throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    }<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    this.named = named;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    this.nameType = nameType;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>  }<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>  /*<a name="line.132"></a>
+<span class="sourceLineNo">133</span>   * Instance methods.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>   */<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>  /**<a name="line.137"></a>
+<span class="sourceLineNo">138</span>   * Returns {@code 0}, following the recommendations of the &lt;a<a name="line.138"></a>
+<span class="sourceLineNo">139</span>   * href="http://mvel.codehaus.org/"&gt;MVEL&lt;/a&gt; project.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>   *<a name="line.140"></a>
+<span class="sourceLineNo">141</span>   * &lt;p&gt;The {@link VariableResolver} documentation does not describe<a name="line.141"></a>
+<span class="sourceLineNo">142</span>   * what this method is used for.&lt;/p&gt;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>   *<a name="line.143"></a>
+<span class="sourceLineNo">144</span>   * @return {@code 0}<a name="line.144"></a>
+<span class="sourceLineNo">145</span>   *<a name="line.145"></a>
+<span class="sourceLineNo">146</span>   * @see VariableResolver#getFlags()<a name="line.146"></a>
+<span class="sourceLineNo">147</span>   */<a name="line.147"></a>
+<span class="sourceLineNo">148</span>  @Override<a name="line.148"></a>
+<span class="sourceLineNo">149</span>  public final int getFlags() {<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    return 0; // per VariableResolver "documentation"<a name="line.150"></a>
+<span class="sourceLineNo">151</span>  }<a name="line.151"></a>
+<span class="sourceLineNo">152</span><a name="line.152"></a>
+<span class="sourceLineNo">153</span>  /**<a name="line.153"></a>
+<span class="sourceLineNo">154</span>   * Returns the {@link String} that is the {@linkplain<a name="line.154"></a>
+<span class="sourceLineNo">155</span>   * NameType#getValue() value} of the {@link NameType} supplied at<a name="line.155"></a>
+<span class="sourceLineNo">156</span>   * {@linkplain #NameResolver(Named, NameType) construction time}.<a name="line.156"></a>
+<span class="sourceLineNo">157</span>   *<a name="line.157"></a>
+<span class="sourceLineNo">158</span>   * &lt;p&gt;This method never returns {@code null}.&lt;/p&gt;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>   *<a name="line.159"></a>
+<span class="sourceLineNo">160</span>   * @return a non-{@code null} {@link String} naming the {@link Name}<a name="line.160"></a>
+<span class="sourceLineNo">161</span>   * whose value will be returned by the {@link #getValue()} method<a name="line.161"></a>
+<span class="sourceLineNo">162</span>   *<a name="line.162"></a>
+<span class="sourceLineNo">163</span>   * @see #getValue()<a name="line.163"></a>
+<span class="sourceLineNo">164</span>   *<a name="line.164"></a>
+<span class="sourceLineNo">165</span>   * @see VariableResolver#getName()<a name="line.165"></a>
+<span class="sourceLineNo">166</span>   */<a name="line.166"></a>
+<span class="sourceLineNo">167</span>  @Override<a name="line.167"></a>
+<span class="sourceLineNo">168</span>  public final String getName() {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    assert this.nameType != null;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    return this.nameType.getValue();<a name="line.170"></a>
+<span class="sourceLineNo">171</span>  }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>  /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>   * Returns a {@link Name} for the supplied {@link NameType}, or<a name="line.174"></a>
+<span class="sourceLineNo">175</span>   * {@code null} if no such {@link Name} could be found.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>   *<a name="line.176"></a>
+<span class="sourceLineNo">177</span>   * @param nameType the {@link NameType} to use as a key; may be<a name="line.177"></a>
+<span class="sourceLineNo">178</span>   * {@code null}<a name="line.178"></a>
+<span class="sourceLineNo">179</span>   *<a name="line.179"></a>
+<span class="sourceLineNo">180</span>   * @return a {@link Name}, or {@code null}<a name="line.180"></a>
+<span class="sourceLineNo">181</span>   *<a name="line.181"></a>
+<span class="sourceLineNo">182</span>   * @see Named#getName(NameType)<a name="line.182"></a>
+<span class="sourceLineNo">183</span>   */<a name="line.183"></a>
+<span class="sourceLineNo">184</span>  @Override<a name="line.184"></a>
+<span class="sourceLineNo">185</span>  public final Name getName(final NameType nameType) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    assert this.named != null;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    return this.named.getName(nameType);<a name="line.187"></a>
+<span class="sourceLineNo">188</span>  }<a name="line.188"></a>
+<span class="sourceLineNo">189</span><a name="line.189"></a>
+<span class="sourceLineNo">190</span>  /**<a name="line.190"></a>
+<span class="sourceLineNo">191</span>   * Returns the value of {@link Name}{@code .class} when invoked.<a name="line.191"></a>
+<span class="sourceLineNo">192</span>   *<a name="line.192"></a>
+<span class="sourceLineNo">193</span>   * &lt;p&gt;This method never returns {@code null}.&lt;/p&gt;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>   *<a name="line.194"></a>
+<span class="sourceLineNo">195</span>   * @return {@code Name.class}<a name="line.195"></a>
+<span class="sourceLineNo">196</span>   */<a name="line.196"></a>
+<span class="sourceLineNo">197</span>  @Override<a name="line.197"></a>
+<span class="sourceLineNo">198</span>  public final Class&lt;Name&gt; getType() {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    return Name.class;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>  }<a name="line.200"></a>
+<span class="sourceLineNo">201</span><a name="line.201"></a>
+<span class="sourceLineNo">202</span>  /**<a name="line.202"></a>
+<span class="sourceLineNo">203</span>   * Returns the value of a {@link Name} reference in a &lt;a<a name="line.203"></a>
+<span class="sourceLineNo">204</span>   * href="http://mvel.codehaus.org/"&gt;MVEL&lt;/a&gt; program whose name is<a name="line.204"></a>
+<span class="sourceLineNo">205</span>   * given by the return value of this {@link NameResolver}'s {@link<a name="line.205"></a>
+<span class="sourceLineNo">206</span>   * #getName()} method.<a name="line.206"></a>
+<span class="sourceLineNo">207</span>   *<a name="line.207"></a>
+<span class="sourceLineNo">208</span>   * &lt;p&gt;If a suitable value cannot be determined, then the {@linkplain<a name="line.208"></a>
+<span class="sourceLineNo">209</span>   * String#isEmpty() empty string} ("") is returned.&lt;/p&gt;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>   *<a name="line.210"></a>
+<span class="sourceLineNo">211</span>   * &lt;p&gt;This method never returns {@code null}.&lt;/p&gt;<a name="line.211"></a>
+<span class="sourceLineNo">212</span>   *<a name="line.212"></a>
+<span class="sourceLineNo">213</span>   * @return a non-{@code null} {@link String}<a name="line.213"></a>
+<span class="sourceLineNo">214</span>   *<a name="line.214"></a>
+<span class="sourceLineNo">215</span>   * @see #getName()<a name="line.215"></a>
+<span class="sourceLineNo">216</span>   *<a name="line.216"></a>
+<span class="sourceLineNo">217</span>   * @see VariableResolver#getValue()<a name="line.217"></a>
+<span class="sourceLineNo">218</span>   */<a name="line.218"></a>
+<span class="sourceLineNo">219</span>  @Override<a name="line.219"></a>
+<span class="sourceLineNo">220</span>  public final Object getValue() {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>    Object returnValue = null;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    final Name n = this.getName(this.nameType);<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    if (n != null) {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>      returnValue = n.getValue();<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    }<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    if (returnValue == null) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>      returnValue = "";<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    return returnValue;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>  }<a name="line.230"></a>
+<span class="sourceLineNo">231</span><a name="line.231"></a>
+<span class="sourceLineNo">232</span>  /**<a name="line.232"></a>
+<span class="sourceLineNo">233</span>   * Does nothing.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>   *<a name="line.234"></a>
+<span class="sourceLineNo">235</span>   * @param type ignored<a name="line.235"></a>
+<span class="sourceLineNo">236</span>   *<a name="line.236"></a>
+<span class="sourceLineNo">237</span>   * @see #getType()<a name="line.237"></a>
+<span class="sourceLineNo">238</span>   */<a name="line.238"></a>
+<span class="sourceLineNo">239</span>  @Override<a name="line.239"></a>
+<span class="sourceLineNo">240</span>  @SuppressWarnings("rawtypes")<a name="line.240"></a>
+<span class="sourceLineNo">241</span>  public final void setStaticType(final Class type) {<a name="line.241"></a>
+<span class="sourceLineNo">242</span><a name="line.242"></a>
+<span class="sourceLineNo">243</span>  }<a name="line.243"></a>
+<span class="sourceLineNo">244</span><a name="line.244"></a>
+<span class="sourceLineNo">245</span><a name="line.245"></a>
+<span class="sourceLineNo">246</span>  /**<a name="line.246"></a>
+<span class="sourceLineNo">247</span>   * Does nothing when invoked.<a name="line.247"></a>
+<span class="sourceLineNo">248</span>   *<a name="line.248"></a>
+<span class="sourceLineNo">249</span>   * @param value ignored<a name="line.249"></a>
+<span class="sourceLineNo">250</span>   */<a name="line.250"></a>
+<span class="sourceLineNo">251</span>  @Override<a name="line.251"></a>
+<span class="sourceLineNo">252</span>  public final void setValue(final Object value) {<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>  }<a name="line.254"></a>
+<span class="sourceLineNo">255</span><a name="line.255"></a>
+<span class="sourceLineNo">256</span><a name="line.256"></a>
+<span class="sourceLineNo">257</span>}<a name="line.257"></a>
 
 
 
@@ -345,6 +323,7 @@
 
 
 
-</PRE>
-</BODY>
-</HTML>
+</pre>
+</div>
+</body>
+</html>
