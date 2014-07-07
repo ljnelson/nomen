@@ -180,10 +180,14 @@ public abstract class AbstractValued implements Serializable, Valued {
    * equal to} the return value of this {@link AbstractValued}'s
    * {@link #getValue()} method.
    *
-   * @return {@code true} if the supplied {@link Object} is equal to
-   * this {@link AbstractValued}; {@code false} in all other cases
+   * @return {@code true} if the supplied {@link Object} is a {@link
+   * Valued} and {@linkplain Valued#getValue() has a value} that is
+   * equal to the {@linkplain #getValue() value of this
+   * <code>AbstractValued</code>}; {@code false} in all other cases
    *
    * @see #getValue()
+   *
+   * @see Valued#getValue()
    */
   @Override
   public boolean equals(final Object other) {

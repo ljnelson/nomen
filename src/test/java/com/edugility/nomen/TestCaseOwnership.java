@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2011-2014 Edugility LLC.
+ * Copyright (c) 2013-2014 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -32,48 +32,52 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TestCaseName {
+public class TestCaseOwnership {
 
-  private NameSupport dude;
+  private NameSupport dude1;
 
-  public TestCaseName() {
+  private NameSupport dude2;
+
+  public TestCaseOwnership() {
     super();
   }
 
   @Before
   public void setUp() {
-    this.dude = new NameSupport() {
+    this.dude1 = new NameSupport() {
+        private static final long serialVersionUID = 1L;
+      };
+    this.dude2 = new NameSupport() {
         private static final long serialVersionUID = 1L;
       };
   }
 
   @Test
-  public void testSameNamePutTwice() {
+  public void testOwnershipMonitoring() {
 
     // Create a new Name, consisting of a just-in-time-created
-    // NameValue of "Laird" assigned to dude.
-    final Name laird = new Name(this.dude, new NameValue("Laird"));
+    // NameValue of "Laird" assigned to dude1.  That Name is now owned
+    // by dude1, but unindexed.
+    final Name laird = new Name(this.dude1, new NameValue("Laird"));
+    assertSame(this.dude1, laird.getNamed());
+    assertEquals(0, laird.getPropertyChangeListeners("named").length);
 
     final NameType first = new NameType("first");
-
     final NameType preferred = new NameType("preferred");
 
     // Store the very same Name under two types.  The assertNull()
     // call makes sure that there wasn't one in there already.
-    assertNull(this.dude.putName(first, laird));
-    assertNull(this.dude.putName(preferred, laird));
+    assertNull(this.dude1.putName(first, laird));
+    assertNull(this.dude1.putName(preferred, laird));
 
-    final Name lj = new Name(this.dude, new NameValue("L. J."));
+    assertEquals(1, laird.getPropertyChangeListeners("named").length);
 
+    assertEquals(2, this.dude1.getNameTypes().size());
+    
+    laird.setNamed(this.dude2);
 
-    Name old = this.dude.putName(preferred, lj);
-    assertNotNull(old);
-    assertSame(laird, old);
+    assertTrue(this.dude1.getNameTypes().isEmpty());
 
-    assertSame(this.dude, laird.getNamed());
-    old = this.dude.putName(first, lj);
-    assertNotNull(old);
-    assertNull(old.getNamed());
   }
 
 }
