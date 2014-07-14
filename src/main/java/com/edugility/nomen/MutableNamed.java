@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2011-2014 Edugility LLC.
+ * Copyright (c) 2013-2014 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,53 +27,22 @@
  */
 package com.edugility.nomen;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.io.Serializable;
 
-import static org.junit.Assert.*;
+/**
+ * A {@link Named} that permits additions and removals.
+ *
+ * @author <a href="http://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ *
+ * @see #getName(NameType)
+ *
+ * @see Name
+ */
+public interface MutableNamed extends Named {
 
-public class TestCaseName {
+  public Name putName(final NameType nameType, final Name name);
 
-  private AbstractNamed dude;
-
-  public TestCaseName() {
-    super();
-  }
-
-  @Before
-  public void setUp() {
-    this.dude = new AbstractNamed() {
-        private static final long serialVersionUID = 1L;
-      };
-  }
-
-  @Test
-  public void testSameNamePutTwice() {
-
-    // Create a new Name, consisting of a just-in-time-created
-    // NameValue of "Laird" assigned to dude.
-    final Name laird = new Name(this.dude, new NameValue("Laird"));
-
-    final NameType first = new NameType("first");
-
-    final NameType preferred = new NameType("preferred");
-
-    // Store the very same Name under two types.  The assertNull()
-    // call makes sure that there wasn't one in there already.
-    assertNull(this.dude.putName(first, laird));
-    assertNull(this.dude.putName(preferred, laird));
-
-    final Name lj = new Name(this.dude, new NameValue("L. J."));
-
-
-    Name old = this.dude.putName(preferred, lj);
-    assertNotNull(old);
-    assertSame(laird, old);
-
-    assertSame(this.dude, laird.getNamed());
-    old = this.dude.putName(first, lj);
-    assertNotNull(old);
-    assertNull(old.getNamed());
-  }
+  public Name removeName(final NameType nameType);
 
 }

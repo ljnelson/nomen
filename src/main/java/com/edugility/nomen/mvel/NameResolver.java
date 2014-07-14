@@ -29,6 +29,8 @@ package com.edugility.nomen.mvel;
 
 import java.io.Serializable; // for javadoc only
 
+import java.util.Set;
+
 import com.edugility.nomen.Name;
 import com.edugility.nomen.Named;
 import com.edugility.nomen.NameType;

@@ -29,13 +29,6 @@ package com.edugility.nomen;
 
 import java.io.Serializable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 /**
  * An {@link AbstractValued} implementation that serves as a key
  * within a {@link Named} to identify particular {@link Name}
@@ -78,7 +71,7 @@ public class NameType extends AbstractValued {
    *
    * @param value the value for this {@link NameType}; must not be
    * {@code null}
-   * 
+   *
    * @exception IllegalArgumentException if {@code value} is {@code
    * null}
    *

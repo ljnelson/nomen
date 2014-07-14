@@ -29,7 +29,9 @@ package com.edugility.nomen.mvel;
 
 import java.io.Serializable; // for javadoc only
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.edugility.nomen.Name;
 import com.edugility.nomen.Named;
@@ -131,7 +133,7 @@ public class NameResolverFactory extends BaseVariableResolverFactory implements 
     }
     return returnValue;
   }
-  
+
   /**
    * Returns {@code true} if {@code name} is equal to the {@linkplain
    * NameType#getValue() value} of a {@link NameType} that, when

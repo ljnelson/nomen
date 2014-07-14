@@ -27,25 +27,24 @@
  */
 package com.edugility.nomen;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * An implementation of the {@link Named} interface, together with
- * mutator methods.
+ * An implementation of the {@link MutableNamed} interface.
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
  *
  * @see NameSupport
  */
-@Deprecated
-public abstract class AbstractNamed extends NameSupport {
+public abstract class AbstractNamed implements MutableNamed {
 
 
   /*
@@ -61,6 +60,29 @@ public abstract class AbstractNamed extends NameSupport {
 
 
   /*
+   * Instance fields.
+   */
+
+
+  /**
+   * A {@link Map} holding {@link Name}s {@linkplain Name#getNamed()
+   * owned} by this {@link AbstractNamed} indexed by {@link
+   * NameType}s.
+   *
+   * <p>This field is never {@code null}.</p>
+   */
+  private Map<NameType, Name> names;
+
+  /**
+   * A {@link NameSupport} instance that implements some of the
+   * complex ownership logic required.
+   *
+   * <p>This field is never {@code null}.</p>
+   */
+  private transient NameSupport nameSupport;
+
+
+  /*
    * Constructors.
    */
 
@@ -70,7 +92,54 @@ public abstract class AbstractNamed extends NameSupport {
    */
   protected AbstractNamed() {
     super();
+    this.names = new HashMap<NameType, Name>();
+    this.nameSupport = new NameSupport(this);
   }
 
+
+  /*
+   * Instance methods.
+   */
+
+
+  @Override
+  public Name getName(final NameType nameType) {
+    assert this.names != null;
+    return this.names.get(nameType);
+  }
+
+  @Override
+  public Name putName(final NameType nameType, final Name name) {
+    assert this.nameSupport != null;
+    return this.nameSupport.putName(this.names, nameType, name);
+  }
+
+  @Override
+  public Name removeName(final NameType nameType) {
+    assert this.nameSupport != null;
+    return this.nameSupport.removeName(this.names, nameType);
+  }
+
+  public Set<NameType> getNameTypes() {
+    assert this.nameSupport != null;
+    return this.nameSupport.getNameTypes(this.names);
+  }
+
+  public Collection<Name> getNames() {
+    assert this.nameSupport != null;
+    return this.nameSupport.getNames(this.names);
+  }
+
+  private void readObject(final ObjectInputStream stream) throws ClassNotFoundException, IOException {
+    if (stream != null) {
+      stream.defaultReadObject();
+    }
+    if (this.names == null) {
+      this.names = new HashMap<NameType, Name>();
+    }
+    if (this.nameSupport == null) {
+      this.nameSupport = new NameSupport(this);
+    }
+  }
 
 }

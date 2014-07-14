@@ -27,66 +27,48 @@
  */
 package com.edugility.nomen;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-public class NameSupport implements Named {
+/**
+ *
+ * @author <a href="http://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ *
+ * @see Named
+ */
+public class NameSupport {
 
+  /**
+   * The version of this class for {@linkplain Serializable
+   * serialization purposes}.
+   */
   private static final long serialVersionUID = 1L;
 
+  /**
+   * The {@link Named} on whose behalf this {@link NameSupport} is
+   * operating.
+   *
+   * <p>This field is never {@code null}.</p>
+   */
   private final Named delegate;
 
-  private final Map<NameType, Name> map;
-
-  private transient PropertyChangeListener ownershipMonitor;
-
-  public NameSupport() {
-    super();
-    this.delegate = this;
-    this.map = new HashMap<NameType, Name>();
-    this.ownershipMonitor = new NameOwnershipMonitor(this.delegate, this.map.entrySet());
-  }
-
   public NameSupport(final Named delegate) {
-    this(delegate, null);
-  }
-
-  public NameSupport(final Named delegate, Map<NameType, Name> map) {
     super();
-    if (map == null) {
-      map = new HashMap<NameType, Name>();
-    }
     this.delegate = delegate;
-    this.map = map;
-    this.ownershipMonitor = new NameOwnershipMonitor(this.delegate, map.entrySet());
   }
 
-  @Override
-  public Name getName(final NameType nameType) {
-    final Name returnValue;
-    final Map<NameType, Name> map = this.map;
-    if (map != null) {
-      returnValue = map.get(nameType);
-    } else {
-      returnValue = null;
-    }
-    return returnValue;
-  }
-
-  public Set<NameType> getNameTypes() {
+  public Set<NameType> getNameTypes(final Map<NameType, Name> map) {
     final Set<NameType> returnValue;
-    final Map<NameType, Name> map = this.map;
     if (map == null || map.isEmpty()) {
       returnValue = Collections.emptySet();
     } else {
@@ -95,9 +77,8 @@ public class NameSupport implements Named {
     return returnValue;
   }
 
-  public Collection<Name> getNames() {
+  public Collection<Name> getNames(final Map<NameType, Name> map) {
     final Collection<Name> returnValue;
-    final Map<NameType, Name> map = this.map;
     if (map == null || map.isEmpty()) {
       returnValue = Collections.emptySet();
     } else {
@@ -106,62 +87,62 @@ public class NameSupport implements Named {
     return returnValue;
   }
 
-  public Name putName(final NameType nameType, final Name name) {
-    if (nameType == null) {
+  public Name putName(final Map<NameType, Name> map, final NameType nameType, final Name name) {
+    if (map == null) {
+      throw new IllegalArgumentException("map", new NullPointerException("map"));
+    } else if (nameType == null) {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
     } else if (name == null) {
       throw new IllegalArgumentException("name", new NullPointerException("name"));
     }
+
     final Named delegate = this.delegate;
-    final Name returnValue;
-    final Name old;
-    if (delegate == null) {
-      old = null;
-    } else {
-      old = delegate.getName(nameType);
-    }
-    if (old == name) {
-      returnValue = old;
-    } else {
+    assert delegate != null;
+
+    final Name old = delegate.getName(nameType);
+    if (old != name) {
+      
       name.setNamed(delegate);
-      this.addNameOwnershipMonitor(name);
-      returnValue = map.put(nameType, name);
-      assert returnValue == old;
-      if (returnValue != null) {
-        this.disown(returnValue);
+      this.addNameOwnershipMonitor(name, map);
+      
+      final Name priorMapValue = map.put(nameType, name);
+      this.disown(old, map);
+      if (priorMapValue != old) {
+        this.disown(priorMapValue, map);
       }
     }
-    return returnValue;
+
+    return old;
   }
 
-  private final void addNameOwnershipMonitor(final Name name) {
-    if (name != null) {
+  private final void addNameOwnershipMonitor(final Name name, final Map<?, ? extends Name> map) {
+    if (name != null && map != null) {
       boolean add = true;
       final PropertyChangeListener[] pcls = name.getPropertyChangeListeners("named");
       if (pcls != null && pcls.length > 0) {
         for (final PropertyChangeListener pcl : pcls) {
-          if (pcl == this.ownershipMonitor) {
+          if (pcl instanceof NameOwnershipMonitor) {
             add = false;
             break;
           }
         }
       }
       if (add) {
-        name.addPropertyChangeListener("named", this.ownershipMonitor);
+        name.addPropertyChangeListener("named", new NameOwnershipMonitor(this.delegate, map.entrySet()));
       }
     }
   }
 
-  public Name removeName(final NameType nameType) {
+  public Name removeName(final Map<NameType, Name> map, final NameType nameType) {
     if (nameType == null) {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
     }
+
     final Name returnValue;
-    final Map<NameType, Name> map = this.map;
     if (map != null && !map.isEmpty()) {
       returnValue = map.remove(nameType);
       if (returnValue != null) {
-        this.disown(returnValue);
+        this.disown(returnValue, map);
       }
     } else {
       returnValue = null;
@@ -173,22 +154,19 @@ public class NameSupport implements Named {
    * Sets the ownership of the supplied {@link Name} to {@code null}
    * if it can be proved that no {@link NameType} indexes it.
    */
-  private final void disown(final Name name) {
-    if (name != null) {
-      final Map<NameType, Name> map = this.map;
-      if (map != null && !map.isEmpty()) {
-        final Iterable<?> values = this.map.values();
-        if (values != null) {
-          boolean found = false;
-          for (final Object value : values) {
-            if (value == name) {
-              found = true;
-              break;
-            }
+  private final void disown(final Name name, final Map<NameType, Name> map) {
+    if (name != null && name.getNamed() != null && map != null && !map.isEmpty()) {
+      final Iterable<?> values = map.values();
+      if (values != null) {
+        boolean found = false;
+        for (final Object value : values) {
+          if (value == name) {
+            found = true;
+            break;
           }
-          if (!found) {
-            name.setNamed(null);
-          }
+        }
+        if (!found) {
+          name.setNamed(null);
         }
       }
     }
@@ -198,7 +176,6 @@ public class NameSupport implements Named {
     if (stream != null) {
       stream.defaultReadObject();
     }
-    this.ownershipMonitor = new NameOwnershipMonitor(this, this.map.entrySet());
   }
 
 }

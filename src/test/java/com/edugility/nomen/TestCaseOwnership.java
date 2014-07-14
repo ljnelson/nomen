@@ -34,9 +34,9 @@ import static org.junit.Assert.*;
 
 public class TestCaseOwnership {
 
-  private NameSupport dude1;
+  private AbstractNamed dude1;
 
-  private NameSupport dude2;
+  private AbstractNamed dude2;
 
   public TestCaseOwnership() {
     super();
@@ -44,10 +44,10 @@ public class TestCaseOwnership {
 
   @Before
   public void setUp() {
-    this.dude1 = new NameSupport() {
+    this.dude1 = new AbstractNamed() {
         private static final long serialVersionUID = 1L;
       };
-    this.dude2 = new NameSupport() {
+    this.dude2 = new AbstractNamed() {
         private static final long serialVersionUID = 1L;
       };
   }
