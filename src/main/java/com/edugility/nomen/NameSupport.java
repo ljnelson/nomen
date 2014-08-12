@@ -106,9 +106,10 @@ public class NameSupport {
       this.addNameOwnershipMonitor(name, map);
       
       final Name priorMapValue = map.put(nameType, name);
-      this.disown(old, map);
+      final Collection<? extends Name> names = map.values();
+      this.disown(old, names);
       if (priorMapValue != old) {
-        this.disown(priorMapValue, map);
+        this.disown(priorMapValue, names);
       }
     }
 
@@ -142,7 +143,7 @@ public class NameSupport {
     if (map != null && !map.isEmpty()) {
       returnValue = map.remove(nameType);
       if (returnValue != null) {
-        this.disown(returnValue, map);
+        this.disown(returnValue, map.values());
       }
     } else {
       returnValue = null;
@@ -154,20 +155,17 @@ public class NameSupport {
    * Sets the ownership of the supplied {@link Name} to {@code null}
    * if it can be proved that no {@link NameType} indexes it.
    */
-  private final void disown(final Name name, final Map<NameType, Name> map) {
-    if (name != null && name.getNamed() != null && map != null && !map.isEmpty()) {
-      final Iterable<?> values = map.values();
-      if (values != null) {
-        boolean found = false;
-        for (final Object value : values) {
-          if (value == name) {
-            found = true;
-            break;
-          }
+  private final void disown(final Name name, final Collection<? extends Name> names) {
+    if (name != null && name.getNamed() != null && names != null && !names.isEmpty()) {
+      boolean found = false;
+      for (final Object value : names) {
+        if (value == name) {
+          found = true;
+          break;
         }
-        if (!found) {
-          name.setNamed(null);
-        }
+      }
+      if (!found) {
+        name.setNamed(null);
       }
     }
   }

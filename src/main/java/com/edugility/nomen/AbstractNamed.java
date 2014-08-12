@@ -37,7 +37,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * An implementation of the {@link MutableNamed} interface.
+ * An implementation of the {@link MutableNamed} interface that uses a
+ * {@link NameSupport} delegate internally.
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>

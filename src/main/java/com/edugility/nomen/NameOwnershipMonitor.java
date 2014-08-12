@@ -49,11 +49,11 @@ import java.util.Map.Entry;
  * are removed.</p>
  *
  * <p>The {@link NameSupport} class uses this class.  When any {@link
- * Name} is added via the {@link NameSupport#putName(NameType, Name)}
- * method, a single instance of this class is {@linkplain
- * NameSupport#addPropertyChangeListener(String,
- * PropertyChangeListener) added} as a {@link PropertyChangeListener}
- * to the {@code named} property of that {@link Name}.</p>
+ * Name} is added via the {@link NameSupport#putName(Map, NameType,
+ * Name)} method, a single instance of this class is {@linkplain
+ * Name#addPropertyChangeListener(String, PropertyChangeListener)
+ * added} as a {@link PropertyChangeListener} to the {@code named}
+ * property of that {@link Name}.</p>
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>

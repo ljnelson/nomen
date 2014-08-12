@@ -139,6 +139,9 @@ public abstract class AbstractValued implements Serializable, Valued {
    * 
    * @param value the new value; must not be {@code null}
    *
+   * @exception IllegalArgumentException if {@code value} is {@code
+   * null}
+   *
    * @exception IllegalStateException if this method is called more
    * than once
    *

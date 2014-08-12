@@ -246,6 +246,11 @@ public class Name extends AbstractValued {
     this.setNameValue(nameValue);
   }
 
+  public Name(final String nameValue) {
+    super();
+    this.setNameValue(this.createNameValue(nameValue));
+  }
+
 
   /*
    * Instance methods.
@@ -267,7 +272,7 @@ public class Name extends AbstractValued {
 
   /**
    * Sets the {@link Named} that will serve as this {@link Name}'s
-   * owner.  If the supplied {@link Named} is identical to the {@link
+   * owner.  If the supplied {@link Named} is equal to the {@link
    * Named} returned by the {@link #getNamed()} method, no action is
    * taken.
    *
