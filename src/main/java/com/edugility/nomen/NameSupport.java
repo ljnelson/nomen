@@ -40,11 +40,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * An object that manages {@link Name}s on behalf of some {@link
+ * Named}.  A {@link NameSupport} can be used as an internal delegate
+ * in your {@link Named} implementation to handle common use cases.
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
- *
- * @see Named
  */
 public class NameSupport {
 
@@ -62,13 +63,40 @@ public class NameSupport {
    */
   private final Named delegate;
 
+  /**
+   * Creates a new {@link NameSupport} that will manage {@link Name}s
+   * for the supplied {@link Named}.
+   *
+   * @param delegate the delegate whose {@link Name}s will be managed;
+   * must not be {@code null}
+   *
+   * @exception IllegalArgumentException if {@code delegate} is {@code
+   * null}
+   */
   public NameSupport(final Named delegate) {
     super();
+    if (delegate == null) {
+      throw new IllegalArgumentException("delegate", new NullPointerException("delegate"));
+    }
     this.delegate = delegate;
   }
 
-  public Set<NameType> getNameTypes(final Map<NameType, Name> map) {
-    final Set<NameType> returnValue;
+  /**
+   * Returns a {@link Set} of {@link NameType}s that the supplied
+   * {@link Map} contains as {@linkplain Map#keySet() keys}.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @param map the {@link Map} whose {@linkplain Map#keySet() keys}
+   * are to be returned; may be {@code null} in which case an
+   * {@linkplain Collections#emptySet() empty <code>Set</code>} will
+   * be returned
+   *
+   * @return a non-{@code null}, {@linkplain
+   * Collections#unmodifiableSet(Set) immutable <code>Set</code>}
+   */
+  public Set<? extends NameType> getNameTypes(final Map<? extends NameType, ?> map) {
+    final Set<? extends NameType> returnValue;
     if (map == null || map.isEmpty()) {
       returnValue = Collections.emptySet();
     } else {
@@ -77,7 +105,24 @@ public class NameSupport {
     return returnValue;
   }
 
-  public Collection<Name> getNames(final Map<NameType, Name> map) {
+  /**
+   * Returns a non-{@code null}, {@linkplain
+   * Collections#unmodifiableCollection(Collection) immutable
+   * <code>Collection</code>} of {@link Name}s housed in the supplied
+   * {@link Map} as its {@linkplain Map#values() values}.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @param map a {@link Map} containing {@link Name}s as its
+   * {@linkplain Map#values() values}; may be {@code null} in which
+   * case an {@linkplain Collections#emptySet() empty
+   * <code>Set</code>} will be returned
+   *
+   * @return a non-{@code null} {@linkplain
+   * Collections#unmodifiableCollection(Collection) immutable
+   * <code>Collection</code>} of {@link Name}s
+   */
+  public Collection<? extends Name> getNames(final Map<?, ? extends Name> map) {
     final Collection<Name> returnValue;
     if (map == null || map.isEmpty()) {
       returnValue = Collections.emptySet();
@@ -87,6 +132,28 @@ public class NameSupport {
     return returnValue;
   }
 
+  /**
+   * {@linkplain Map#put(Object, Object) Puts} the supplied {@link
+   * Name} into the supplied {@link Map} indexed under the supplied
+   * {@link NameType}, while ensuring that {@link Name} ownership is
+   * sanely managed.
+   *
+   * <p>This method may return {@code null}.</p>
+   *
+   * @param map a mutable {@link Map} containing {@link Name}s indexed
+   * by {@link NameType}s; must not be {@code null}; this {@link Map}
+   * will be modified as a result of invoking this method
+   *
+   * @param nameType the {@link NameType} under which to index the
+   * supplied {@link Name} in the supplied {@link Map}; must not be
+   * {@code null}
+   *
+   * @param name the {@link Name} to index in the supplied {@link
+   * Map}; must not be {@code null}
+   *
+   * @return the {@link Name} previously indexed under the supplied
+   * {@link NameType}, or {@code null}
+   */
   public Name putName(final Map<NameType, Name> map, final NameType nameType, final Name name) {
     if (map == null) {
       throw new IllegalArgumentException("map", new NullPointerException("map"));
@@ -116,6 +183,20 @@ public class NameSupport {
     return old;
   }
 
+  /**
+   * Adds a new {@link NameOwnershipMonitor} to the supplied {@link
+   * Name} as a {@link PropertyChangeListener} that listens for
+   * changes in its {@code named} property.  The {@link
+   * NameOwnershipMonitor} is responsible for ensuring that ownership
+   * of the {@link Name} is properly maintained.
+   *
+   * @param name the {@link Name} to monitor; may be {@code null} in
+   * which case no action will be taken
+   *
+   * @param map a {@link Map} whose {@linkplain Map#values() values}
+   * are {@link Name}s; may be {@code null} in which case no action
+   * will be taken
+   */
   private final void addNameOwnershipMonitor(final Name name, final Map<?, ? extends Name> map) {
     if (name != null && map != null) {
       boolean add = true;
@@ -134,7 +215,25 @@ public class NameSupport {
     }
   }
 
-  public Name removeName(final Map<NameType, Name> map, final NameType nameType) {
+  /**
+   * Removes any {@link Name} present in the supplied {@link Map} that
+   * is indexed under the supplied {@link NameType}.
+   *
+   * <p>This method may return {@code null}.</p>
+   *
+   * @param map the {@link Map} from which a {@link Name} should be
+   * removed; may be {@code null} in which case no action will be
+   * taken and {@code null} will be returned
+   *
+   * @param nameType the {@link NameType} identifying the {@link Name}
+   * to be removed; must not be {@code null}
+   *
+   * @return the {@link Name} that was removed, or {@code null}
+   *
+   * @exception IllegalArgumentException if {@code nameType} is {@code
+   * null}
+   */
+  public Name removeName(final Map<?, ? extends Name> map, final NameType nameType) {
     if (nameType == null) {
       throw new IllegalArgumentException("nameType", new NullPointerException("nameType"));
     }
@@ -153,7 +252,15 @@ public class NameSupport {
 
   /**
    * Sets the ownership of the supplied {@link Name} to {@code null}
-   * if it can be proved that no {@link NameType} indexes it.
+   * if and only if it can be proved that no {@link NameType} indexes
+   * it.
+   *
+   * @param name the {@link Name} to disown; may be {@code null} in
+   * which case no action will be taken
+   *
+   * @param names a {@link Collection} of {@link Name}s that will be
+   * consulted for ownership maintenance purposes; may be {@code null}
+   * in which case no action will be taken
    */
   private final void disown(final Name name, final Collection<? extends Name> names) {
     if (name != null && name.getNamed() != null && names != null && !names.isEmpty()) {
@@ -167,12 +274,6 @@ public class NameSupport {
       if (!found) {
         name.setNamed(null);
       }
-    }
-  }
-
-  private final void readObject(final ObjectInputStream stream) throws ClassNotFoundException, IOException {
-    if (stream != null) {
-      stream.defaultReadObject();
     }
   }
 

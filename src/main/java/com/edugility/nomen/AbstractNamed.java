@@ -121,12 +121,12 @@ public abstract class AbstractNamed implements MutableNamed {
     return this.nameSupport.removeName(this.names, nameType);
   }
 
-  public Set<NameType> getNameTypes() {
+  public Set<? extends NameType> getNameTypes() {
     assert this.nameSupport != null;
     return this.nameSupport.getNameTypes(this.names);
   }
 
-  public Collection<Name> getNames() {
+  public Collection<? extends Name> getNames() {
     assert this.nameSupport != null;
     return this.nameSupport.getNames(this.names);
   }

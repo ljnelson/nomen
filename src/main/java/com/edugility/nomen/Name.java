@@ -240,12 +240,29 @@ public class Name extends AbstractValued {
    *
    * @exception IllegalArgumentException if {@code nameValue} is
    * {@code null}
+   *
+   * @see #setNameValue(NameValue)
    */
   public Name(final NameValue nameValue) {
     super();
     this.setNameValue(nameValue);
   }
 
+  /**
+   * Creates a new {@link Name} that is initially {@linkplain
+   * #getNamed() unowned} with a {@link NameValue} constructed by the
+   * {@link #createNameValue(String)} method.
+   *
+   * @param nameValue the value for this new {@link Name}; must not be
+   * {@code null}
+   *
+   * @exception IllegalArgumentException if {@code nameValue} is
+   * {@code null}
+   *
+   * @see #createNameValue(String)
+   *
+   * @see #setNameValue(NameValue)
+   */
   public Name(final String nameValue) {
     super();
     this.setNameValue(this.createNameValue(nameValue));
