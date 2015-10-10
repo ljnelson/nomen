@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.Valued
-	c111 [label=<<table title="com.edugility.nomen.Valued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Valued.html">
+	c182 [label=<<table title="com.edugility.nomen.Valued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Valued.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Valued </td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./Valued.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.AbstractValued
-	c116 [label=<<table title="com.edugility.nomen.AbstractValued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractValued.html">
+	c190 [label=<<table title="com.edugility.nomen.AbstractValued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractValued.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractValued </font></td></tr>
 		</table></td></tr>
@@ -41,6 +41,6 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./AbstractValued.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//com.edugility.nomen.AbstractValued implements com.edugility.nomen.Valued
-	c111:p -> c116:p [dir=back,arrowtail=empty,style=dashed];
+	c182:p -> c190:p [dir=back,arrowtail=empty,style=dashed];
 }
 

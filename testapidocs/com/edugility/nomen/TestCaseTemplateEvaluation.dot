@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.TestCaseTemplateEvaluation
-	c17 [label=<<table title="com.edugility.nomen.TestCaseTemplateEvaluation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./TestCaseTemplateEvaluation.html">
+	c27 [label=<<table title="com.edugility.nomen.TestCaseTemplateEvaluation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./TestCaseTemplateEvaluation.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestCaseTemplateEvaluation </td></tr>
 		</table></td></tr>

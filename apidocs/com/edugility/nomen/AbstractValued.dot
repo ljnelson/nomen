@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.Valued
-	c44 [label=<<table title="com.edugility.nomen.Valued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Valued.html">
+	c58 [label=<<table title="com.edugility.nomen.Valued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Valued.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Valued </td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./Valued.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.NameValue
-	c45 [label=<<table title="com.edugility.nomen.NameValue" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameValue.html">
+	c59 [label=<<table title="com.edugility.nomen.NameValue" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameValue.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NameValue </td></tr>
 		</table></td></tr>
@@ -46,7 +46,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./NameValue.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.NameType
-	c46 [label=<<table title="com.edugility.nomen.NameType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameType.html">
+	c60 [label=<<table title="com.edugility.nomen.NameType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NameType </td></tr>
 		</table></td></tr>
@@ -59,7 +59,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./NameType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.Name
-	c48 [label=<<table title="com.edugility.nomen.Name" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Name.html">
+	c64 [label=<<table title="com.edugility.nomen.Name" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Name.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Name </td></tr>
 		</table></td></tr>
@@ -70,6 +70,7 @@ digraph G {
 <tr><td align="left" balign="left"> # Name() </td></tr>
 <tr><td align="left" balign="left"> + Name(named : Named, nameValue : NameValue) </td></tr>
 <tr><td align="left" balign="left"> + Name(nameValue : NameValue) </td></tr>
+<tr><td align="left" balign="left"> + Name(nameValue : String) </td></tr>
 <tr><td align="left" balign="left"> + getNamed() : Named </td></tr>
 <tr><td align="left" balign="left"> + setNamed(named : Named) </td></tr>
 <tr><td align="left" balign="left"> + getNameValue() : NameValue </td></tr>
@@ -90,7 +91,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./Name.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.AbstractValued
-	c49 [label=<<table title="com.edugility.nomen.AbstractValued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./AbstractValued.html">
+	c66 [label=<<table title="com.edugility.nomen.AbstractValued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./AbstractValued.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractValued </font></td></tr>
 		</table></td></tr>
@@ -108,14 +109,14 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./AbstractValued.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//com.edugility.nomen.NameValue extends com.edugility.nomen.AbstractValued
-	c49:p -> c45:p [dir=back,arrowtail=empty];
+	c66:p -> c59:p [dir=back,arrowtail=empty];
 	//com.edugility.nomen.NameType extends com.edugility.nomen.AbstractValued
-	c49:p -> c46:p [dir=back,arrowtail=empty];
+	c66:p -> c60:p [dir=back,arrowtail=empty];
 	//com.edugility.nomen.Name extends com.edugility.nomen.AbstractValued
-	c49:p -> c48:p [dir=back,arrowtail=empty];
+	c66:p -> c64:p [dir=back,arrowtail=empty];
 	//com.edugility.nomen.AbstractValued implements com.edugility.nomen.Valued
-	c44:p -> c49:p [dir=back,arrowtail=empty,style=dashed];
+	c58:p -> c66:p [dir=back,arrowtail=empty,style=dashed];
 	// com.edugility.nomen.Name NAVASSOC com.edugility.nomen.NameValue
-	c48:p -> c45:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c64:p -> c59:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 

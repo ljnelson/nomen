@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.mvel.NameResolverFactory
-	c16 [label=<<table title="com.edugility.nomen.mvel.NameResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameResolverFactory.html">
+	c22 [label=<<table title="com.edugility.nomen.mvel.NameResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameResolverFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NameResolverFactory </td></tr>
 		</table></td></tr>
@@ -28,7 +28,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./NameResolverFactory.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.mvel.NameResolver
-	c17 [label=<<table title="com.edugility.nomen.mvel.NameResolver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameResolver.html">
+	c23 [label=<<table title="com.edugility.nomen.mvel.NameResolver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameResolver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NameResolver </td></tr>
 		</table></td></tr>

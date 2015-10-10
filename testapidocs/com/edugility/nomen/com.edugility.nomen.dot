@@ -23,8 +23,22 @@ digraph G {
 <tr><td align="left" balign="left"> + testSyntacticallyInvalidTemplate() </td></tr>
 		</table></td></tr>
 		</table>>, URL="./TestCaseTemplateEvaluation.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// com.edugility.nomen.TestCaseOwnership
+	c1 [label=<<table title="com.edugility.nomen.TestCaseOwnership" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestCaseOwnership.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TestCaseOwnership </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left">  </td></tr>
+		</table></td></tr>
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="left" balign="left"> + TestCaseOwnership() </td></tr>
+<tr><td align="left" balign="left"> + setUp() </td></tr>
+<tr><td align="left" balign="left"> + testOwnershipMonitoring() </td></tr>
+		</table></td></tr>
+		</table>>, URL="./TestCaseOwnership.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.TestCaseNameValue
-	c1 [label=<<table title="com.edugility.nomen.TestCaseNameValue" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestCaseNameValue.html">
+	c2 [label=<<table title="com.edugility.nomen.TestCaseNameValue" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestCaseNameValue.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestCaseNameValue </td></tr>
 		</table></td></tr>
@@ -38,7 +52,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./TestCaseNameValue.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.TestCaseName
-	c2 [label=<<table title="com.edugility.nomen.TestCaseName" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestCaseName.html">
+	c3 [label=<<table title="com.edugility.nomen.TestCaseName" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TestCaseName.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestCaseName </td></tr>
 		</table></td></tr>
@@ -51,10 +65,14 @@ digraph G {
 <tr><td align="left" balign="left"> + testSameNamePutTwice() </td></tr>
 		</table></td></tr>
 		</table>>, URL="./TestCaseName.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// com.edugility.nomen.TestCaseOwnership NAVASSOC com.edugility.nomen.AbstractNamed
+	c1:p -> c4:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// com.edugility.nomen.TestCaseOwnership NAVASSOC com.edugility.nomen.AbstractNamed
+	c1:p -> c4:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.TestCaseName NAVASSOC com.edugility.nomen.AbstractNamed
-	c2:p -> c3:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c3:p -> c4:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.AbstractNamed
-	c3 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c4 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/com/edugility/nomen/AbstractNamed.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractNamed </font></td></tr>
 		</table></td></tr>
@@ -65,11 +83,10 @@ digraph G {
 <tr><td align="left" balign="left"> # AbstractNamed() </td></tr>
 <tr><td align="left" balign="left"> + getName(arg0 : NameType) : Name </td></tr>
 <tr><td align="left" balign="left"> + putName(arg0 : NameType, arg1 : Name) : Name </td></tr>
-<tr><td align="left" balign="left"> # createName(arg0 : NameValue) : Name </td></tr>
 <tr><td align="left" balign="left"> + removeName(arg0 : NameType) : Name </td></tr>
-<tr><td align="left" balign="left"> + getNameTypes() : Set&lt;NameType&gt; </td></tr>
-<tr><td align="left" balign="left"> + getNames() : Collection&lt;Name&gt; </td></tr>
+<tr><td align="left" balign="left"> + getNameTypes() : Set&lt;?&gt; </td></tr>
+<tr><td align="left" balign="left"> + getNames() : Collection&lt;?&gt; </td></tr>
 		</table></td></tr>
-		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/com/edugility/nomen/AbstractNamed.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

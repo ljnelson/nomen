@@ -1,5 +1,6 @@
 <map id="G" name="G">
 <area shape="rect" id="node1_0" href="./TestCaseName.html" title="com.edugility.nomen.TestCaseName" alt="" coords="85,11,270,117"/>
 <area shape="rect" id="node1" href="./TestCaseName.html" title="&lt;TABLE&gt;" alt="" coords="74,6,281,122"/>
-<area shape="rect" id="node3" href="null" title="&lt;TABLE&gt;" alt="" coords="5,171,349,351"/>
+<area shape="rect" id="node3_1" href="http://java.sun.com/j2se/1.4.2/docs/api/com/edugility/nomen/AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="16,177,339,330"/>
+<area shape="rect" id="node3" href="http://java.sun.com/j2se/1.4.2/docs/api/com/edugility/nomen/AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="5,171,349,335"/>
 </map>

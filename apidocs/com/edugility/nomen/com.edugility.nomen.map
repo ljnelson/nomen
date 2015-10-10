@@ -1,16 +1,22 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./Valued.html" title="com.edugility.nomen.Valued" alt="" coords="305,11,442,101"/>
-<area shape="rect" id="node1" href="./Valued.html" title="&lt;TABLE&gt;" alt="" coords="294,6,453,106"/>
-<area shape="rect" id="node6_1" href="./AbstractValued.html" title="com.edugility.nomen.AbstractValued" alt="" coords="265,161,482,330"/>
-<area shape="rect" id="node6" href="./AbstractValued.html" title="&lt;TABLE&gt;" alt="" coords="254,155,493,335"/>
-<area shape="rect" id="node2_2" href="./NameValue.html" title="com.edugility.nomen.NameValue" alt="" coords="15,827,505,1077"/>
-<area shape="rect" id="node2" href="./NameValue.html" title="&lt;TABLE&gt;" alt="" coords="5,822,515,1082"/>
-<area shape="rect" id="node3_3" href="./NameType.html" title="com.edugility.nomen.NameType" alt="" coords="283,534,464,623"/>
-<area shape="rect" id="node3" href="./NameType.html" title="&lt;TABLE&gt;" alt="" coords="272,529,475,629"/>
-<area shape="rect" id="node4_4" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="601,907,879,997"/>
-<area shape="rect" id="node4" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="591,902,889,1002"/>
-<area shape="rect" id="node7_5" href="./AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="651,1137,1016,1306"/>
-<area shape="rect" id="node7" href="./AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="640,1131,1027,1311"/>
-<area shape="rect" id="node5_6" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="510,390,1023,767"/>
-<area shape="rect" id="node5" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="499,385,1034,773"/>
+<area shape="rect" id="node1_0" href="./Valued.html" title="com.edugility.nomen.Valued" alt="" coords="186,11,323,101"/>
+<area shape="rect" id="node1" href="./Valued.html" title="&lt;TABLE&gt;" alt="" coords="175,6,334,106"/>
+<area shape="rect" id="node9_1" href="./AbstractValued.html" title="com.edugility.nomen.AbstractValued" alt="" coords="146,161,363,330"/>
+<area shape="rect" id="node9" href="./AbstractValued.html" title="&lt;TABLE&gt;" alt="" coords="135,155,374,335"/>
+<area shape="rect" id="node2_2" href="./NameValue.html" title="com.edugility.nomen.NameValue" alt="" coords="15,843,505,1093"/>
+<area shape="rect" id="node2" href="./NameValue.html" title="&lt;TABLE&gt;" alt="" coords="5,838,515,1098"/>
+<area shape="rect" id="node3_3" href="./NameType.html" title="com.edugility.nomen.NameType" alt="" coords="25,542,207,631"/>
+<area shape="rect" id="node3" href="./NameType.html" title="&lt;TABLE&gt;" alt="" coords="15,537,217,637"/>
+<area shape="rect" id="node4_4" href="./NameSupport.html" title="com.edugility.nomen.NameSupport" alt="" coords="626,1531,1185,1669"/>
+<area shape="rect" id="node4" href="./NameSupport.html" title="&lt;TABLE&gt;" alt="" coords="615,1526,1195,1674"/>
+<area shape="rect" id="node6_5" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="768,923,1045,1013"/>
+<area shape="rect" id="node6" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="757,918,1056,1018"/>
+<area shape="rect" id="node5_6" href="./NameOwnershipMonitor.html" title="com.edugility.nomen.NameOwnershipMonitor" alt="" coords="863,542,1297,631"/>
+<area shape="rect" id="node5" href="./NameOwnershipMonitor.html" title="&lt;TABLE&gt;" alt="" coords="852,537,1308,637"/>
+<area shape="rect" id="node8_7" href="./MutableNamed.html" title="com.edugility.nomen.MutableNamed" alt="" coords="608,1153,973,1258"/>
+<area shape="rect" id="node8" href="./MutableNamed.html" title="&lt;TABLE&gt;" alt="" coords="597,1147,984,1263"/>
+<area shape="rect" id="node7_8" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="303,390,817,783"/>
+<area shape="rect" id="node7" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="293,385,827,789"/>
+<area shape="rect" id="node10_9" href="./AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="608,1318,973,1471"/>
+<area shape="rect" id="node10" href="./AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="597,1313,984,1477"/>
 </map>

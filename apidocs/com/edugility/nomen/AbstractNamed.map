@@ -1,8 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="175,11,452,101"/>
-<area shape="rect" id="node1" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="164,6,463,106"/>
-<area shape="rect" id="node3_1" href="./AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="16,161,381,330"/>
-<area shape="rect" id="node3" href="./AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="5,155,392,335"/>
-<area shape="rect" id="node2_2" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="57,390,570,767"/>
-<area shape="rect" id="node2" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="46,385,581,773"/>
+<area shape="rect" id="node1_0" href="./NameSupport.html" title="com.edugility.nomen.NameSupport" alt="" coords="15,518,574,655"/>
+<area shape="rect" id="node1" href="./NameSupport.html" title="&lt;TABLE&gt;" alt="" coords="5,513,585,661"/>
+<area shape="rect" id="node2_1" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="619,390,1133,783"/>
+<area shape="rect" id="node2" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="609,385,1143,789"/>
+<area shape="rect" id="node3_2" href="./MutableNamed.html" title="com.edugility.nomen.MutableNamed" alt="" coords="403,11,768,117"/>
+<area shape="rect" id="node3" href="./MutableNamed.html" title="&lt;TABLE&gt;" alt="" coords="392,6,779,122"/>
+<area shape="rect" id="node4_3" href="./AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="403,177,768,330"/>
+<area shape="rect" id="node4" href="./AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="392,171,779,335"/>
 </map>

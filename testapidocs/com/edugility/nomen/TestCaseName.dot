@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.TestCaseName
-	c10 [label=<<table title="com.edugility.nomen.TestCaseName" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./TestCaseName.html">
+	c13 [label=<<table title="com.edugility.nomen.TestCaseName" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./TestCaseName.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TestCaseName </td></tr>
 		</table></td></tr>
@@ -24,9 +24,9 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./TestCaseName.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.TestCaseName NAVASSOC com.edugility.nomen.AbstractNamed
-	c10:p -> c13:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c13:p -> c17:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.AbstractNamed
-	c13 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
+	c17 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/com/edugility/nomen/AbstractNamed.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractNamed </font></td></tr>
 		</table></td></tr>
@@ -37,11 +37,10 @@ digraph G {
 <tr><td align="left" balign="left"> # AbstractNamed() </td></tr>
 <tr><td align="left" balign="left"> + getName(arg0 : NameType) : Name </td></tr>
 <tr><td align="left" balign="left"> + putName(arg0 : NameType, arg1 : Name) : Name </td></tr>
-<tr><td align="left" balign="left"> # createName(arg0 : NameValue) : Name </td></tr>
 <tr><td align="left" balign="left"> + removeName(arg0 : NameType) : Name </td></tr>
-<tr><td align="left" balign="left"> + getNameTypes() : Set&lt;NameType&gt; </td></tr>
-<tr><td align="left" balign="left"> + getNames() : Collection&lt;Name&gt; </td></tr>
+<tr><td align="left" balign="left"> + getNameTypes() : Set&lt;?&gt; </td></tr>
+<tr><td align="left" balign="left"> + getNames() : Collection&lt;?&gt; </td></tr>
 		</table></td></tr>
-		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/com/edugility/nomen/AbstractNamed.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 
