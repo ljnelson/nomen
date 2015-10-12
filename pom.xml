@@ -153,6 +153,9 @@
     <stylesheetfile>css/styles.css</stylesheetfile>
     -->
 
+    <!-- maven-release-plugin properties -->
+    <goals>deploy site-deploy</goals>
+
     <umlGraphVersion>5.6.6</umlGraphVersion>
 
   </properties>
