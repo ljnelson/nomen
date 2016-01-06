@@ -1,16 +1,16 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./NameSupport.html" title="com.edugility.nomen.NameSupport" alt="" coords="15,139,574,277"/>
-<area shape="rect" id="node1" href="./NameSupport.html" title="&lt;TABLE&gt;" alt="" coords="5,134,585,282"/>
-<area shape="rect" id="node3_1" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="683,465,960,554"/>
-<area shape="rect" id="node3" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="672,459,971,559"/>
-<area shape="rect" id="node2_2" href="./NameOwnershipMonitor.html" title="com.edugility.nomen.NameOwnershipMonitor" alt="" coords="620,163,1055,253"/>
-<area shape="rect" id="node2" href="./NameOwnershipMonitor.html" title="&lt;TABLE&gt;" alt="" coords="609,158,1065,258"/>
-<area shape="rect" id="node5_3" href="./MutableNamed.html" title="com.edugility.nomen.MutableNamed" alt="" coords="87,654,452,759"/>
-<area shape="rect" id="node5" href="./MutableNamed.html" title="&lt;TABLE&gt;" alt="" coords="76,649,463,765"/>
-<area shape="rect" id="node6_4" href="./mvel/NameResolverFactory.html" title="com.edugility.nomen.mvel.NameResolverFactory" alt="" coords="1161,622,1965,791"/>
-<area shape="rect" id="node6" href="./mvel/NameResolverFactory.html" title="&lt;TABLE&gt;" alt="" coords="1150,617,1975,797"/>
-<area shape="rect" id="node7_5" href="./mvel/NameResolver.html" title="com.edugility.nomen.mvel.NameResolver" alt="" coords="498,614,1115,799"/>
-<area shape="rect" id="node7" href="./mvel/NameResolver.html" title="&lt;TABLE&gt;" alt="" coords="487,609,1126,805"/>
-<area shape="rect" id="node4_6" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="1130,11,1643,405"/>
-<area shape="rect" id="node4" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="1119,6,1654,410"/>
+<area shape="rect" id="node1_0" href="./NameSupport.html" title="com.edugility.nomen.NameSupport" alt="" coords="15,163,574,301"/>
+<area shape="rect" id="node1" href="./NameSupport.html" title="&lt;TABLE&gt;" alt="" coords="5,158,585,306"/>
+<area shape="rect" id="node3_1" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="683,513,960,602"/>
+<area shape="rect" id="node3" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="672,507,971,607"/>
+<area shape="rect" id="node2_2" href="./NameOwnershipMonitor.html" title="com.edugility.nomen.NameOwnershipMonitor" alt="" coords="620,187,1055,277"/>
+<area shape="rect" id="node2" href="./NameOwnershipMonitor.html" title="&lt;TABLE&gt;" alt="" coords="609,182,1065,282"/>
+<area shape="rect" id="node5_3" href="./MutableNamed.html" title="com.edugility.nomen.MutableNamed" alt="" coords="87,702,452,807"/>
+<area shape="rect" id="node5" href="./MutableNamed.html" title="&lt;TABLE&gt;" alt="" coords="76,697,463,813"/>
+<area shape="rect" id="node6_4" href="./mvel/NameResolverFactory.html" title="com.edugility.nomen.mvel.NameResolverFactory" alt="" coords="1161,662,1965,847"/>
+<area shape="rect" id="node6" href="./mvel/NameResolverFactory.html" title="&lt;TABLE&gt;" alt="" coords="1150,657,1975,853"/>
+<area shape="rect" id="node7_5" href="./mvel/NameResolver.html" title="com.edugility.nomen.mvel.NameResolver" alt="" coords="498,662,1115,847"/>
+<area shape="rect" id="node7" href="./mvel/NameResolver.html" title="&lt;TABLE&gt;" alt="" coords="487,657,1126,853"/>
+<area shape="rect" id="node4_6" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="1130,11,1643,453"/>
+<area shape="rect" id="node4" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="1119,6,1654,458"/>
 </map>

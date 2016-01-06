@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.NameValue
-	c83 [label=<<table title="com.edugility.nomen.NameValue" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameValue.html">
+	c82 [label=<<table title="com.edugility.nomen.NameValue" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NameValue.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NameValue </td></tr>
 		</table></td></tr>
@@ -33,7 +33,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./NameValue.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.Named
-	c87 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Named.html">
+	c86 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Named.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Named </td></tr>
@@ -46,7 +46,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./Named.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.Name
-	c88 [label=<<table title="com.edugility.nomen.Name" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Name.html">
+	c87 [label=<<table title="com.edugility.nomen.Name" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Name.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Name </td></tr>
 		</table></td></tr>
@@ -62,8 +62,11 @@ digraph G {
 <tr><td align="left" balign="left"> + setNamed(named : Named) </td></tr>
 <tr><td align="left" balign="left"> + getNameValue() : NameValue </td></tr>
 <tr><td align="left" balign="left"> + setNameValue(nameValue : NameValue) </td></tr>
+<tr><td align="left" balign="left"> # compileTemplate(template : String) : Object </td></tr>
 <tr><td align="left" balign="left"> + getValue() : String </td></tr>
 <tr><td align="left" balign="left"> # toString(object : Object) : String </td></tr>
+<tr><td align="left" balign="left"> # canExecute(compiledTemplate : Object) : boolean </td></tr>
+<tr><td align="left" balign="left"> # execute(compiledTemplate : Object) : Object </td></tr>
 <tr><td align="left" balign="left"> # computeValue() : String </td></tr>
 <tr><td align="left" balign="left"> + setValue(value : String) </td></tr>
 <tr><td align="left" balign="left"> # createNameValue(value : String) : NameValue </td></tr>
@@ -78,7 +81,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./Name.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.AbstractValued
-	c90 [label=<<table title="com.edugility.nomen.AbstractValued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractValued.html">
+	c89 [label=<<table title="com.edugility.nomen.AbstractValued" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractValued.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractValued </font></td></tr>
 		</table></td></tr>
@@ -96,7 +99,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./AbstractValued.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.AbstractNamed
-	c91 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractNamed.html">
+	c90 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractNamed.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractNamed </font></td></tr>
 		</table></td></tr>
@@ -113,17 +116,18 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./AbstractNamed.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.mvel.NameResolverFactory
-	c92 [label=<<table title="com.edugility.nomen.mvel.NameResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./mvel/NameResolverFactory.html">
+	c91 [label=<<table title="com.edugility.nomen.mvel.NameResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./mvel/NameResolverFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> com.edugility.nomen.mvel.NameResolverFactory </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
+<tr><td align="left" balign="left"> # named : com.edugility.nomen.Named </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + NameResolverFactory(named : com.edugility.nomen.Named) </td></tr>
 <tr><td align="left" balign="left"> + getName(nameType : com.edugility.nomen.NameType) : com.edugility.nomen.Name </td></tr>
 <tr><td align="left" balign="left"> + isResolveable(name : java.lang.String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + getVariableResolver(name : java.lang.String) : org.mvel2.integration.VariableResolver </td></tr>
 <tr><td align="left" balign="left"> # createNameResolver(named : com.edugility.nomen.Named, name : java.lang.String) : com.edugility.nomen.mvel.NameResolver </td></tr>
 <tr><td align="left" balign="left"> + isTarget(name : java.lang.String) : boolean </td></tr>
 <tr><td align="left" balign="left"> + createVariable(name : java.lang.String, value : java.lang.Object) : org.mvel2.integration.VariableResolver </td></tr>
@@ -131,38 +135,20 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./mvel/NameResolverFactory.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//com.edugility.nomen.NameValue extends com.edugility.nomen.AbstractValued
-	c90:p -> c83:p [dir=back,arrowtail=empty];
+	c89:p -> c82:p [dir=back,arrowtail=empty];
 	//com.edugility.nomen.Name extends com.edugility.nomen.AbstractValued
-	c90:p -> c88:p [dir=back,arrowtail=empty];
+	c89:p -> c87:p [dir=back,arrowtail=empty];
 	//com.edugility.nomen.mvel.NameResolverFactory implements com.edugility.nomen.Named
-	c87:p -> c92:p [dir=back,arrowtail=empty,style=dashed];
+	c86:p -> c91:p [dir=back,arrowtail=empty,style=dashed];
 	// com.edugility.nomen.Name NAVASSOC com.edugility.nomen.Named
-	c88:p -> c87:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c87:p -> c86:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.Name NAVASSOC com.edugility.nomen.NameValue
-	c88:p -> c83:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c87:p -> c82:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.Name NAVASSOC com.edugility.nomen.mvel.NameResolverFactory
-	c88:p -> c92:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// com.edugility.nomen.Name NAVASSOC org.mvel2.templates.CompiledTemplate
-	c88:p -> c95:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c87:p -> c91:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.AbstractNamed NAVASSOC com.edugility.nomen.Name
-	c91:p -> c88:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c90:p -> c87:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.mvel.NameResolverFactory NAVASSOC com.edugility.nomen.Named
-	c92:p -> c87:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.mvel2.templates.CompiledTemplate
-	c95 [label=<<table title="org.mvel2.templates.CompiledTemplate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/templates/CompiledTemplate.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> org.mvel2.templates.CompiledTemplate </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
-		</table></td></tr>
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left"> + CompiledTemplate(arg0 : char[], arg1 : org.mvel2.templates.res.Node) </td></tr>
-<tr><td align="left" balign="left"> + getTemplate() : char[] </td></tr>
-<tr><td align="left" balign="left"> + setTemplate(arg0 : char[]) </td></tr>
-<tr><td align="left" balign="left"> + getRoot() : org.mvel2.templates.res.Node </td></tr>
-<tr><td align="left" balign="left"> + setRoot(arg0 : org.mvel2.templates.res.Node) </td></tr>
-		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/templates/CompiledTemplate.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	c91:p -> c86:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 

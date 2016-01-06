@@ -1,12 +1,12 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./Valued.html" title="com.edugility.nomen.Valued" alt="" coords="104,11,241,101"/>
-<area shape="rect" id="node1" href="./Valued.html" title="&lt;TABLE&gt;" alt="" coords="93,6,252,106"/>
-<area shape="rect" id="node5_1" href="./AbstractValued.html" title="com.edugility.nomen.AbstractValued" alt="" coords="64,161,281,330"/>
-<area shape="rect" id="node5" href="./AbstractValued.html" title="&lt;TABLE&gt;" alt="" coords="53,155,292,335"/>
-<area shape="rect" id="node2_2" href="./NameValue.html" title="com.edugility.nomen.NameValue" alt="" coords="55,843,544,1093"/>
-<area shape="rect" id="node2" href="./NameValue.html" title="&lt;TABLE&gt;" alt="" coords="44,838,555,1098"/>
-<area shape="rect" id="node3_3" href="./NameType.html" title="com.edugility.nomen.NameType" alt="" coords="82,542,263,631"/>
-<area shape="rect" id="node3" href="./NameType.html" title="&lt;TABLE&gt;" alt="" coords="71,537,274,637"/>
-<area shape="rect" id="node4_4" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="309,390,823,783"/>
-<area shape="rect" id="node4" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="299,385,833,789"/>
+<area shape="rect" id="node1_0" href="./Valued.html" title="com.edugility.nomen.Valued" alt="" coords="110,11,248,101"/>
+<area shape="rect" id="node1" href="./Valued.html" title="&lt;TABLE&gt;" alt="" coords="100,6,258,106"/>
+<area shape="rect" id="node5_1" href="./AbstractValued.html" title="com.edugility.nomen.AbstractValued" alt="" coords="70,161,288,330"/>
+<area shape="rect" id="node5" href="./AbstractValued.html" title="&lt;TABLE&gt;" alt="" coords="60,155,298,335"/>
+<area shape="rect" id="node2_2" href="./NameValue.html" title="com.edugility.nomen.NameValue" alt="" coords="61,891,550,1141"/>
+<area shape="rect" id="node2" href="./NameValue.html" title="&lt;TABLE&gt;" alt="" coords="50,886,561,1146"/>
+<area shape="rect" id="node3_3" href="./NameType.html" title="com.edugility.nomen.NameType" alt="" coords="88,566,270,655"/>
+<area shape="rect" id="node3" href="./NameType.html" title="&lt;TABLE&gt;" alt="" coords="78,561,280,661"/>
+<area shape="rect" id="node4_4" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="316,390,829,831"/>
+<area shape="rect" id="node4" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="305,385,840,837"/>
 </map>

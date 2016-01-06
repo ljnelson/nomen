@@ -42,8 +42,11 @@ digraph G {
 <tr><td align="left" balign="left"> + setNamed(named : Named) </td></tr>
 <tr><td align="left" balign="left"> + getNameValue() : NameValue </td></tr>
 <tr><td align="left" balign="left"> + setNameValue(nameValue : NameValue) </td></tr>
+<tr><td align="left" balign="left"> # compileTemplate(template : String) : Object </td></tr>
 <tr><td align="left" balign="left"> + getValue() : String </td></tr>
 <tr><td align="left" balign="left"> # toString(object : Object) : String </td></tr>
+<tr><td align="left" balign="left"> # canExecute(compiledTemplate : Object) : boolean </td></tr>
+<tr><td align="left" balign="left"> # execute(compiledTemplate : Object) : Object </td></tr>
 <tr><td align="left" balign="left"> # computeValue() : String </td></tr>
 <tr><td align="left" balign="left"> + setValue(value : String) </td></tr>
 <tr><td align="left" balign="left"> # createNameValue(value : String) : NameValue </td></tr>

@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.Named
-	c75 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Named.html">
+	c74 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Named.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Named </td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./Named.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.MutableNamed
-	c77 [label=<<table title="com.edugility.nomen.MutableNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MutableNamed.html">
+	c76 [label=<<table title="com.edugility.nomen.MutableNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MutableNamed.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> MutableNamed </td></tr>
@@ -37,7 +37,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./MutableNamed.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.AbstractNamed
-	c79 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractNamed.html">
+	c78 [label=<<table title="com.edugility.nomen.AbstractNamed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractNamed.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractNamed </font></td></tr>
 		</table></td></tr>
@@ -54,8 +54,8 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./AbstractNamed.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//com.edugility.nomen.MutableNamed implements com.edugility.nomen.Named
-	c75:p -> c77:p [dir=back,arrowtail=empty,style=dashed];
+	c74:p -> c76:p [dir=back,arrowtail=empty,style=dashed];
 	//com.edugility.nomen.AbstractNamed implements com.edugility.nomen.MutableNamed
-	c77:p -> c79:p [dir=back,arrowtail=empty,style=dashed];
+	c76:p -> c78:p [dir=back,arrowtail=empty,style=dashed];
 }
 

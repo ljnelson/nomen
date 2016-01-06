@@ -1,16 +1,14 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./NameValue.html" title="com.edugility.nomen.NameValue" alt="" coords="15,694,505,943"/>
-<area shape="rect" id="node1" href="./NameValue.html" title="&lt;TABLE&gt;" alt="" coords="5,689,515,949"/>
-<area shape="rect" id="node2_1" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="551,774,828,863"/>
-<area shape="rect" id="node2" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="540,769,839,869"/>
-<area shape="rect" id="node6_2" href="./mvel/NameResolverFactory.html" title="com.edugility.nomen.mvel.NameResolverFactory" alt="" coords="287,1003,1091,1173"/>
-<area shape="rect" id="node6" href="./mvel/NameResolverFactory.html" title="&lt;TABLE&gt;" alt="" coords="277,998,1102,1178"/>
-<area shape="rect" id="node3_3" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="433,241,946,634"/>
-<area shape="rect" id="node3" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="422,235,957,639"/>
-<area shape="rect" id="node14_4" href="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/templates/CompiledTemplate.html" title="org.mvel2.templates.CompiledTemplate" alt="" coords="925,750,1369,887"/>
-<area shape="rect" id="node14" href="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/templates/CompiledTemplate.html" title="&lt;TABLE&gt;" alt="" coords="914,745,1379,893"/>
-<area shape="rect" id="node4_5" href="./AbstractValued.html" title="com.edugility.nomen.AbstractValued" alt="" coords="198,11,415,181"/>
-<area shape="rect" id="node4" href="./AbstractValued.html" title="&lt;TABLE&gt;" alt="" coords="187,6,426,186"/>
-<area shape="rect" id="node5_6" href="./AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="507,19,872,173"/>
-<area shape="rect" id="node5" href="./AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="496,14,883,178"/>
+<area shape="rect" id="node1_0" href="./NameValue.html" title="com.edugility.nomen.NameValue" alt="" coords="15,742,505,991"/>
+<area shape="rect" id="node1" href="./NameValue.html" title="&lt;TABLE&gt;" alt="" coords="5,737,515,997"/>
+<area shape="rect" id="node2_1" href="./Named.html" title="com.edugility.nomen.Named" alt="" coords="551,822,828,911"/>
+<area shape="rect" id="node2" href="./Named.html" title="&lt;TABLE&gt;" alt="" coords="540,817,839,917"/>
+<area shape="rect" id="node6_2" href="./mvel/NameResolverFactory.html" title="com.edugility.nomen.mvel.NameResolverFactory" alt="" coords="287,1051,1091,1237"/>
+<area shape="rect" id="node6" href="./mvel/NameResolverFactory.html" title="&lt;TABLE&gt;" alt="" coords="277,1046,1102,1242"/>
+<area shape="rect" id="node3_3" href="./Name.html" title="com.edugility.nomen.Name" alt="" coords="421,241,934,682"/>
+<area shape="rect" id="node3" href="./Name.html" title="&lt;TABLE&gt;" alt="" coords="410,235,945,687"/>
+<area shape="rect" id="node4_4" href="./AbstractValued.html" title="com.edugility.nomen.AbstractValued" alt="" coords="209,11,426,181"/>
+<area shape="rect" id="node4" href="./AbstractValued.html" title="&lt;TABLE&gt;" alt="" coords="198,6,437,186"/>
+<area shape="rect" id="node5_5" href="./AbstractNamed.html" title="com.edugility.nomen.AbstractNamed" alt="" coords="495,19,860,173"/>
+<area shape="rect" id="node5" href="./AbstractNamed.html" title="&lt;TABLE&gt;" alt="" coords="484,14,871,178"/>
 </map>

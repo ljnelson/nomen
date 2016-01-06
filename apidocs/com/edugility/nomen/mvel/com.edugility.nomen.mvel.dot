@@ -15,12 +15,13 @@ digraph G {
 <tr><td align="center" balign="center"> NameResolverFactory </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
+<tr><td align="left" balign="left"> # named : Named </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + NameResolverFactory(named : Named) </td></tr>
 <tr><td align="left" balign="left"> + getName(nameType : NameType) : Name </td></tr>
 <tr><td align="left" balign="left"> + isResolveable(name : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + getVariableResolver(name : String) : VariableResolver </td></tr>
 <tr><td align="left" balign="left"> # createNameResolver(named : Named, name : String) : NameResolver </td></tr>
 <tr><td align="left" balign="left"> + isTarget(name : String) : boolean </td></tr>
 <tr><td align="left" balign="left"> + createVariable(name : String, value : Object) : VariableResolver </td></tr>

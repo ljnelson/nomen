@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.Named
-	c126 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Named.html">
+	c124 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Named.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> com.edugility.nomen.Named </td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../Named.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.Name
-	c127 [label=<<table title="com.edugility.nomen.Name" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Name.html">
+	c125 [label=<<table title="com.edugility.nomen.Name" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Name.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> com.edugility.nomen.Name </td></tr>
 		</table></td></tr>
@@ -39,8 +39,11 @@ digraph G {
 <tr><td align="left" balign="left"> + setNamed(named : com.edugility.nomen.Named) </td></tr>
 <tr><td align="left" balign="left"> + getNameValue() : com.edugility.nomen.NameValue </td></tr>
 <tr><td align="left" balign="left"> + setNameValue(nameValue : com.edugility.nomen.NameValue) </td></tr>
+<tr><td align="left" balign="left"> # compileTemplate(template : java.lang.String) : java.lang.Object </td></tr>
 <tr><td align="left" balign="left"> + getValue() : java.lang.String </td></tr>
 <tr><td align="left" balign="left"> # toString(object : java.lang.Object) : java.lang.String </td></tr>
+<tr><td align="left" balign="left"> # canExecute(compiledTemplate : java.lang.Object) : boolean </td></tr>
+<tr><td align="left" balign="left"> # execute(compiledTemplate : java.lang.Object) : java.lang.Object </td></tr>
 <tr><td align="left" balign="left"> # computeValue() : java.lang.String </td></tr>
 <tr><td align="left" balign="left"> + setValue(value : java.lang.String) </td></tr>
 <tr><td align="left" balign="left"> # createNameValue(value : java.lang.String) : com.edugility.nomen.NameValue </td></tr>
@@ -55,17 +58,18 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../Name.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.mvel.NameResolverFactory
-	c131 [label=<<table title="com.edugility.nomen.mvel.NameResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./NameResolverFactory.html">
+	c129 [label=<<table title="com.edugility.nomen.mvel.NameResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./NameResolverFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NameResolverFactory </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="left" balign="left">  </td></tr>
+<tr><td align="left" balign="left"> # named : Named </td></tr>
 		</table></td></tr>
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + NameResolverFactory(named : Named) </td></tr>
 <tr><td align="left" balign="left"> + getName(nameType : NameType) : Name </td></tr>
 <tr><td align="left" balign="left"> + isResolveable(name : String) : boolean </td></tr>
+<tr><td align="left" balign="left"> + getVariableResolver(name : String) : VariableResolver </td></tr>
 <tr><td align="left" balign="left"> # createNameResolver(named : Named, name : String) : NameResolver </td></tr>
 <tr><td align="left" balign="left"> + isTarget(name : String) : boolean </td></tr>
 <tr><td align="left" balign="left"> + createVariable(name : String, value : Object) : VariableResolver </td></tr>
@@ -73,17 +77,17 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./NameResolverFactory.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//com.edugility.nomen.mvel.NameResolverFactory extends org.mvel2.integration.impl.BaseVariableResolverFactory
-	c133:p -> c131:p [dir=back,arrowtail=empty];
+	c131:p -> c129:p [dir=back,arrowtail=empty];
 	//com.edugility.nomen.mvel.NameResolverFactory implements com.edugility.nomen.Named
-	c126:p -> c131:p [dir=back,arrowtail=empty,style=dashed];
+	c124:p -> c129:p [dir=back,arrowtail=empty,style=dashed];
 	// com.edugility.nomen.Name NAVASSOC com.edugility.nomen.Named
-	c127:p -> c126:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c125:p -> c124:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.Name NAVASSOC com.edugility.nomen.mvel.NameResolverFactory
-	c127:p -> c131:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c125:p -> c129:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.mvel.NameResolverFactory NAVASSOC com.edugility.nomen.Named
-	c131:p -> c126:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c129:p -> c124:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.mvel2.integration.impl.BaseVariableResolverFactory
-	c133 [label=<<table title="org.mvel2.integration.impl.BaseVariableResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/integration/impl/BaseVariableResolverFactory.html">
+	c131 [label=<<table title="org.mvel2.integration.impl.BaseVariableResolverFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> org.mvel2.integration.impl.BaseVariableResolverFactory </font></td></tr>
 		</table></td></tr>
@@ -116,6 +120,6 @@ digraph G {
 <tr><td align="left" balign="left"> + tiltFlag() : boolean </td></tr>
 <tr><td align="left" balign="left"> + setTiltFlag(arg0 : boolean) </td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/integration/impl/BaseVariableResolverFactory.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 

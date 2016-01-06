@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// com.edugility.nomen.NameType
-	c110 [label=<<table title="com.edugility.nomen.NameType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../NameType.html">
+	c108 [label=<<table title="com.edugility.nomen.NameType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../NameType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> com.edugility.nomen.NameType </td></tr>
 		</table></td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../NameType.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.Named
-	c113 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Named.html">
+	c111 [label=<<table title="com.edugility.nomen.Named" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Named.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> com.edugility.nomen.Named </td></tr>
@@ -36,7 +36,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="../Named.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.mvel.NameResolver
-	c119 [label=<<table title="com.edugility.nomen.mvel.NameResolver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./NameResolver.html">
+	c117 [label=<<table title="com.edugility.nomen.mvel.NameResolver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./NameResolver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NameResolver </td></tr>
 		</table></td></tr>
@@ -55,15 +55,15 @@ digraph G {
 		</table></td></tr>
 		</table>>, URL="./NameResolver.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//com.edugility.nomen.mvel.NameResolver implements org.mvel2.integration.VariableResolver
-	c120:p -> c119:p [dir=back,arrowtail=empty,style=dashed];
+	c118:p -> c117:p [dir=back,arrowtail=empty,style=dashed];
 	//com.edugility.nomen.mvel.NameResolver implements com.edugility.nomen.Named
-	c113:p -> c119:p [dir=back,arrowtail=empty,style=dashed];
+	c111:p -> c117:p [dir=back,arrowtail=empty,style=dashed];
 	// com.edugility.nomen.mvel.NameResolver NAVASSOC com.edugility.nomen.Named
-	c119:p -> c113:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c117:p -> c111:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// com.edugility.nomen.mvel.NameResolver NAVASSOC com.edugility.nomen.NameType
-	c119:p -> c110:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c117:p -> c108:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.mvel2.integration.VariableResolver
-	c120 [label=<<table title="org.mvel2.integration.VariableResolver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/integration/VariableResolver.html">
+	c118 [label=<<table title="org.mvel2.integration.VariableResolver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> org.mvel2.integration.VariableResolver </td></tr>
@@ -79,6 +79,6 @@ digraph G {
 <tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + getValue() : java.lang.Object </font></td></tr>
 <tr><td align="left" balign="left"><font face="Helvetica-Oblique" point-size="10.0"> + setValue(arg0 : java.lang.Object) </font></td></tr>
 		</table></td></tr>
-		</table>>, URL="http://java.sun.com/j2se/1.4.2/docs/api/org/mvel2/integration/VariableResolver.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
+		</table>>, URL="null", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
 
