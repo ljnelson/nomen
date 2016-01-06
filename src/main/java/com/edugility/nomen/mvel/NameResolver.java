@@ -158,8 +158,12 @@ public final class NameResolver implements VariableResolver, Named {
    *
    * <p>This method never returns {@code null}.</p>
    *
+   * <p><em>Name</em> in this method refers to the name of a variable,
+   * not to a {@link Name}.</p>
+   *
    * @return a non-{@code null} {@link String} naming the {@link Name}
-   * whose value will be returned by the {@link #getValue()} method
+   * whose {@linkplain Name#getValue() value} will be returned by the
+   * {@link #getValue()} method
    *
    * @see #getValue()
    *

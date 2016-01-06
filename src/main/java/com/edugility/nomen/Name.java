@@ -162,10 +162,8 @@ public class Name extends AbstractValued {
   private transient NameResolverFactory nameResolverFactory;
 
   /**
-   * The {@link CompiledTemplate} that will be {@linkplain
-   * TemplateRuntime#execute(CompiledTemplate, Object,
-   * VariableResolverFactory) executed} by the {@link #getValue()}
-   * method.
+   * The {@link Object} representing a compiled template that will be
+   * executed by the {@link #getValue()} method.
    *
    * @see #installTemplate()
    *
@@ -175,7 +173,7 @@ public class Name extends AbstractValued {
    *
    * @see CompiledTemplate
    */
-  private transient CompiledTemplate compiledTemplate;
+  private transient Object compiledTemplate;
 
   /**
    * A {@link PropertyChangeSupport} that assists with firing Java
@@ -294,6 +292,8 @@ public class Name extends AbstractValued {
    * taken.
    *
    * @param named the new owner; may be {@code null}
+   *
+   * @see #getNamed()
    */
   public void setNamed(final Named named) {
     final Named old = this.getNamed();
@@ -308,6 +308,7 @@ public class Name extends AbstractValued {
     }
   }
 
+  
   /**
    * Returns the {@link NameValue} fundamentally bound to this {@link
    * Name}.
@@ -363,16 +364,15 @@ public class Name extends AbstractValued {
     }
   }
 
+
   /**
    * If the {@link #compiledTemplate} field is {@code null} and the
    * {@linkplain #getNameValue() affiliated <code>NameValue</code>} is
    * non-{@code null}, {@linkplain NameValue#isAtomic() is not atomic}
    * and its {@linkplain NameValue#getValue() value} is non-{@code
-   * null}, {@linkplain TemplateCompiler#compileTemplate(String)
-   * compiles} that value for quick {@linkplain
-   * TemplateRuntime#execute(CompiledTemplate, Object,
-   * VariableResolverFactory) execution} later by the {@link
-   * #getValue()} method.
+   * null}, {@linkplain #compileTemplate(String) compiles} that value
+   * for quick {@linkplain #execute(Object) execution} later by the
+   * {@link #getValue()} method.
    *
    * <h3>Design Notes</h3>
    *
@@ -381,6 +381,10 @@ public class Name extends AbstractValued {
    *
    * @exception IllegalStateException if a template compilation error
    * occurs
+   *
+   * @see #compileTemplate(String)
+   *
+   * @see #execute(Object)
    *
    * @see #getNameValue()
    *
@@ -394,11 +398,7 @@ public class Name extends AbstractValued {
       if (nv != null && !nv.isAtomic()) {
         final String template = nv.getValue();
         if (template != null) {
-          try {
-            this.compiledTemplate = TemplateCompiler.compileTemplate(template);
-          } catch (final CompileException wrapMe) {
-            throw new IllegalStateException(wrapMe);
-          }
+          this.compiledTemplate = this.compileTemplate(template);
           assert this.compiledTemplate != null;
           this.firePropertyChange("compiledTemplate", null, this.compiledTemplate);
         }          
@@ -407,11 +407,43 @@ public class Name extends AbstractValued {
   }
 
   /**
+   * Interprets the supplied {@code template} as the source code of a
+   * template and compiles it into an implementation-specific
+   * representation that can subsequently be executed efficiently.
+   *
+   * <p>This method may return {@code null}.</p>
+   *
+   * @param template the source code of the template to be compiled;
+   * may be {@code null} in which case {@code null} will be returned
+   *
+   * @return an {@link Object} representing the compilation of the
+   * source code, or {@code null}
+   *
+   * @exception IllegalStateException if there was a problem compiling
+   * the template
+   */
+  protected Object compileTemplate(final String template) {
+    final Object returnValue;
+    if (template == null) {
+      returnValue = null;
+    } else {
+      Object temp = null;
+      try {
+        temp = TemplateCompiler.compileTemplate(template);
+      } catch (final CompileException wrapMe) {
+        throw new IllegalStateException(wrapMe);
+      } finally {
+        returnValue = temp;
+      }
+    }
+    return returnValue;
+  }
+
+  /**
    * Returns the result of evaluating this {@link Name}'s {@linkplain
-   * #getNameValue() associated <code>NameValue</code>} against this
-   * {@link Name}'s {@linkplain #getNamed() associated
-   * <code>Named</code>} as an <a
-   * href="http://mvel.codehaus.org/">MVEL template</a>.
+   * #getNameValue() associated, possibly non-atomic
+   * <code>NameValue</code>} against this {@link Name}'s {@linkplain
+   * #getNamed() associated <code>Named</code>}.
    *
    * <p>This method never returns {@code null}.</p>
    *
@@ -460,6 +492,73 @@ public class Name extends AbstractValued {
   }
 
   /**
+   * Returns {@code true} if the supplied {@code compiledTemplate} is
+   * an executable representation of a template that was previously
+   * returned by the {@link #compileTemplate(String)} method.
+   *
+   * <p>This method is called by the default implementation of {@link
+   * #computeValue()}.</p>
+   *
+   * @param compiledTemplate the template to test; may be {@code null}
+   *
+   * @return {@code true} if the supplied {@code compiledTemplate} is
+   * something that was produced by the {@link
+   * #compileTemplate(String)} method and can be executed by the
+   * {@link #execute(Object)} method; {@code false} in all other cases
+   *
+   * @see #compileTemplate(String)
+   *
+   * @see #execute(Object)
+   *
+   * @see #computeValue()
+   */
+  protected boolean canExecute(final Object compiledTemplate) {
+    return compiledTemplate instanceof CompiledTemplate;
+  }
+
+  /**
+   * Executes the supplied {@code compiledTemplate} and returns the
+   * result.
+   *
+   * <p>This method may return {@code null}.</p>
+   *
+   * <p>If the supplied {@link Object} cannot be executed because it
+   * is the wrong sort of {@link Object} or if it is otherwise
+   * determined to be an invalid argument, {@code null} will be
+   * returned.  Overrides of this method must conform to this
+   * requirement.</p>
+   *
+   * <p>This method is called by the default implementation of {@link
+   * #computeValue()}.</p>
+   *
+   * @param compiledTemplate a template returned by the {@link
+   * #compileTemplate(String)} method; may be {@code null}
+   *
+   * @return the result of executing the supplied {@code
+   * compiledTemplate}, or {@code null}
+   *
+   * @exception IllegalStateException if there was a problem with
+   * execution
+   *
+   * @see #canExecute(Object)
+   *
+   * @see #compileTemplate(String)
+   */
+  protected Object execute(final Object compiledTemplate) {
+    Object returnValue = null;
+    if (compiledTemplate instanceof CompiledTemplate) {
+      try {
+        returnValue = TemplateRuntime.execute((CompiledTemplate)compiledTemplate, this.getNamed(), this.nameResolverFactory);
+      } catch (final IllegalStateException throwMe) {
+        throw throwMe;
+      } catch (final RuntimeException wrapMe) {          
+        throw new IllegalStateException(wrapMe);
+      }
+    }
+    return returnValue;
+  }
+  
+  /**
    * Computes and returns the most up-to-date value possible for this
    * {@link Name}.
    *
@@ -473,13 +572,17 @@ public class Name extends AbstractValued {
    *
    * @exception IllegalStateException if there was a problem compiling
    * a template
+   *
+   * @see #canExecute(Object)
+   *
+   * @see #execute(Object)
    */
   protected String computeValue() {
     final String returnValue;
     final NameValue nv = this.getNameValue();
     if (nv == null) {
       returnValue = "";
-    } else if (nv.isAtomic() || this.compiledTemplate == null) {
+    } else if (nv.isAtomic() || !this.canExecute(this.compiledTemplate)) {
       final Object rawValue = nv.getValue();
       if (rawValue == null) {
         returnValue = "";
@@ -487,15 +590,7 @@ public class Name extends AbstractValued {
         returnValue = this.toString(rawValue);
       }
     } else {
-      Object rawValue = null;
-      try {
-        rawValue = TemplateRuntime.execute(this.compiledTemplate, this.getNamed(), this.nameResolverFactory);
-      } catch (final IllegalStateException throwMe) {
-        throw throwMe;
-      } catch (final RuntimeException wrapMe) {          
-        throw new IllegalStateException(wrapMe);
-      }
-      final String rawStringValue = this.toString(rawValue);
+      final String rawStringValue = this.toString(this.execute(this.compiledTemplate));
       if (rawStringValue == null || rawStringValue.isEmpty()) {
         returnValue = "";
       } else {
@@ -510,7 +605,6 @@ public class Name extends AbstractValued {
     assert returnValue != null;
     return returnValue;
   }
-
 
   /**
    * Overrides the {@link AbstractValued#setValue(String)} method to

@@ -31,12 +31,15 @@ import java.io.Serializable; // for javadoc only
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.edugility.nomen.Name;
 import com.edugility.nomen.Named;
 import com.edugility.nomen.NameType;
 import com.edugility.nomen.NameValue; // for javadoc only
+
+import org.mvel2.UnresolveablePropertyException;
 
 import org.mvel2.integration.VariableResolver;
 import org.mvel2.integration.VariableResolverFactory;
@@ -47,6 +50,9 @@ import org.mvel2.integration.impl.BaseVariableResolverFactory;
  * A {@link BaseVariableResolverFactory} that produces {@link
  * NameResolver} instances for use by <a
  * href="http://mvel.codehaus.org/">MVEL</a> expressions.
+ *
+ * <p>Subclasses of this class normally have to override only the
+ * {@link #getName(NameType)} method.</p>
  *
  * @author <a href="http://about.me/lairdnelson"
  * target="_parent">Laird Nelson</a>
@@ -60,6 +66,8 @@ import org.mvel2.integration.impl.BaseVariableResolverFactory;
  * @see VariableResolverFactory
  *
  * @see VariableResolver
+ *
+ * @see #getName(NameType)
  *
  * @see Name#getValue()
  *
@@ -95,7 +103,7 @@ public class NameResolverFactory extends BaseVariableResolverFactory implements 
    *
    * <p>This field is never {@code null}.</p>
    */
-  private final Named named;
+  protected final Named named;
 
 
   /*
@@ -123,8 +131,34 @@ public class NameResolverFactory extends BaseVariableResolverFactory implements 
     this.named = named;
   }
 
+
+  /*
+   * Instance methods.
+   */
+
+
+  /**
+   * Given a {@link NameType}, returns a {@link Name} corresponding to
+   * it in some fashion.
+   *
+   * <p>This method may return {@code null}.</p>
+   *
+   * <p>The default implementation of this method invokes the {@link
+   * Named#getName(NameType)} method on the value of the {@link
+   * #named} field.</p>
+   *
+   * @param nameType the {@link NameType} for which a corresponding
+   * {@link Name} should be returned; may be {@code null}
+   *
+   * @return a {@link Name} corresponding to the supplied {@link
+   * NameType}, or {@code null}
+   *
+   * @see #named
+   *
+   * @see Named#getName(NameType)
+   */
   @Override
-  public final Name getName(final NameType nameType) {
+  public Name getName(final NameType nameType) {
     final Name returnValue;
     if (nameType != null && this.named != null) {
       returnValue = this.named.getName(nameType);
@@ -168,18 +202,62 @@ public class NameResolverFactory extends BaseVariableResolverFactory implements 
     } else {
       final Name n = this.getName(new NameType(name));
       if (n == null) {
-        returnValue = this.isNextResolveable(null);
+        returnValue = this.isNextResolveable(name);
       } else {
-        if (this.variableResolvers == null) {
-          this.variableResolvers = new HashMap<String, VariableResolver>();
+        Map<String, VariableResolver> resolvers = this.getVariableResolvers();
+        if (resolvers == null) {
+          resolvers = new HashMap<String, VariableResolver>();
         }
-        this.variableResolvers.put(name, this.createNameResolver(this.named, name));
+        resolvers.put(name, this.createNameResolver(this.named, name));
+        if (resolvers != this.getVariableResolvers()) {
+          this.setVariableResolvers(resolvers);
+        }
         returnValue = true;
       }
     }
     return returnValue;
   }
 
+  /**
+   * Overrides the {@link
+   * BaseVariableResolverFactory#getVariableResolver(String)} method
+   * for performance and robustness only.
+   *
+   * <p>This method never returns {@code null}.</p>
+   *
+   * @param name the name of the variable whose {@link
+   * VariableResolver} should be returned, if possible; may be {@code
+   * null}
+   *
+   * @return a {@link VariableResolver} suitable for resolving a
+   * variable with the supplied {@code name}; never {@code null}
+   *
+   * @exception UnresolveablePropertyException if no {@link
+   * VariableResolver} could be found
+   *
+   * @see BaseVariableResolverFactory#getVariableResolver(String)
+   */
+  @Override
+  public final VariableResolver getVariableResolver(final String name) {
+    VariableResolver returnValue = null;
+    if (this.isResolveable(name)) {
+      final Map<String, VariableResolver> resolvers = this.getVariableResolvers();
+      if (resolvers != null && !resolvers.isEmpty()) {
+        returnValue = resolvers.get(name);
+        if (returnValue == null && this.isNextResolveable(name)) {
+          final VariableResolverFactory nextFactory = this.getNextFactory();
+          if (nextFactory != null) {
+            returnValue = nextFactory.getVariableResolver(name);
+          }
+        }
+      }
+    }
+    if (returnValue == null) {
+      throw new UnresolveablePropertyException("unable to resolve variable '" + name + "'");
+    }
+    return returnValue;
+  }
+  
   /**
    * Creates and returns a {@link NameResolver} appropriate for the
    * supplied {@link Named} and the supplied {@code value}.
@@ -222,7 +300,14 @@ public class NameResolverFactory extends BaseVariableResolverFactory implements 
    */
   @Override
   public boolean isTarget(final String name) {
-    return name != null && this.variableResolvers != null && this.variableResolvers.containsKey(name);
+    final boolean returnValue;
+    if (name == null) {
+      returnValue = false;
+    } else {
+      final Map<?, ?> resolvers = this.getVariableResolvers();
+      returnValue = resolvers != null && resolvers.containsKey(name);
+    }
+    return returnValue;
   }
 
   /**
