@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright (c) 2011-2014 Edugility LLC.
+ * Copyright (c) 2011-2016 Edugility LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,6 +26,11 @@
  * http://www.opensource.org/license/mit-license.html.
  */
 package com.edugility.nomen;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -74,6 +79,24 @@ public class TestCaseName {
     old = this.dude.putName(first, lj);
     assertNotNull(old);
     assertNull(old.getNamed());
+  }
+
+  @Test
+  public void testMapValues() {
+    final Map<String, Integer> map = new HashMap<String, Integer>();
+    final Integer one = Integer.valueOf(1);
+    assertNotNull(one);
+    map.put("1", one);
+    map.put("one", one);
+    final Collection<?> values = map.values();
+    assertNotNull(values);
+    assertEquals(2, values.size());
+    final Iterator<?> iterator = values.iterator();
+    assertNotNull(iterator);
+    assertTrue(iterator.hasNext());
+    assertSame(one, iterator.next());
+    assertSame(one, iterator.next());
+    assertFalse(iterator.hasNext());
   }
 
 }
