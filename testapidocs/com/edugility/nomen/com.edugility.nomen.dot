@@ -63,6 +63,7 @@ digraph G {
 <tr><td align="left" balign="left"> + TestCaseName() </td></tr>
 <tr><td align="left" balign="left"> + setUp() </td></tr>
 <tr><td align="left" balign="left"> + testSameNamePutTwice() </td></tr>
+<tr><td align="left" balign="left"> + testMapValues() </td></tr>
 		</table></td></tr>
 		</table>>, URL="./TestCaseName.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// com.edugility.nomen.TestCaseOwnership NAVASSOC com.edugility.nomen.AbstractNamed
