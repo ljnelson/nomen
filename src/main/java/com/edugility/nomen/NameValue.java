@@ -79,12 +79,6 @@ import java.io.Serializable;
  *
  * <h3>Design Notes</h3>
  *
- * <p>This class is designed to be treated as immutable once fully
- * {@linkplain #isInitialized() initialized}.  Consequently, certain
- * methods, like {@link #setAtomic(boolean)} and {@link
- * #setValue(String)} and {@link #setWhitespaceReplacement(String)},
- * may only be called once with a given parameter value.</p>
- *
  * <p>Methods and fields that might otherwise be {@code final} are
  * explicitly left non-{@code final} so that this class may be used as
  * a JPA entity.</p>
@@ -103,8 +97,6 @@ import java.io.Serializable;
  * @see #setAtomic(boolean)
  *
  * @see #setWhitespaceReplacement(String)
- *
- * @see #isInitialized()
  */
 public class NameValue extends AbstractValued {
 
@@ -398,7 +390,7 @@ public class NameValue extends AbstractValued {
    * @see #setAtomic(boolean)
    */
   public boolean isInitialized() {
-    return this.atomic != null && this.getValue() != null && this.whitespaceReplacementSet;
+    return this.getValue() != null && this.whitespaceReplacementSet;
   }
 
   /**

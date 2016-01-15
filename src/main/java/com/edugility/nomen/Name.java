@@ -334,8 +334,7 @@ public class Name extends AbstractValued {
    * {@code null}
    *
    * @exception IllegalArgumentException if {@code nameValue} is
-   * {@code null} or {@linkplain NameValue#isInitialized() not
-   * initialized}
+   * {@code null}
    *
    * @exception IllegalStateException if the supplied {@link
    * NameValue} is {@linkplain NameValue#isAtomic() not atomic} and
@@ -352,8 +351,6 @@ public class Name extends AbstractValued {
   public void setNameValue(final NameValue nameValue) {
     if (nameValue == null) {
       throw new IllegalArgumentException("nameValue", new NullPointerException("nameValue"));
-    } else if (!nameValue.isInitialized()) {
-      throw new IllegalArgumentException("!nameValue.isInitialized()");
     }
     final NameValue old = this.getNameValue();
     if (!nameValue.equals(old)) {
@@ -578,27 +575,26 @@ public class Name extends AbstractValued {
    * @see #execute(Object)
    */
   protected String computeValue() {
-    final String returnValue;
+    String returnValue = "";
     final NameValue nv = this.getNameValue();
-    if (nv == null) {
-      returnValue = "";
-    } else if (nv.isAtomic() || !this.canExecute(this.compiledTemplate)) {
-      final Object rawValue = nv.getValue();
-      if (rawValue == null) {
-        returnValue = "";
+    if (nv != null) {
+      if (nv.isAtomic()) {
+        final Object rawValue = nv.getValue();
+        if (rawValue != null) {
+          returnValue = this.toString(rawValue);
+        }
       } else {
-        returnValue = this.toString(rawValue);
-      }
-    } else {
-      final String rawStringValue = this.toString(this.execute(this.compiledTemplate));
-      if (rawStringValue == null || rawStringValue.isEmpty()) {
-        returnValue = "";
-      } else {
-        final String whitespaceReplacement = nv.getWhitespaceReplacement();
-        if (whitespaceReplacement != null) {
-          returnValue = whitespacePattern.matcher(rawStringValue).replaceAll(whitespaceReplacement);
-        } else {
-          returnValue = rawStringValue;
+        this.installTemplate();
+        if (this.canExecute(this.compiledTemplate)) {
+          final String rawStringValue = this.toString(this.execute(this.compiledTemplate));
+          if (rawStringValue != null && !rawStringValue.isEmpty()) {
+            final String whitespaceReplacement = nv.getWhitespaceReplacement();
+            if (whitespaceReplacement == null) {
+              returnValue = rawStringValue;
+            } else {
+              returnValue = whitespacePattern.matcher(rawStringValue).replaceAll(whitespaceReplacement);
+            }
+          }
         }
       }
     }
@@ -627,20 +623,42 @@ public class Name extends AbstractValued {
    */
   @Override
   public void setValue(final String value) {
-    final NameValue nv = this.createNameValue(value);
-    if (nv == null) {
-      throw new IllegalStateException("createNameValue(\"" + value + "\") == null");
+    boolean doit = false;
+    final AbstractValued oldNameValue = this.getNameValue();
+    if (oldNameValue == null) {
+      doit = true;
+    } else {
+      final String templateSource = oldNameValue.getValue();
+      if (value == null) {
+        if (templateSource != null) {
+          doit = true;
+        }
+      } else if (!value.equals(templateSource)) {
+        doit = true;
+      }
     }
-    final String old = this.getValue();
-    this.setNameValue(nv);
-    this.firePropertyChange("value", old, this.getValue());
+    if (doit) {
+      final NameValue nv = this.createNameValue(value);
+      if (nv == null) {
+        throw new IllegalStateException("createNameValue(\"" + value + "\") == null");
+      }
+      final String old = this.getValue();
+      this.setNameValue(nv);
+      this.firePropertyChange("value", old, this.getValue());
+    }
   }
 
   /**
-   * Returns a new {@link NameValue}.
+   * Returns a {@link NameValue} suitable for the supplied {@link
+   * String} value.
    *
    * <p>This method never returns {@code null} and overrides of it
    * must not return {@code null} either.</p>
+   *
+   * <p>This implementation returns a new {@link NameValue}.</p>
+   *
+   * <p>Overrides are permitted to return a new {@link NameValue} or
+   * subclass, or to somehow alter an already existing one.</p>
    *
    * @param value the value for the new {@link NameValue}; must not be
    * {@code null}
