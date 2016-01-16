@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -107,27 +108,33 @@ public class NameSupport {
 
   /**
    * Returns a non-{@code null}, {@linkplain
-   * Collections#unmodifiableCollection(Collection) immutable
-   * <code>Collection</code>} of {@link Name}s housed in the supplied
-   * {@link Map} as its {@linkplain Map#values() values}.
+   * Collections#unmodifiableSet(Set) immutable <code>Set</code>} of
+   * {@link Entry} instances, whose {@linkplain Entry#getKey() keys}
+   * are {@link NameType}s and whose {@linkplain Entry#getValue()
+   * values} are {@link Name}s as found in the supplied {@link Map}.
    *
    * <p>This method never returns {@code null}.</p>
    *
+   * @param <K> a type extending {@link NameType}
+   *
+   * @param <V> a type extending {@link Name}
+   * 
    * @param map a {@link Map} containing {@link Name}s as its
-   * {@linkplain Map#values() values}; may be {@code null} in which
-   * case an {@linkplain Collections#emptySet() empty
-   * <code>Set</code>} will be returned
+   * {@linkplain Map#values() values} and {@link NameType}s as its
+   * {@linkplain Map#keySet() keys}; may be {@code null} in which case
+   * an {@linkplain Collections#emptySet() empty <code>Set</code>}
+   * will be returned
    *
    * @return a non-{@code null} {@linkplain
-   * Collections#unmodifiableCollection(Collection) immutable
-   * <code>Collection</code>} of {@link Name}s
+   * Collections#unmodifiableSet(Set) immutable <code>Set</code>} of
+   * {@link Entry} instances
    */
-  public Collection<? extends Name> getNames(final Map<?, ? extends Name> map) {
-    final Collection<Name> returnValue;
+  public <K extends NameType, V extends Name> Set<? extends Entry<K, V>> getNames(final Map<K, V> map) {
+    final Set<Entry<K, V>> returnValue;
     if (map == null || map.isEmpty()) {
       returnValue = Collections.emptySet();
     } else {
-      returnValue = Collections.unmodifiableCollection(map.values());
+      returnValue = map.entrySet();
     }
     return returnValue;
   }

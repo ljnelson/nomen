@@ -34,6 +34,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -126,7 +127,7 @@ public abstract class AbstractNamed implements MutableNamed {
     return this.nameSupport.getNameTypes(this.names);
   }
 
-  public Collection<? extends Name> getNames() {
+  public Set<? extends Entry<? extends NameType, ? extends Name>> getNames() {
     assert this.nameSupport != null;
     return this.nameSupport.getNames(this.names);
   }
