@@ -20,7 +20,7 @@ digraph G {
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="left" balign="left"> + NameSupport(delegate : Named) </td></tr>
 <tr><td align="left" balign="left"> + getNameTypes(map : Map&lt;?, ?&gt;) : Set&lt;?&gt; </td></tr>
-<tr><td align="left" balign="left"> + getNames(map : Map&lt;?, ?&gt;) : Collection&lt;?&gt; </td></tr>
+<tr><td align="left" balign="left"> + getNames(map : Map&lt;K, V&gt;) : Set&lt;?&gt; </td></tr>
 <tr><td align="left" balign="left"> + putName(map : Map&lt;NameType, Name&gt;, nameType : NameType, name : Name) : Name </td></tr>
 <tr><td align="left" balign="left"> + removeName(map : Map&lt;?, ?&gt;, nameType : NameType) : Name </td></tr>
 		</table></td></tr>

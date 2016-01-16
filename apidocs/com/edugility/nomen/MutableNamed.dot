@@ -50,7 +50,7 @@ digraph G {
 <tr><td align="left" balign="left"> + putName(nameType : NameType, name : Name) : Name </td></tr>
 <tr><td align="left" balign="left"> + removeName(nameType : NameType) : Name </td></tr>
 <tr><td align="left" balign="left"> + getNameTypes() : Set&lt;?&gt; </td></tr>
-<tr><td align="left" balign="left"> + getNames() : Collection&lt;?&gt; </td></tr>
+<tr><td align="left" balign="left"> + getNames() : Set&lt;?&gt; </td></tr>
 		</table></td></tr>
 		</table>>, URL="./AbstractNamed.html", fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//com.edugility.nomen.MutableNamed implements com.edugility.nomen.Named
